@@ -22,13 +22,13 @@
 @media(prefers-reduced-motion:reduce){.spinner{animation:none}}
 .tabs{display:flex;gap:8px;margin-bottom:14px}.tabs button{min-height:42px;border:1px solid var(--line);border-radius:10px;padding:0 18px;background:var(--paper);color:var(--ink);font-weight:650}.tabs button[aria-selected="true"]{background:var(--ink);color:white}.catalog-controls{display:flex;gap:8px;align-items:end;flex-wrap:wrap}.catalog-controls>.option-field>input{width:120px;min-height:42px;border:1px solid var(--line);border-radius:8px;padding:8px;font-size:16px}.catalog-controls .option-field select{min-width:100px}.catalog-options{margin-top:10px}.catalog-card{margin-top:14px}.catalog-progress{width:100%;margin-top:10px}.length-input{width:90px;height:40px;border:1px solid var(--line);border-radius:8px;padding:8px}.catalog-filters{margin-top:10px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.catalog-filters .option-field select{min-width:0;width:100%;font-size:12px;padding:5px 18px 5px 8px}.ending-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.ending-chip{border:1px solid var(--line);border-radius:999px;padding:6px 10px;min-height:34px;background:var(--paper);color:var(--muted);font-size:12px}.ending-chip.selected{background:var(--soft);border-color:var(--accent);color:var(--accent)}@media(max-width:400px){.catalog-controls .primary,.catalog-controls .secondary{padding:0 11px;font-size:12px}.catalog-controls .option-field select{min-width:90px}}
 
-.quick-ending-tools{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px}.quick-ending-tools span{font-size:11px;color:var(--muted)}.quick-ending-tools div{display:flex;gap:15px}.quick-ending-tools button{min-height:32px}.quick-ending-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:5px}.quick-ending-grid button{min-height:40px;padding:7px 11px;border:1px solid var(--line);border-radius:999px;background:var(--paper);color:var(--muted);font-size:12px;display:flex;align-items:center;gap:6px}.quick-ending-grid button[aria-pressed="true"]{color:var(--accent);border-color:var(--accent);background:var(--soft)}.quick-ending-grid button span{min-width:8px}.inline-endings{margin-top:10px;border-top:1px solid var(--line);padding-top:12px}.inline-ending-search{display:flex;align-items:center;gap:10px}.inline-ending-search input{flex:1}.inline-ending-search button{white-space:nowrap}.inline-ending-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;max-height:220px;overflow:auto;overscroll-behavior:contain;margin-top:8px;padding:2px}.inline-ending-list .ending-choice{font-size:12px;min-height:42px;padding:7px}.draft-notice{font-size:11px;color:var(--muted);margin:9px 0 0}.search-preview.invalid{font-size:12px;color:var(--red);margin:10px 0 0}.result-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 17px;border-bottom:1px solid var(--line)}.result-heading h2{font-size:15px;margin:0;overflow-wrap:anywhere}.progress:has(#progressText:empty){display:none}@media(max-width:620px){.inline-ending-list{grid-template-columns:repeat(3,minmax(0,1fr))}.quick-ending-grid button{padding:7px 10px}.quick-ending-tools{gap:5px}}
+.ending-group-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:7px 0 2px}.ending-group-head strong{font-size:12px}.ending-group-head div{display:flex;gap:12px}.ending-group-head button{font-size:11px;min-height:28px}.compact-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:2px 4px}.compact-grid .ending-choice{justify-content:flex-start;gap:5px;min-height:30px;padding:4px;border:0;border-radius:4px;font-size:12px;font-weight:400}.compact-grid .ending-choice input{width:14px;height:14px}.compact-grid .ending-choice span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.compact-grid .ending-choice:has(input:checked){background:var(--soft)}.ending-section{border-top:1px solid var(--line);padding-top:3px;margin-top:7px}.inline-ending-search{display:flex;align-items:center;gap:10px}.inline-ending-search input{flex:1;min-width:0;height:34px;font-size:12px}.inline-ending-search button{white-space:nowrap;font-size:11px}.inline-ending-list{height:180px;overflow:auto;overscroll-behavior:contain;align-content:start;margin-top:5px}.recent-grid{max-height:96px;overflow:auto;overscroll-behavior:contain}.ending-summary{font-size:12px;color:var(--muted);height:40px;display:flex;align-items:center}.recent-empty{font-size:11px;color:var(--muted);margin:5px 0}.all-endings-toggle{border:0;background:none;color:var(--ink);font-size:12px;font-weight:650;padding:0;min-height:30px;text-align:left}.compact-feedback{font-size:11px;color:var(--red);margin:4px 0}@media(max-width:620px){.compact-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.compact-grid .ending-choice{font-size:11px;gap:4px;padding:4px 2px}}.draft-notice{font-size:11px;color:var(--muted);margin:9px 0 0}.search-preview.invalid{font-size:12px;color:var(--red);margin:10px 0 0}.result-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 17px;border-bottom:1px solid var(--line)}.result-heading h2{font-size:15px;margin:0;overflow-wrap:anywhere}.progress:has(#progressText:empty){display:none}@media(max-width:620px){.inline-ending-list{grid-template-columns:repeat(3,minmax(0,1fr))}.quick-ending-grid button{padding:7px 10px}.quick-ending-tools{gap:5px}}
 </style>
 </head>
 <body>
 <main class="shell">
   <header class="top">
-    <div class="brand"><span class="logo" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="14" cy="14" r="10.5"/><path d="M3.5 14h21M14 3.5c-6 5.5-6 15.5 0 21M14 3.5c6 5.5 6 15.5 0 21"/></svg></span><div><strong>Domain Finder</strong><span class="version">v1.4.1</span></div></div>
+    <div class="brand"><span class="logo" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="14" cy="14" r="10.5"/><path d="M3.5 14h21M14 3.5c-6 5.5-6 15.5 0 21M14 3.5c6 5.5 6 15.5 0 21"/></svg></span><div><strong>Domain Finder</strong><span class="version">v1.4.2</span></div></div>
     <span id="connection" class="connection">Checking setup</span>
   </header>
   <p class="eyebrow">Cloudflare Registrar</p>
@@ -46,11 +46,20 @@
       <div class="option-field"><label for="matchMode">Match</label><select id="matchMode"><option value="suggestions">All suggestions</option><option value="exact">Exact</option><option value="contains">Contains</option><option value="begins">Begins with</option><option value="ends">Ends with</option><option value="regex">Regex</option></select></div>
       <div id="searchEndings" class="option-field ending-field">
         <label id="endingsLabel">Endings</label>
-        <button id="endingToggle" class="ending-toggle" type="button" aria-expanded="false" aria-controls="searchEndingPanel" aria-labelledby="endingsLabel"><span>More endings</span><span aria-hidden="true">⌄</span></button>
+        <span id="endingSummary" class="ending-summary" aria-live="polite">All endings</span>
       </div>
     </div>
-    <div id="quickEndingSection"><div class="quick-ending-tools"><span id="endingSummary">All endings</span><div><button id="usePinnedEndings" class="text-button" type="button">Select pinned</button><button id="useAllEndings" class="text-button" type="button">Clear</button></div></div><div id="endingChips" class="quick-ending-grid" role="group" aria-label="Quick endings"></div>
-      <div id="searchEndingPanel" class="inline-endings" hidden><div class="inline-ending-search"><label for="searchEndingQuery" class="sr-only">Find more endings</label><input id="searchEndingQuery" class="ending-search" type="search" placeholder="Find an ending, e.g. .dev" autocomplete="off"><button id="refreshSearchEndings" class="text-button" type="button">Refresh list</button></div><div id="searchEndingList" class="inline-ending-list" role="group" aria-label="More domain endings"></div><p id="searchEndingMessage" class="hint" role="status"></p></div></div>
+    <div id="quickEndingSection">
+      <div class="ending-group-head"><strong>Quick picks</strong><div><button id="usePinnedEndings" class="text-button" type="button">Select all</button><button id="clearQuickEndings" class="text-button" type="button">Deselect all</button></div></div>
+      <div id="endingChips" class="compact-grid" role="group" aria-label="Quick picks"></div>
+      <div class="ending-section"><div class="ending-group-head"><strong>Recent</strong><div><button id="selectRecentEndings" class="text-button" type="button">Select all</button><button id="clearRecentEndings" class="text-button" type="button">Deselect all</button></div></div>
+      <div id="recentEndingList" class="compact-grid recent-grid" role="group" aria-label="Recent endings"></div><p id="recentEndingEmpty" class="recent-empty">Other endings you choose will appear here.</p></div>
+      <div class="ending-section"><div class="ending-group-head"><button id="endingToggle" class="all-endings-toggle" type="button" aria-expanded="false" aria-controls="searchEndingPanel">All endings ▸</button><button id="useAllEndings" class="text-button" type="button">Clear selection</button></div>
+      <div id="searchEndingPanel" hidden><div class="inline-ending-search"><label for="searchEndingQuery" class="sr-only">Search all endings</label><input id="searchEndingQuery" class="ending-search" type="search" placeholder="Search endings" autocomplete="off"><button id="refreshSearchEndings" class="text-button" type="button">Refresh list</button></div>
+      <div class="ending-group-head"><span></span><div><button id="selectShownEndings" class="text-button" type="button">Select shown</button><button id="clearShownEndings" class="text-button" type="button">Deselect shown</button></div></div>
+      <div id="searchEndingList" class="compact-grid inline-ending-list" role="group" aria-label="All endings"></div><p id="searchEndingMessage" class="hint" role="status"></p></div></div>
+      <p id="endingFeedback" class="compact-feedback" role="status" hidden></p>
+    </div>
     <div id="regexOptions" class="search-options" hidden><div class="option-field"><label for="maxLength">Maximum name length</label><input id="maxLength" type="number" min="1" max="63" value="12" class="length-input"></div><p class="hint">Checks 200 candidates at a time. Stop and resume any time.</p></div>
     <p id="searchHint" class="hint">Use a phrase for suggestions, or separate up to 20 full domains with commas.</p>
 <p id="searchPreview" class="search-preview" aria-live="polite" hidden></p><p id="draftNotice" class="draft-notice" hidden>Options changed. Search again to update the results.</p>
@@ -120,6 +129,7 @@ const MATCH_MODES = ['suggestions', 'exact', 'contains', 'begins', 'ends', 'rege
 const PREFERENCE_KEY = 'domain-finder.search-options';
 const PINNED_ENDINGS = ['com','org','io','ai','co','cam','soccer','football','tech','live','camera','net','app'];
 const POPULAR_ENDINGS = ['dev','info','biz','me','tv','us','uk','co.uk','ca','de','online','site','store','xyz'];
+const QUICK_ENDINGS = [...new Set([...PINNED_ENDINGS,...POPULAR_ENDINGS])];
 const ENDING_CACHE_KEY = 'domain-finder.ending-list.v1';
 const RESULT_CACHE_KEY = 'domain-finder.results.v1';
 const DAY_MS = 86400000;
@@ -224,7 +234,7 @@ function updateOptions() {
   $('quickEndingSection').hidden=fullDomain;
   $('endingSummary').textContent=selectedEndings.size?selectedEndings.size+' endings selected':mode==='exact'||mode==='regex'?'Choose at least one ending':'All endings';
   $('useAllEndings').disabled=!selectedEndings.size;
-  $('usePinnedEndings').disabled=PINNED_ENDINGS.every(name=>selectedEndings.has(name));
+  
   $('searchHint').textContent=fullDomain?'Full domains are checked exactly.':mode==='regex'?'Patterns match the whole name. Checks 200 candidates at a time.':mode==='exact'?'Check this exact name with each selected ending.':'Cloudflare suggestions; Contains, Begins with, and Ends with filter the returned names.';
   let error='';
   if(query)try{
@@ -238,28 +248,55 @@ function updateOptions() {
   $('draftNotice').hidden=!lastRun||JSON.stringify(options)===JSON.stringify(lastRun);
   renderEndingChips();if(!$('searchEndingPanel').hidden)syncSearchEndings();
 }
-function toggleSearchEnding(name, checked) {
-  if(checked && !selectedEndings.has(name) && selectedEndings.size>=50){notice('Choose up to 50 endings.',true);syncSearchEndings();return;}
-  checked?selectedEndings.add(name):selectedEndings.delete(name);
+function changeSearchEndings(names,checked) {
+  let limited=false;
+  for(const name of names){
+    if(checked){
+      if(!selectedEndings.has(name)&&selectedEndings.size>=50){limited=true;continue;}
+      selectedEndings.add(name);recentEndings.delete(name);recentEndings.add(name);
+    }else selectedEndings.delete(name);
+  }
+  $('endingFeedback').textContent=limited?'Up to 50 endings can be selected. Deselect some to add more.':'';
+  $('endingFeedback').hidden=!limited;
   updateOptions();saveOptions();
 }
+function toggleSearchEnding(name,checked){changeSearchEndings([name],checked);}
+function recentChoices(){return [...recentEndings].reverse().filter(name=>!QUICK_ENDINGS.includes(name));}
+function shownEndings(){
+  const query=$('searchEndingQuery').value.trim().toLowerCase().replace(/^\./,'');
+  return [...new Set([...QUICK_ENDINGS,...recentEndings,...selectedEndings,...endingCatalog])].filter(name=>name.includes(query)).sort((a,b)=>a.localeCompare(b));
+}
+function renderChoiceGrid(holder,names){
+  const existing=new Map([...holder.children].filter(node=>node.dataset.ending).map(node=>[node.dataset.ending,node]));
+  for(const [name,node] of existing)if(!names.includes(name))node.remove();
+  names.forEach((name,index)=>{
+    let label=existing.get(name);
+    if(!label){
+      label=element('label','ending-choice');label.dataset.ending=name;label.title='.'+name;
+      const input=element('input');input.type='checkbox';input.value=name;input.setAttribute('aria-label','.'+name);
+      input.addEventListener('change',()=>toggleSearchEnding(name,input.checked));
+      label.append(input,element('span','','.'+name));
+    }
+    if(holder.children[index]!==label)holder.insertBefore(label,holder.children[index]||null);
+    label.querySelector('input').checked=selectedEndings.has(name);
+  });
+}
+function groupActions(selectId,clearId,names){
+  $(selectId).disabled=!names.length||names.every(name=>selectedEndings.has(name));
+  $(clearId).disabled=!names.some(name=>selectedEndings.has(name));
+}
 function syncSearchEndings() {
-  for(const input of $('searchEndingList').querySelectorAll('input'))input.checked=selectedEndings.has(input.value);
+  for(const input of $('quickEndingSection').querySelectorAll('input[type="checkbox"]'))input.checked=selectedEndings.has(input.value);
+  groupActions('usePinnedEndings','clearQuickEndings',QUICK_ENDINGS);
+  groupActions('selectRecentEndings','clearRecentEndings',recentChoices());
+  groupActions('selectShownEndings','clearShownEndings',shownEndings());
   $('refreshSearchEndings').disabled=endingsLoading;
-  $('searchEndingMessage').textContent=endingError||(endingsLoading?'Updating list…':'');
+  $('searchEndingMessage').textContent=endingError||(endingsLoading?'Updating list…':!shownEndings().length?'No matching endings.':'');
   $('searchEndingMessage').hidden=!$('searchEndingMessage').textContent;
 }
-function renderSearchEndings() {
-  const holder=$('searchEndingList');
-  if(!holder || $('searchEndingPanel').hidden)return;
-  const query=$('searchEndingQuery').value.trim().toLowerCase().replace(/^\./,'');
-  const scroll=holder.scrollTop, focused=holder.contains(document.activeElement)?document.activeElement.value:null;
-  const names=[...new Set([...POPULAR_ENDINGS,...recentEndings,...endingCatalog,...PINNED_ENDINGS])].filter(name=>query?name.includes(query):!PINNED_ENDINGS.includes(name));
-  const fragment=document.createDocumentFragment();
-  for(const name of names){const label=element('label','ending-choice'),input=element('input');input.type='checkbox';input.value=name;input.checked=selectedEndings.has(name);input.setAttribute('aria-label','.'+name);input.addEventListener('change',()=>toggleSearchEnding(name,input.checked));label.append(element('span','','.'+name),input);fragment.append(label);}
-  if(!names.length)fragment.append(element('p','hint','No matching endings.'));
-  holder.replaceChildren(fragment);holder.scrollTop=scroll;
-  if(focused){const input=[...holder.querySelectorAll('input')].find(input=>input.value===focused);input?.focus({preventScroll:true});}
+function renderSearchEndings(){
+  if($('searchEndingPanel').hidden)return;
+  renderChoiceGrid($('searchEndingList'),shownEndings());
   syncSearchEndings();
 }
 function closeEndings(returnFocus = false) {
@@ -896,15 +933,20 @@ async function copyShown() {
   } catch { notice('Clipboard access was blocked. Select and copy the domain names directly.'); }
 }
 $('matchMode').addEventListener('change',()=>{notice('');updateOptions();saveOptions();});
-$('usePinnedEndings').addEventListener('click',()=>{for(const name of PINNED_ENDINGS)if(selectedEndings.size<50)selectedEndings.add(name);updateOptions();saveOptions();});
-$('useAllEndings').addEventListener('click',()=>{selectedEndings.clear();updateOptions();saveOptions();});
+$('usePinnedEndings').addEventListener('click',()=>changeSearchEndings(QUICK_ENDINGS,true));
+$('clearQuickEndings').addEventListener('click',()=>changeSearchEndings(QUICK_ENDINGS,false));
+$('selectRecentEndings').addEventListener('click',()=>changeSearchEndings(recentChoices(),true));
+$('clearRecentEndings').addEventListener('click',()=>changeSearchEndings(recentChoices(),false));
+$('selectShownEndings').addEventListener('click',()=>changeSearchEndings(shownEndings(),true));
+$('clearShownEndings').addEventListener('click',()=>changeSearchEndings(shownEndings(),false));
+$('useAllEndings').addEventListener('click',()=>{changeSearchEndings([...selectedEndings],false);});
 $('searchEndingQuery').addEventListener('input',()=>{$('searchEndingList').scrollTop=0;renderSearchEndings();});
 $('searchEndingQuery').addEventListener('keydown',event=>{if(event.key==='Enter')event.preventDefault();});
 $('refreshSearchEndings').addEventListener('click',()=>loadEndings(true));
 $('query').addEventListener('input', updateOptions);
 $('maxLength').addEventListener('input',()=>{updateOptions();saveOptions();});
 $('continueScan').addEventListener('click', continueScan);
-$('endingToggle').addEventListener('click',()=>{const open=$('searchEndingPanel').hidden;$('searchEndingPanel').hidden=!open;$('endingToggle').setAttribute('aria-expanded',String(open));if(open){renderSearchEndings();loadEndings();}});
+$('endingToggle').addEventListener('click',()=>{const open=$('searchEndingPanel').hidden;$('searchEndingPanel').hidden=!open;$('endingToggle').setAttribute('aria-expanded',String(open));$('endingToggle').textContent=open?'All endings ▾':'All endings ▸';if(open){renderSearchEndings();loadEndings();}});
 $('catalogEndingToggle').addEventListener('click',()=>{ if(!$('endingPanel').hidden)closeEndings();else openCatalogEndings(); });
 $('endingSearch').addEventListener('input',()=>renderEndings(true));
 $('endingSearch').addEventListener('keydown',event=>{if(event.key==='Enter')event.preventDefault();});
@@ -937,14 +979,10 @@ const recentEndings = new Set();
 function rememberEndings() { for (const ending of selectedEndings) recentEndings.add(ending); }
 function renderEndingChips() {
   rememberEndings();
-  const holder=$('endingChips'),names=[...new Set([...PINNED_ENDINGS,...selectedEndings])];
-  const existing=new Map([...holder.children].map(button=>[button.dataset.ending,button]));
-  for(const [name,button] of existing)if(!names.includes(name))button.remove();
-  for(const name of names){
-    let button=existing.get(name);
-    if(!button){button=element('button');button.type='button';button.dataset.ending=name;button.append(element('span','ending-mark',''),document.createTextNode('.'+name));button.addEventListener('click',()=>toggleSearchEnding(name,!selectedEndings.has(name)));holder.append(button);}
-    const checked=selectedEndings.has(name);button.setAttribute('aria-pressed',String(checked));button.setAttribute('aria-label',(checked?'Deselect ':'Select ')+'.'+name);button.querySelector('span').textContent=checked?'✓':'+';
-  }
+  renderChoiceGrid($('endingChips'),QUICK_ENDINGS);
+  renderChoiceGrid($('recentEndingList'),recentChoices());
+  $('recentEndingEmpty').hidden=recentChoices().length>0;
+  syncSearchEndings();
 }
 let catalogVisible = false, catalogTimer = null, catalogBusy = false, catalogEpoch = 0;
 let catalogPacing = null, catalogOptionsBusy = false;

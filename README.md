@@ -1,10 +1,10 @@
-# Domain Finder · v1.4.1
+# Domain Finder · v1.4.2
 
 Replace the same four files in your existing repository. Keep the same secrets. The updated wrangler.jsonc provisions Catalog storage and a background schedule automatically; upload all four files together.
 
 ## Search
 
-The original search layout and visual style are retained. Choose a Match option, then tap the ending pills directly to select or deselect them. All 13 preferred endings stay visible. Select pinned selects all 13; Clear deselects all. More endings expands a searchable cached list inline.
+The original search layout and visual style are retained. The ending selector uses compact checkbox grids: Quick picks combines the 13 requested endings and popular endings, Recent remembers other selections even after deselection, and All endings expands a searchable 180px scroll area. Each group has bulk selection and deselection. Clear selection resets every group. Selections stay synchronized and persist across reloads.
 
 - Exact: `mango` with `.com` and `.io` checks `mango.com` and `mango.io` directly.
 - Regex: enter the pattern in the search field. Matching names are generated and checked directly; no suggestion keyword is used.
@@ -99,7 +99,7 @@ The Worker uses one SQLite-backed Durable Object with a persistent cursor, saved
 
 The Catalog tab incrementally fetches saved rows and filters them locally using Exact/Contains/Begins with/Ends with/Regex, availability, and sort. Catalog regex is a filter against the complete saved list for that ending and accepts JavaScript regex syntax with a timeout. CSV exports the filtered cached list. Search regex remains a candidate generator.
 
-The 13 pinned endings are always available as toggles in Search. Selected additional endings also appear there. More endings expands inline with popular choices first and supports text filtering. Catalog uses its own single-selection dialog. Browser preferences are local; catalog data is stored on the server.
+Quick picks combines the 13 requested endings and popular endings. Recent remembers other choices. All endings expands inline with text filtering and a bounded scroll area. Catalog uses its own single-selection dialog. Browser preferences are local; catalog data is stored on the server.
 
 Deployment requires a Wrangler version supporting the current declarative Durable Object exports field. Existing deploy command npx wrangler deploy resolves the current release; no database IDs, manual binding setup, or new secrets are required.
 
@@ -125,10 +125,16 @@ Cloudflare Cache API: https://developers.cloudflare.com/workers/runtime-apis/cac
 
 ## Search experience
 
-Version 1.4.1 restores the previous visual style and Match selector, including Exact and Regex. Invalid or incomplete searches cannot be submitted. Regex exposes maximum length and pattern help.
+Version 1.4.2 keeps the existing visual style and Match selector, including Exact and Regex.
 
-All 13 pinned endings are always visible as one-tap select/deselect pills. Select pinned selects all 13; Clear deselects all. Additional endings expand inline with search and popular choices first. There is no selection modal in Search. Checkbox and quick-toggle elements retain focus during selection. Choices and API list caches persist across reloads. Catalog keeps its single-selection dialog.
+- Quick picks combines the requested 13 endings with popular endings in one compact checkbox grid.
+- Recent contains other previously selected endings, including ones subsequently deselected. It does not duplicate Quick picks.
+- All endings expands inline into a searchable, fixed-height scroll area. Matching choices use Select shown / Deselect shown.
+- Quick picks and Recent each have Select all / Deselect all. Each action affects only that group. Clear selection deselects everything without erasing history.
+- Selection states stay synchronized across groups. Choices, recent history and API caches persist across reloads.
+- Search accepts up to 50 selected endings. Bulk selection fills remaining capacity and explicitly reports the limit.
+- Catalog retains its separate single-ending selector and persistent background scan storage.
 
-Results identify the original query and search type. Changing the form shows a draft notice without relabeling existing results. Refresh belongs to the results and targets the completed search, not an edited draft. For Regex it refreshes the current displayed batch while preserving the generator position. Stop, Resume checks, and Check next 200 remain supported.
+Results identify the original query and search type. Changing the form shows a draft notice without relabeling existing results. Refresh targets the completed search, not an edited draft. Regex refresh preserves the generator position. Stop, Resume checks, and Check next 200 remain supported.
 
-Chromium tests covered the restored layout, one-tap selection and deselection, bulk selection and clearing, inline search, remembered choices and cached ending lists across reloads, repeated searches, Exact/Regex/Contains, and catalog ending selection. Layouts were checked at 360px, 390px, and 1280px. Backend catalog storage, identity, and cursors are unchanged.
+Chromium tests covered group bulk actions, individual selection, cross-group synchronization, recent history after deselection and reload, cached ending lists, repeated searches, Exact/Regex, and catalog ending selection. Responsive layouts passed at 360px, 390px and 1280px. Catalog storage and cursors are unchanged.

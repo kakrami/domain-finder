@@ -1,9 +1,9 @@
 import { DurableObject } from 'cloudflare:workers';
 import page from './index.html';
 
-// Domain Finder 1.4.1. Only search, check, and extension-list Registrar operations are exposed.
+// Domain Finder 1.4.2. Only search, check, and extension-list Registrar operations are exposed.
 // Runtime secrets: CF_ACCOUNT_ID and CF_API_TOKEN. Never put values in this file.
-const VERSION = '1.4.1';
+const VERSION = '1.4.2';
 const LIMIT = 20; // Cloudflare domain-check request limit.
 const SEARCH_LIMIT = 50;
 const HEADERS = {
