@@ -1,4 +1,4 @@
-# Domain Finder · v1.3.4
+# Domain Finder · v1.3.5
 
 Replace the same four files in your existing repository. Keep the same secrets. The updated wrangler.jsonc provisions Catalog storage and a background schedule automatically; upload all four files together.
 
@@ -122,3 +122,11 @@ Refresh results bypasses both cache layers for the current search. Recheck bypas
 Verified with local browser tests: pinned order, shared picker, mobile/desktop bounds, remembered selections, no ending-list downloads on reload, repeated and overlapping searches, negative results, explicit refresh, recheck, and expiry. Server cache tests verified 24-hour expiry, seven-day ending pages, unchanged timestamps, credential isolation, and no caching of failed or missing checks. Prior catalog migration, character generation, pause/resume and quota tests also passed.
 
 Cloudflare Cache API: https://developers.cloudflare.com/workers/runtime-apis/cache/
+
+## Ending selector rebuild
+
+The old dropdown has been replaced by one native modal dialog shared by Search and Catalog. Desktop uses a centered dialog; phones use a full-width bottom sheet. Quick picks shows pinned and popular choices; All shows the full cached list; Selected shows only current choices. Search finds endings directly, and Select pinned chooses the requested 13 endings in one action. Full names remain readable in large selection tiles. The list scrolls independently, with the selection total, Clear all, and Done always visible.
+
+Search selections apply immediately and retain checkbox focus and scroll position. Catalog chooses one ending and closes immediately. The dialog handles keyboard focus, Escape, backdrop dismissal and return focus to its opener. Phones do not open the keyboard until the search field is tapped. Existing preferences, ending caches, search caches, catalog results, and all scan cursors are retained.
+
+Browser verification covered selected-view removal, bulk pinned selection, unchanged input elements after selection, scrolling through a long list, keyboard focus wrapping, Escape/backdrop dismissal, automatic Catalog closing, 360/390-pixel mobile layouts, desktop layout, and a reduced 500-pixel viewport. The existing search-cache and catalog checks also passed.
