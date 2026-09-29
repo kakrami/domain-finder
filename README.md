@@ -1,14 +1,14 @@
-# Domain Finder · v1.4.0
+# Domain Finder · v1.4.1
 
 Replace the same four files in your existing repository. Keep the same secrets. The updated wrangler.jsonc provisions Catalog storage and a background schedule automatically; upload all four files together.
 
 ## Search
 
-Choose Ideas, Exact, or Regex first. Each mode shows its relevant options and a preview before running. The pinned endings are directly selectable on the page; More endings expands a searchable cached list inline. The action follows the options. Desktop places the query and endings side by side; mobile stacks them in order.
+The original search layout and visual style are retained. Choose a Match option, then tap the ending pills directly to select or deselect them. All 13 preferred endings stay visible. Select pinned selects all 13; Clear deselects all. More endings expands a searchable cached list inline.
 
 - Exact: `mango` with `.com` and `.io` checks `mango.com` and `mango.io` directly.
 - Regex: enter the pattern in the search field. Matching names are generated and checked directly; no suggestion keyword is used.
-- Ideas (Any match / Contains / Starts with / Ends with): request up to 50 Cloudflare suggestions and apply the chosen text and ending filters to that page. A zero match means none of those returned suggestions matched; it does not rule out other domains.
+- All suggestions / Contains / Begins with / Ends with: request up to 50 Cloudflare suggestions and apply the chosen text and ending filters to that page. A zero match means none of those returned suggestions matched; it does not rule out other domains.
 - Full domains and comma-separated domain lists are checked exactly.
 
 Regex example: `^mango[a-z0-9]{1,4}$` generates every valid name matching that pattern, for each selected ending. Checks run in pages of 200, with progress, Stop, Resume checks, and Check next 200. Results display the current page. Scans run while the page is open; reloading does not preserve progress.
@@ -125,10 +125,10 @@ Cloudflare Cache API: https://developers.cloudflare.com/workers/runtime-apis/cac
 
 ## Search experience
 
-Ideas, Exact, and Regex use separate visible mode buttons. Full domain input switches to Exact automatically, with the supplied endings used directly. Exact previews the domains that will be checked. Regex validates the supported grammar, shows the candidate count and first batch size before execution, and exposes maximum length and concise pattern help. Invalid or incomplete searches cannot be submitted.
+Version 1.4.1 restores the previous visual style and Match selector, including Exact and Regex. Invalid or incomplete searches cannot be submitted. Regex exposes maximum length and pattern help.
 
-Pinned endings are selected directly on the page. Additional endings expand inline; there is no selection modal in Search. Checkbox and quick-toggle elements retain focus and scroll position during selection. Choices and API list caches persist across reloads. Catalog keeps a native single-selection dialog.
+All 13 pinned endings are always visible as one-tap select/deselect pills. Select pinned selects all 13; Clear deselects all. Additional endings expand inline with search and popular choices first. There is no selection modal in Search. Checkbox and quick-toggle elements retain focus during selection. Choices and API list caches persist across reloads. Catalog keeps its single-selection dialog.
 
 Results identify the original query and search type. Changing the form shows a draft notice without relabeling existing results. Refresh belongs to the results and targets the completed search, not an edited draft. For Regex it refreshes the current displayed batch while preserving the generator position. Stop, Resume checks, and Check next 200 remain supported.
 
-Whole-flow Chromium tests covered Ideas, Exact, Regex, inline ending selection, cache reuse across reloads, negative results, previews and validation, automatic exact-domain detection, refreshing an existing search after editing the draft, stop/resume, continuing regex batches, and refreshing a later batch without restarting it. Layouts were checked at 360px, 390px, and 1280px. Backend catalog storage, identity, and cursors are unchanged.
+Chromium tests covered the restored layout, one-tap selection and deselection, bulk selection and clearing, inline search, remembered choices and cached ending lists across reloads, repeated searches, Exact/Regex/Contains, and catalog ending selection. Layouts were checked at 360px, 390px, and 1280px. Backend catalog storage, identity, and cursors are unchanged.
