@@ -20,13 +20,13 @@
 .search-options{display:flex;align-items:end;gap:10px;margin-top:13px}.option-field{display:flex;flex-direction:column;gap:5px;min-width:0}.option-field>label{font-size:11px;font-weight:650}.option-field select{height:40px;font-size:13px;color:var(--ink);min-width:145px}.ending-field{position:relative;flex:1;max-width:300px}.ending-toggle{height:40px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 11px;font-size:13px;min-width:0}.ending-toggle span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ending-panel{position:absolute;top:calc(100% + 7px);left:0;width:340px;max-width:calc(100vw - 60px);z-index:5;background:var(--paper);border:1px solid #d4dbe3;border-radius:12px;padding:13px;box-shadow:0 12px 35px #172a3a24}.ending-top{display:flex;gap:9px;justify-content:space-between;align-items:center;margin-bottom:9px}.ending-top strong{font-size:13px}.text-button{background:none;border:0;color:var(--accent);font-size:12px;padding:5px 0;min-height:32px}.ending-search{border:1px solid #cbd2db;border-radius:8px;background:var(--paper);color:var(--ink);font-size:16px;padding:9px 10px;width:100%;min-width:0;min-height:40px}.ending-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px 6px;max-height:220px;overflow-y:auto;overscroll-behavior:contain;margin-top:8px}.ending-choice{display:flex;align-items:center;gap:6px;font-size:12px;min-height:36px;overflow:hidden;cursor:pointer}.ending-choice span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ending-choice input{width:16px;height:16px;margin:0;accent-color:var(--accent);flex:none}.ending-message{font-size:11px;color:var(--muted);line-height:1.5;margin:9px 0 0;overflow-wrap:anywhere}.ending-bottom{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:7px;border-top:1px solid var(--line);padding-top:7px}.ending-bottom .secondary{min-height:34px;font-size:12px;padding:0 12px}.filter-summary{font-size:11px;color:var(--muted);margin:0 0 12px;line-height:1.6;overflow-wrap:anywhere}
 @media(max-width:620px){.search-options{gap:8px}.option-field select{min-width:130px;width:100%}.ending-field{max-width:none}.ending-panel{left:auto;right:0;max-width:calc(100vw - 62px)}.filter-summary{margin-bottom:10px}}
 @media(prefers-reduced-motion:reduce){.spinner{animation:none}}
-.tabs{display:flex;gap:8px;margin-bottom:14px}.tabs button{min-height:42px;border:1px solid var(--line);border-radius:10px;padding:0 18px;background:var(--paper);color:var(--ink);font-weight:650}.tabs button[aria-selected="true"]{background:var(--ink);color:white}.catalog-controls{display:flex;gap:8px;align-items:end;flex-wrap:wrap}.catalog-controls input{width:120px;min-height:42px;border:1px solid var(--line);border-radius:8px;padding:8px;font-size:16px}.catalog-controls .option-field select{min-width:100px}.catalog-card{margin-top:14px}.catalog-progress{width:100%;margin-top:10px}.length-input{width:90px;height:40px;border:1px solid var(--line);border-radius:8px;padding:8px}.catalog-filters{margin-top:10px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.catalog-filters .option-field select{min-width:0;width:100%;font-size:12px;padding:5px 18px 5px 8px}.ending-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.ending-chip{border:1px solid var(--line);border-radius:999px;padding:6px 10px;min-height:34px;background:var(--paper);color:var(--muted);font-size:12px}.ending-chip.selected{background:var(--soft);border-color:var(--accent);color:var(--accent)}@media(max-width:400px){.catalog-controls .primary,.catalog-controls .secondary{padding:0 11px;font-size:12px}.catalog-controls .option-field select{min-width:90px}}
+.tabs{display:flex;gap:8px;margin-bottom:14px}.tabs button{min-height:42px;border:1px solid var(--line);border-radius:10px;padding:0 18px;background:var(--paper);color:var(--ink);font-weight:650}.tabs button[aria-selected="true"]{background:var(--ink);color:white}.catalog-controls{display:flex;gap:8px;align-items:end;flex-wrap:wrap}.catalog-controls input{width:120px;min-height:42px;border:1px solid var(--line);border-radius:8px;padding:8px;font-size:16px}.catalog-controls .option-field select{min-width:100px}.catalog-options{margin-top:10px}.catalog-card{margin-top:14px}.catalog-progress{width:100%;margin-top:10px}.length-input{width:90px;height:40px;border:1px solid var(--line);border-radius:8px;padding:8px}.catalog-filters{margin-top:10px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.catalog-filters .option-field select{min-width:0;width:100%;font-size:12px;padding:5px 18px 5px 8px}.ending-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.ending-chip{border:1px solid var(--line);border-radius:999px;padding:6px 10px;min-height:34px;background:var(--paper);color:var(--muted);font-size:12px}.ending-chip.selected{background:var(--soft);border-color:var(--accent);color:var(--accent)}@media(max-width:400px){.catalog-controls .primary,.catalog-controls .secondary{padding:0 11px;font-size:12px}.catalog-controls .option-field select{min-width:90px}}
 </style>
 </head>
 <body>
 <main class="shell">
   <header class="top">
-    <div class="brand"><span class="logo" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="14" cy="14" r="10.5"/><path d="M3.5 14h21M14 3.5c-6 5.5-6 15.5 0 21M14 3.5c6 5.5 6 15.5 0 21"/></svg></span><div><strong>Domain Finder</strong><span class="version">v1.3.0</span></div></div>
+    <div class="brand"><span class="logo" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="14" cy="14" r="10.5"/><path d="M3.5 14h21M14 3.5c-6 5.5-6 15.5 0 21M14 3.5c6 5.5 6 15.5 0 21"/></svg></span><div><strong>Domain Finder</strong><span class="version">v1.3.3</span></div></div>
     <span id="connection" class="connection">Checking setup</span>
   </header>
   <p class="eyebrow">Cloudflare Registrar</p>
@@ -80,7 +80,8 @@
 <section id="catalogPane" role="tabpanel" aria-labelledby="catalogTab" hidden>
   <div class="search-card">
     <div class="catalog-controls"><div class="option-field"><label for="catalogEnding">Ending</label><input id="catalogEnding" list="catalogEndings" value="com" placeholder="com" autocomplete="off" autocapitalize="none" spellcheck="false"><datalist id="catalogEndings"></datalist></div><button id="catalogStart" class="primary" type="button">Add ending</button><button id="catalogPause" class="secondary" type="button" hidden>Pause</button><button id="catalogRefresh" class="secondary" type="button">Refresh</button></div>
-    <p class="hint">3 letters · a–z · 17,576 names per ending. Runs in the background even when this page is closed.</p>
+    <div class="filters catalog-options"><label class="check-label"><input id="catalogNumbers" type="checkbox">Include numbers (0–9)</label><label class="check-label"><input id="catalogHyphens" type="checkbox">Include hyphens (a-b)</label></div>
+    <p id="catalogScope" class="hint">3 characters · a–z · 17,576 names per ending. Runs in the background. Cached names are kept when options change.</p>
     <p id="catalogStatus" class="hint" role="status">Loading catalog…</p><progress id="catalogProgress" max="17576" value="0" class="catalog-progress"></progress>
     <p id="catalogLoaded" class="sr-only">0 cached names loaded</p>
   </div>
@@ -582,7 +583,7 @@ function render() {
     ? 'No confirmed available domains in this view. Turn off “Available only” to see every result.'
     : searchInfo?.total
       ? 'None of the returned suggestions match your filters. Broaden the match, pattern, or selected endings and search again.'
-      : 'Cloudflare returned no suggestions for this keyword and these endings. Try another keyword or select more endings.';
+      : 'Cloudflare returned no suggestions for this keyword. Try another keyword.';
   showSearchSummary();
   $('copyButton').disabled = !shown.length;
   $('copyButton').textContent = 'Copy shown domains';
@@ -771,6 +772,7 @@ function renderEndingChips() {
   holder.hidden = !names.length;
 }
 let catalogVisible = false, catalogTimer = null, catalogBusy = false, catalogEpoch = 0;
+let catalogPacing = null, catalogOptionsBusy = false;
 let catalogEnding = 'com', catalogAfter = 0, catalogJobs = [], catalogPage = 0, catalogRows = new Map(), catalogFiltered = [];
 let catalogFilterEpoch = 0, catalogWorker = null;
 function catalogMessage(text, error = false) {
@@ -779,8 +781,17 @@ function catalogMessage(text, error = false) {
 function catalogStatus() {
   const job = catalogJobs.find(job => job.ending === catalogEnding);
   const state = { running: 'Scanning in background', retrying: 'Retrying in background', paused: 'Paused', complete: 'Complete', complete_with_unknown: 'Complete · some checks unresolved' };
-  $('catalogStatus').textContent = job ? `${state[job.state] || job.state} · ${job.checked.toLocaleString()} / ${job.total.toLocaleString()} checked · ${job.available.toLocaleString()} available` : 'This ending has not been added yet.';
-  $('catalogProgress').value = job?.cursor || 0;
+  const waiting = job && !['paused','complete','complete_with_unknown'].includes(job.state) && catalogPacing?.waitUntil > Date.now() ? ` · ${catalogPacing.reason} (${new Date(catalogPacing.waitUntil).toLocaleTimeString()})` : '';
+  if (job && !catalogOptionsBusy) {
+    $('catalogNumbers').checked = !!job.include_numbers;
+    $('catalogHyphens').checked = !!job.include_hyphens;
+  }
+  $('catalogNumbers').disabled = catalogOptionsBusy;
+  $('catalogHyphens').disabled = catalogOptionsBusy;
+  catalogScope();
+  $('catalogStatus').textContent = job ? `${state[job.state] || job.state} · ${(job.scanned ?? job.cursor).toLocaleString()} / ${job.total.toLocaleString()} scanned · ${job.cached.toLocaleString()} cached · ${job.available.toLocaleString()} available${waiting}` : 'This ending has not been added yet.';
+  $('catalogProgress').max = job?.total || 17576;
+  $('catalogProgress').value = job?.scanned ?? job?.cursor ?? 0;
   $('catalogPause').hidden = !job || ['complete','complete_with_unknown'].includes(job.state);
   $('catalogPause').textContent = job?.state === 'paused' ? 'Resume' : 'Pause';
   $('catalogStart').textContent = job ? job.state === 'complete_with_unknown' ? 'Retry unresolved' : 'Scan / resume' : 'Add ending';
@@ -790,6 +801,11 @@ function catalogStatus() {
   $('catalogEndings').replaceChildren(...choices.map(name => { const option = element('option'); option.value = name; return option; }));
   if (job?.error) catalogMessage(job.error + ' Progress is saved; failed requests will retry automatically.', true);
 }
+function catalogScope() {
+  const base = $('catalogNumbers').checked ? 36 : 26;
+  const total = base ** 3 + ($('catalogHyphens').checked ? base ** 2 : 0);
+  $('catalogScope').textContent = `3 characters · a–z${$('catalogNumbers').checked ? ', 0–9' : ''}${$('catalogHyphens').checked ? ', middle hyphen' : ''} · ${total.toLocaleString()} names per ending. Runs in the background. Cached names are kept when options change.`;
+}
 async function refreshCatalog() {
   if (catalogBusy) return;
   catalogBusy = true; const epoch = catalogEpoch, ending = catalogEnding;
@@ -798,7 +814,7 @@ async function refreshCatalog() {
     const status = await request('/api/catalog/status');
     if (epoch !== catalogEpoch) return;
     if (!Array.isArray(status.jobs)) throw new Error('Invalid catalog status.');
-    catalogJobs = status.jobs; catalogMessage(''); catalogStatus();
+    catalogJobs = status.jobs; catalogPacing = status.pacing; catalogMessage(''); catalogStatus();
     const job = catalogJobs.find(j => j.ending === ending);
     let changes = false;
     if (job && job.sequence > catalogAfter) {
@@ -825,18 +841,26 @@ function setCatalogEnding() {
   if (!validEnding(ending)) { catalogMessage('Enter an ending such as com, io, or co.uk.', true); return false; }
   if (ending !== catalogEnding) {
     catalogEnding = ending; catalogAfter = 0; catalogRows.clear(); catalogPage = 0; catalogEpoch++;
+    const job = catalogJobs.find(job => job.ending === ending);
+    $('catalogNumbers').checked = !!job?.include_numbers;
+    $('catalogHyphens').checked = !!job?.include_hyphens;
     catalogFiltered = []; renderCatalog();
   }
   $('catalogEnding').value = ending; return true;
 }
 async function catalogControl(action) {
   if (!setCatalogEnding()) return;
+  const options = ['start','options'].includes(action) ? { includeNumbers: $('catalogNumbers').checked, includeHyphens: $('catalogHyphens').checked } : undefined;
+  catalogOptionsBusy = true;
+  $('catalogNumbers').disabled = true; $('catalogHyphens').disabled = true;
   try {
-    const result = await request('/api/catalog/control', { ending: catalogEnding, action });
-    catalogJobs = result.jobs;
+    const result = await request('/api/catalog/control', { ending: catalogEnding, action, ...(options ? { options } : {}) });
+    catalogJobs = result.jobs; catalogPacing = result.pacing;
+    catalogOptionsBusy = false;
     recentEndings.add(catalogEnding); saveOptions(); renderEndingChips();
     catalogMessage(''); catalogStatus(); await refreshCatalog();
   } catch (error) { catalogMessage(error.message, true); }
+  finally { catalogOptionsBusy = false; catalogStatus(); }
 }
 function catalogRegex(pattern, labels) {
   return new Promise((resolve, reject) => {
@@ -910,6 +934,10 @@ $('catalogStart').addEventListener('click',()=>catalogControl('start'));
 $('catalogPause').addEventListener('click',()=>catalogControl(catalogJobs.find(j=>j.ending===catalogEnding)?.state==='paused'?'resume':'pause'));
 $('catalogRefresh').addEventListener('click',()=>{ if(setCatalogEnding()) refreshCatalog(); });
 $('catalogEnding').addEventListener('change',()=>{if(setCatalogEnding()) refreshCatalog();});
+for (const id of ['catalogNumbers','catalogHyphens']) $(id).addEventListener('change',()=>{
+  catalogScope();
+  if (catalogJobs.some(job => job.ending === catalogEnding)) catalogControl('options');
+});
 for (const id of ['catalogQuery','catalogMatch','catalogAvailability','catalogSort']) $(id).addEventListener(id==='catalogQuery'?'input':'change',()=>filterCatalog());
 $('catalogPrevious').addEventListener('click',()=>{catalogPage--;renderCatalog();});
 $('catalogNext').addEventListener('click',()=>{catalogPage++;renderCatalog();});

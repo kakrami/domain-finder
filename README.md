@@ -1,4 +1,4 @@
-# Domain Finder · v1.3.0
+# Domain Finder · v1.3.3
 
 Replace the same four files in your existing repository. Keep the same secrets. The updated wrangler.jsonc provisions Catalog storage and a background schedule automatically; upload all four files together.
 
@@ -8,7 +8,7 @@ One search field, a Match selector, and selected endings.
 
 - Exact: `mango` with `.com` and `.io` checks `mango.com` and `mango.io` directly.
 - Regex: enter the pattern in the search field. Matching names are generated and checked directly; no suggestion keyword is used.
-- All suggestions / Contains / Begins with / Ends with: use Cloudflare suggestions and apply the chosen text filter.
+- All suggestions / Contains / Begins with / Ends with: request up to 50 Cloudflare suggestions and apply the chosen text and ending filters to that page. A zero match means none of those returned suggestions matched; it does not rule out other domains.
 - Full domains and comma-separated domain lists are checked exactly.
 
 Regex example: `^mango[a-z0-9]{1,4}$` generates every valid name matching that pattern, for each selected ending. Checks run in pages of 200, with progress, Stop, Resume checks, and Check next 200. Results display the current page. Scans run while the page is open; reloading does not preserve progress.
@@ -72,7 +72,7 @@ The shared Registrar request now uses `redirect: 'manual'` and rejects redirects
 
 ## Verification
 
-Local backend tests used real SQLite and simulated Cloudflare responses, completing all 17,576 records and checking restart persistence, counters, pause/resume, backoff, missing-result retries, delta updates, and completion. Chromium tests checked Catalog filtering, regex workers, pagination, saved ending chips, pause/resume, incremental updates, and mobile/desktop layouts. Live deployment and authentication against your account have not been tested here.
+Local backend tests used real SQLite and simulated Cloudflare responses, preserving a legacy catalog during schema migration, verifying independent character-group progress and no repeated successful checks, exhaustively generating all four character sets (up to 47,952 distinct names), and completing the original 17,576 records and checking restart persistence, counters, pause/resume, backoff, missing-result retries, delta updates, and completion. Chromium tests checked option persistence and checkbox changes without losing cached rows, plus Catalog filtering, regex workers, pagination, saved ending chips, pause/resume, incremental updates, and mobile/desktop layouts. Live deployment and authentication against your account have not been tested here.
 
 ## Official references
 
@@ -93,12 +93,20 @@ Documentation checked September 29, 2026:
 
 ## Catalog
 
-Open the Catalog tab. The .com scan starts automatically after deployment (the background schedule may take several minutes to activate). It generates all 17,576 three-letter names, a-z only. To add an ending, enter it and choose Add ending. Pause/resume affects that ending only. No browser needs to stay open. Completed scans stop; saved availability remains dated until explicitly rechecked. 4-character scanning is not part of this release.
+Open the Catalog tab. The .com scan starts automatically after deployment (the background schedule may take several minutes to activate). By default it generates all 17,576 three-letter names, a-z only. Enable the number and hyphen checkboxes to expand the scan without discarding existing results. To add an ending, enter it and choose Add ending. Pause/resume affects that ending only. No browser needs to stay open. Completed scans stop; saved availability remains dated until explicitly rechecked. 4-character scanning is not part of this release.
 
-The Worker uses one SQLite-backed Durable Object with a persistent cursor, saved results, and alarms. Cron wakes it once per minute for startup/recovery; alarms process one batch of up to 20 names every 10 seconds. Transport errors retain the cursor and retry with backoff. Missing domain records stay unchecked and receive individual retries, never assumed unavailable. After repeated missing responses, the scan finishes with unresolved records and a Retry unresolved action. Cached rows and progress survive redeployments.
+The Worker uses one SQLite-backed Durable Object with a persistent cursor, saved results, and alarms. Cron wakes it once per minute for startup/recovery; alarms process one batch of up to 20 names per second, at most 300 API requests in five minutes (25% of the documented global limit). It slows down when Cloudflare reports low remaining capacity, honors Retry-After after HTTP 429, and caps its own estimated daily writes at 70,000, leaving headroom under the 100,000 daily free SQLite write limit. Other account workloads also count toward that limit. When that budget is reached, it resumes after midnight UTC. Transport errors retain the cursor and retry with backoff. Missing domain records stay unchecked and receive individual retries, never assumed unavailable. After repeated missing responses, the scan finishes with unresolved records and a Retry unresolved action. Cached rows and progress survive redeployments.
 
 The Catalog tab incrementally fetches saved rows and filters them locally using Exact/Contains/Begins with/Ends with/Regex, availability, and sort. Catalog regex is a filter against the complete saved list for that ending and accepts JavaScript regex syntax with a timeout. CSV exports the filtered cached list. Search regex remains a candidate generator.
 
 Selected and previously used endings appear as saved chips at the top of the search options. Selected chips are highlighted; click to deselect. Unselected saved chips can be selected again. Browser preferences are local; catalog data is stored on the server.
 
 Deployment requires a Wrangler version supporting the current declarative Durable Object exports field. Existing deploy command npx wrangler deploy resolves the current release; no database IDs, manual binding setup, or new secrets are required.
+
+Cloudflare limits: https://developers.cloudflare.com/fundamentals/api/reference/limits/ and https://developers.cloudflare.com/durable-objects/platform/pricing/.
+
+## Catalog character options
+
+Letters a–z remain included. “Include numbers” adds digit-only and mixed letter/number names. “Include hyphens” adds a hyphen in the middle, the only valid position for a three-character name. With both enabled, the catalog covers all 47,952 valid ASCII three-character labels for each added ending. Endings may have registry-specific restrictions.
+
+The update adds columns to the existing jobs table without replacing its storage. Original letter ordinals, results, counters, and progress remain intact. Additional groups have separate saved cursors and disjoint domain IDs. Unchecking a box pauses only that group; cached results remain searchable. Rechecking resumes its cursor and does not repeat successful checks. Existing unknown-result retries remain supported. Options are saved per ending on the server.
