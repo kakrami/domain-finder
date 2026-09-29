@@ -1,8 +1,8 @@
 import page from './index.html';
 
-// Domain Finder 1.0.0. Only these two read-only Registrar operations are exposed.
+// Domain Finder 1.0.1. Only these two read-only Registrar operations are exposed.
 // Runtime secrets: CF_ACCOUNT_ID and CF_API_TOKEN. Never put values in this file.
-const VERSION = '1.0.0';
+const VERSION = '1.0.1';
 const LIMIT = 20;
 const HEADERS = {
   'Cache-Control': 'no-store',
@@ -110,12 +110,25 @@ function cleanRows(rows) {
   });
 }
 
+// Redact before truncating so a long error cannot expose part of a secret.
+function safeDetail(value, config) {
+  let text = String(value || '');
+  for (const secret of [config.token, config.account]) {
+    if (!secret) continue;
+    for (const variant of new Set([secret, encodeURIComponent(secret)])) {
+      text = text.split(variant).join('[redacted]');
+    }
+  }
+  return text.replace(/[\u0000-\u001f\u007f]/g, ' ').slice(0, 600);
+}
+
 async function registrar(config, operation, data) {
   const url = new URL(`https://api.cloudflare.com/client/v4/accounts/${config.account}/registrar/${operation}`);
   const options = {
     method: operation === 'domain-search' ? 'GET' : 'POST',
     headers: { Authorization: 'Bearer ' + config.token, Accept: 'application/json' },
-    redirect: 'error',
+    // Workers supports manual redirect handling. Never forward the API token.
+    redirect: 'manual',
   };
   if (operation === 'domain-search') {
     url.searchParams.set('q', data.q);
@@ -129,18 +142,20 @@ async function registrar(config, operation, data) {
   options.signal = controller.signal;
   try {
     const response = await fetch(url, options);
+    if ([301, 302, 303, 307, 308].includes(response.status)) {
+      throw new AppError(`Cloudflare Registrar returned an unexpected HTTP ${response.status} redirect. The request was not forwarded to protect your API token.`, 502);
+    }
     let body;
     try { body = await response.json(); }
     catch {
+      if (controller.signal.aborted) throw new AppError('Cloudflare took too long to respond. Please retry the search.', 504);
       if (response.status === 429) throw new AppError('Cloudflare is rate-limiting requests. Wait a moment, then search again.', 429);
       throw new AppError(`Cloudflare returned HTTP ${response.status} without a JSON result. Try again later.`, 502);
     }
     if (!response.ok || body?.success !== true) {
-      const detail = Array.isArray(body?.errors)
-        ? body.errors.map(e => String(e?.message || '')).filter(Boolean).join('; ').slice(0, 500)
-        : '';
-      // Never send a credential back, even if an upstream diagnostic echoes it.
-      const safeDetail = detail.split(config.token).join('[redacted]').split(config.account).join('[account]');
+      const detail = safeDetail(Array.isArray(body?.errors)
+        ? body.errors.map(e => String(e?.message || '')).filter(Boolean).join('; ')
+        : '', config);
       let message = 'Cloudflare could not complete this search.';
       if (response.status === 401 || response.status === 403) {
         message = 'Cloudflare rejected access. Check CF_ACCOUNT_ID, the token, and its Registrar permissions for this account.';
@@ -149,13 +164,14 @@ async function registrar(config, operation, data) {
       } else if (response.status === 429) {
         message = 'Cloudflare is rate-limiting requests. Wait a moment, then search again.';
       }
-      throw new AppError(message + (safeDetail ? ' ' + safeDetail : ` (HTTP ${response.status})`), response.status === 429 ? 429 : 502);
+      throw new AppError(`${message} (HTTP ${response.status})` + (detail ? ' ' + detail : ''), response.status === 429 ? 429 : 502);
     }
     return cleanRows(body.result?.domains);
   } catch (error) {
     if (error instanceof AppError) throw error;
     if (controller.signal.aborted) throw new AppError('Cloudflare took too long to respond. Please retry the search.', 504);
-    throw new AppError('The Worker could not reach Cloudflare Registrar. Please retry.', 502);
+    const detail = safeDetail(error instanceof Error ? `${error.name}: ${error.message}` : error, config);
+    throw new AppError('Cloudflare request failed.' + (detail ? ' ' + detail : ' No response was received.'), 502);
   } finally { clearTimeout(timeout); }
 }
 

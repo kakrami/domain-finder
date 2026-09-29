@@ -22,7 +22,7 @@
 <body>
 <main class="shell">
   <header class="top">
-    <div class="brand"><span class="logo" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="14" cy="14" r="10.5"/><path d="M3.5 14h21M14 3.5c-6 5.5-6 15.5 0 21M14 3.5c6 5.5 6 15.5 0 21"/></svg></span><div><strong>Domain Finder</strong><span class="version">v1.0.0</span></div></div>
+    <div class="brand"><span class="logo" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="14" cy="14" r="10.5"/><path d="M3.5 14h21M14 3.5c-6 5.5-6 15.5 0 21M14 3.5c6 5.5 6 15.5 0 21"/></svg></span><div><strong>Domain Finder</strong><span class="version">v1.0.1</span></div></div>
     <span id="connection" class="connection">Checking setup</span>
   </header>
   <p class="eyebrow">Cloudflare Registrar</p>
@@ -85,7 +85,7 @@ async function request(path, body, signal) {
   const timeout = setTimeout(() => { timedOut = true; controller.abort(); }, 20000);
   try {
     const response = await fetch(path, {
-      method: body === undefined ? 'POST',
+      method: body === undefined ? 'GET' : 'POST',
       headers: body === undefined ? { Accept: 'application/json' } : { Accept: 'application/json', 'Content-Type': 'application/json' },
       body: body === undefined ? undefined : JSON.stringify(body),
       signal: controller.signal, credentials: 'same-origin', cache: 'no-store',
@@ -117,7 +117,7 @@ async function checkSetup() {
     $('setup').hidden = ready;
     $('secretHelp').hidden = false;
     $('setupMessage').textContent = result.problems.join(' ');
-    $('connection').textContent = ready ? 'Ready to search' : 'Setup needed';
+    $('connection').textContent = ready ? 'Secrets configured' : 'Setup needed';
     $('connection').className = 'connection ' + (ready ? 'ready' : 'error');
     if (ready) notice('');
   } catch (error) {

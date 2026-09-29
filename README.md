@@ -1,4 +1,4 @@
-# Domain Finder · v1.0.0
+# Domain Finder · v1.0.1
 
 A single-file HTML interface with a small Cloudflare Worker for private API calls. No frontend libraries, database, separate API URL, or code edits are needed.
 
@@ -35,7 +35,7 @@ A single-file HTML interface with a small Cloudflare Worker for private API call
 
 4. Open the `workers.dev` address Cloudflare supplies. Select **Check again** if the page was already open. Search a phrase, a full domain, or up to 20 full domains separated by commas.
 
-The initial deployment can show “Setup needed” until the secrets are added. “Ready to search” confirms the settings are present; the first search checks whether Cloudflare accepts the credentials.
+The initial deployment can show “Setup needed” until the secrets are added. “Secrets configured” confirms the settings are present; the first search checks whether Cloudflare accepts the credentials.
 
 ## Account setup
 
@@ -53,9 +53,13 @@ The Registrar API is in beta and supports a subset of dashboard extensions. Pric
 
 The deployed search service is public by default. Anyone with its address can consume its search/API quota. Protect the deployment with authentication before using it as a private service. Secrets are never returned to the browser.
 
+## v1.0.1 repair
+
+The shared Registrar request now uses `redirect: 'manual'` and rejects redirects explicitly. It does not forward your token to a redirect destination. Request failures include the underlying error with both secrets redacted before truncation. HTTP errors include their response status. The initial status says “Secrets configured,” not “Ready to search”; credential acceptance is established only by a successful API request.
+
 ## Verification
 
-26 Worker-handler checks and 14 offline Chromium interface checks passed using simulated responses. Phone widths of 280, 320, and 390 pixels were checked. Native clipboard permission was simulated. Browser navigation was restricted in the test environment. The actual Cloudflare deployment, Wrangler build, account authentication, and live prices have **not** been tested against your account.
+44 local Worker-handler regression checks and 12 offline Chromium checks passed. These use simulated API responses; the request guard simulates the redirect validation published in Cloudflare workerd source. Browser navigation is restricted in the test environment, so interface tests use offline rendering. The actual workerd binary, Wrangler build, live Cloudflare deployment, account authentication, and current domain prices have not been tested against your account. The corrected files do not contain either secret value.
 
 ## Official references
 
@@ -66,3 +70,5 @@ Documentation checked September 29, 2026:
 - Runtime secrets: https://developers.cloudflare.com/workers/configuration/secrets/
 - Account ID: https://developers.cloudflare.com/fundamentals/account/find-account-and-zone-ids/
 - HTML module imports: https://developers.cloudflare.com/workers/wrangler/bundling/
+
+- Workers runtime redirect validation: https://github.com/cloudflare/workerd/blob/ab1b3926727b2fdc1f104d99eef93a878a93f665/src/workerd/api/http.c++
