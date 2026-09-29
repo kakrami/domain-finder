@@ -1,6 +1,6 @@
-# Domain Finder · v1.2.0
+# Domain Finder · v1.3.0
 
-Replace the same four files in your existing repository. Worker settings and secrets are unchanged.
+Replace the same four files in your existing repository. Keep the same secrets. The updated wrangler.jsonc provisions Catalog storage and a background schedule automatically; upload all four files together.
 
 ## Search
 
@@ -72,9 +72,7 @@ The shared Registrar request now uses `redirect: 'manual'` and rejects redirects
 
 ## Verification
 
-39 local backend checks and 40 offline Chromium checks passed using simulated Cloudflare responses. Coverage includes all match modes, real browser regex workers under the app's Content Security Policy, regex timeouts, extension pagination and serialization, 50-result verification batching, partial failures, Stop, repeated searches, stale-response protection, exact checks, sorting, copying, and layouts from 280 to 1280 pixels wide.
-
-Browser network navigation is restricted in this test environment. The interface was rendered offline with an HTTP transport bridge to the actual backend handler; Cloudflare responses, browser storage, and clipboard writes were simulated. Native workerd execution, Wrangler deployment, your live credentials, and actual Registrar results were not tested. There are no new runtime dependencies. Test harness files and screenshots are not part of this deployment package.
+Local backend tests used real SQLite and simulated Cloudflare responses, completing all 17,576 records and checking restart persistence, counters, pause/resume, backoff, missing-result retries, delta updates, and completion. Chromium tests checked Catalog filtering, regex workers, pagination, saved ending chips, pause/resume, incremental updates, and mobile/desktop layouts. Live deployment and authentication against your account have not been tested here.
 
 ## Official references
 
@@ -92,3 +90,15 @@ Documentation checked September 29, 2026:
 - Domain-check semantics and 20-domain limit: https://developers.cloudflare.com/api/resources/registrar/methods/check/
 - Live extension catalog and pagination: https://developers.cloudflare.com/api/resources/registrar/subresources/extensions/methods/list/
 - Official SDK repeated-key array serialization: https://github.com/cloudflare/cloudflare-typescript/blob/5ba0c3d36e3f3a7b12990b55649517b1d5c4914c/src/internal/utils/query.ts
+
+## Catalog
+
+Open the Catalog tab. The .com scan starts automatically after deployment (the background schedule may take several minutes to activate). It generates all 17,576 three-letter names, a-z only. To add an ending, enter it and choose Add ending. Pause/resume affects that ending only. No browser needs to stay open. Completed scans stop; saved availability remains dated until explicitly rechecked. 4-character scanning is not part of this release.
+
+The Worker uses one SQLite-backed Durable Object with a persistent cursor, saved results, and alarms. Cron wakes it once per minute for startup/recovery; alarms process one batch of up to 20 names every 10 seconds. Transport errors retain the cursor and retry with backoff. Missing domain records stay unchecked and receive individual retries, never assumed unavailable. After repeated missing responses, the scan finishes with unresolved records and a Retry unresolved action. Cached rows and progress survive redeployments.
+
+The Catalog tab incrementally fetches saved rows and filters them locally using Exact/Contains/Begins with/Ends with/Regex, availability, and sort. Catalog regex is a filter against the complete saved list for that ending and accepts JavaScript regex syntax with a timeout. CSV exports the filtered cached list. Search regex remains a candidate generator.
+
+Selected and previously used endings appear as saved chips at the top of the search options. Selected chips are highlighted; click to deselect. Unselected saved chips can be selected again. Browser preferences are local; catalog data is stored on the server.
+
+Deployment requires a Wrangler version supporting the current declarative Durable Object exports field. Existing deploy command npx wrangler deploy resolves the current release; no database IDs, manual binding setup, or new secrets are required.

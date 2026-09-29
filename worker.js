@@ -1,8 +1,9 @@
+import { DurableObject } from 'cloudflare:workers';
 import page from './index.html';
 
-// Domain Finder 1.2.0. Only search, check, and extension-list Registrar operations are exposed.
+// Domain Finder 1.3.0. Only search, check, and extension-list Registrar operations are exposed.
 // Runtime secrets: CF_ACCOUNT_ID and CF_API_TOKEN. Never put values in this file.
-const VERSION = '1.1.0';
+const VERSION = '1.3.0';
 const LIMIT = 20; // Cloudflare domain-check request limit.
 const SEARCH_LIMIT = 50;
 const HEADERS = {
@@ -225,6 +226,9 @@ async function check(config, domains) {
 }
 
 export default {
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(catalogStub(env).fetch(new Request('https://catalog/ensure')));
+  },
   async fetch(request, env) {
     const url = new URL(request.url);
     if ((url.pathname === '/' || url.pathname === '/index.html') && ['GET', 'HEAD'].includes(request.method)) {
@@ -243,6 +247,16 @@ export default {
     if (url.pathname === '/api/status' && request.method === 'GET') {
       const config = settings(env);
       return json({ version: VERSION, configured: config.problems.length === 0, problems: config.problems });
+    }
+    if (url.pathname.startsWith('/api/catalog/')) {
+      const origin = request.headers.get('origin');
+      if ((origin && origin !== url.origin) || request.headers.get('sec-fetch-site') === 'cross-site') return json({ error: 'Use the Catalog tab on this website.' }, 403);
+      const path = url.pathname.slice('/api/catalog'.length);
+      if (!['/status','/list','/control'].includes(path)) return json({ error: 'Not found.' }, 404);
+      if (request.method !== (path === '/control' ? 'POST' : 'GET')) return json({ error: 'Invalid method.' }, 405);
+      try {
+        return await catalogStub(env).fetch(new Request('https://catalog' + path + url.search, request));
+      } catch { return json({ error: 'Catalog could not connect to storage. Deploy the updated wrangler.jsonc and worker.js together.' }, 503); }
     }
     const isExtensions = url.pathname === '/api/extensions';
     if (!['/api/search', '/api/check', '/api/extensions'].includes(url.pathname)) return json({ error: 'Not found.' }, 404);
@@ -283,3 +297,150 @@ export default {
     }
   },
 };
+
+const CATALOG_TOTAL = 26 ** 3;
+function shortName(index) {
+  return String.fromCharCode(97 + Math.floor(index / 676), 97 + Math.floor(index / 26) % 26, 97 + index % 26);
+}
+function catalogStub(env) {
+  if (!env.CATALOG) throw new AppError('Upload the updated wrangler.jsonc with the Catalog binding, then deploy.', 503);
+  return env.CATALOG.get(env.CATALOG.idFromName('three-letter-catalog'));
+}
+export class DomainCatalog extends DurableObject {
+  constructor(ctx, env) {
+    super(ctx, env);
+    this.ctx = ctx; this.env = env;
+    this.sql = ctx.storage.sql;
+    this.sql.exec(`CREATE TABLE IF NOT EXISTS jobs (ending TEXT PRIMARY KEY, cursor INTEGER NOT NULL DEFAULT 0, state TEXT NOT NULL DEFAULT 'running', sequence INTEGER NOT NULL DEFAULT 0, attempts INTEGER NOT NULL DEFAULT 0, retry_at INTEGER NOT NULL DEFAULT 0, error TEXT NOT NULL DEFAULT '', updated INTEGER NOT NULL DEFAULT 0, cached INTEGER NOT NULL DEFAULT 0, checked INTEGER NOT NULL DEFAULT 0, available INTEGER NOT NULL DEFAULT 0, unknown INTEGER NOT NULL DEFAULT 0)`);
+    this.sql.exec(`CREATE TABLE IF NOT EXISTS domains (ending TEXT NOT NULL, ordinal INTEGER NOT NULL, checked INTEGER NOT NULL, available INTEGER, data TEXT NOT NULL, sequence INTEGER NOT NULL, PRIMARY KEY (ending, ordinal))`);
+    this.sql.exec(`CREATE INDEX IF NOT EXISTS domain_changes ON domains(ending, sequence)`);
+    this.sql.exec(`CREATE INDEX IF NOT EXISTS domain_status ON domains(ending, checked, available)`);
+    this.sql.exec(`CREATE TABLE IF NOT EXISTS retries (ending TEXT NOT NULL, ordinal INTEGER NOT NULL, attempts INTEGER NOT NULL DEFAULT 0, due INTEGER NOT NULL, PRIMARY KEY(ending, ordinal))`);
+    this.sql.exec(`CREATE INDEX IF NOT EXISTS retry_due ON retries(ending, due)`);
+  }
+  job(ending) { return this.sql.exec('SELECT * FROM jobs WHERE ending = ?', ending).toArray()[0]; }
+  async ensure() {
+    this.sql.exec("INSERT OR IGNORE INTO jobs(ending, updated) VALUES('com', ?)", Date.now());
+    await this.wake();
+  }
+  async wake() {
+    const jobs = this.sql.exec("SELECT * FROM jobs WHERE state IN ('running','retrying')").toArray();
+    if (!jobs.length) { await this.ctx.storage.deleteAlarm(); return; }
+    let next = Infinity;
+    for (const job of jobs) {
+      if (job.cursor < CATALOG_TOTAL) next = Math.min(next, Math.max(Date.now() + 1000, job.retry_at));
+      else {
+        const due = this.sql.exec('SELECT MIN(due) AS due FROM retries WHERE ending = ?', job.ending).toArray()[0]?.due;
+        if (due !== null && due !== undefined) next = Math.min(next, Math.max(Date.now() + 1000, job.retry_at, due));
+      }
+    }
+    if (Number.isFinite(next)) {
+      const alarm = await this.ctx.storage.getAlarm();
+      if (!alarm || alarm > next) await this.ctx.storage.setAlarm(next);
+    }
+  }
+  status() {
+    const jobs = this.sql.exec('SELECT * FROM jobs ORDER BY ending').toArray().map(job => {
+      return { ...job, total: CATALOG_TOTAL };
+    });
+    return { length: 3, characters: 'a-z', jobs };
+  }
+  async fetch(request) {
+    return this.ctx.blockConcurrencyWhile(async () => {
+      try {
+        const url = new URL(request.url);
+        await this.ensure();
+        if (url.pathname === '/ensure') return json(this.status());
+        if (request.method === 'GET' && url.pathname === '/status') return json(this.status());
+        if (request.method === 'GET' && url.pathname === '/list') {
+          const ending = extensionName(url.searchParams.get('ending') || 'com');
+          const after = Number(url.searchParams.get('after') || 0);
+          if (!Number.isSafeInteger(after) || after < 0) throw new AppError('Invalid catalog cursor.');
+          const data = this.sql.exec('SELECT data, sequence FROM domains WHERE ending = ? AND sequence > ? ORDER BY sequence LIMIT 1001', ending, after).toArray();
+          const rows = data.slice(0, 1000);
+          return json({ domains: rows.map(row => JSON.parse(row.data)), after: rows.at(-1)?.sequence || after, hasMore: data.length > 1000 });
+        }
+        if (request.method === 'POST' && url.pathname === '/control') {
+          const body = await readBody(request);
+          const ending = extensionName(body.ending);
+          if (!['start','pause','resume'].includes(body.action)) throw new AppError('Invalid catalog action.');
+          if (body.action === 'start' && !this.job(ending)) {
+            if (this.sql.exec('SELECT COUNT(*) AS count FROM jobs').toArray()[0].count >= 50) throw new AppError('The catalog supports up to 50 endings.');
+            // Validate the ending with one real check before creating a job.
+            const config = settings(this.env);
+            if (config.problems.length) throw new AppError(config.problems.join(' '), 503);
+            const first = await check(config, ['aaa.' + ending]);
+            if (first[0]?.reason === 'extension_disallows_registration') throw new AppError('This ending is not supported by the Registrar API.');
+            this.sql.exec('INSERT INTO jobs(ending, updated) VALUES(?, ?)', ending, Date.now());
+          }
+          const job = this.job(ending);
+          if (!job) throw new AppError('Start this ending first.');
+          if (body.action === 'pause') this.sql.exec("UPDATE jobs SET state='paused', updated=? WHERE ending=?", Date.now(), ending);
+          else if (job.cursor < CATALOG_TOTAL || job.state === 'paused' || job.state === 'complete_with_unknown') {
+            this.ctx.storage.transactionSync(() => {
+              if (job.cursor >= CATALOG_TOTAL) {
+                this.sql.exec('INSERT OR IGNORE INTO retries(ending, ordinal, attempts, due) SELECT ending, ordinal, 0, ? FROM domains WHERE ending=? AND checked=0', Date.now(), ending);
+                this.sql.exec('UPDATE retries SET attempts=0, due=? WHERE ending=?', Date.now(), ending);
+              }
+              this.sql.exec("UPDATE jobs SET state='running', attempts=0, retry_at=0, error='', updated=? WHERE ending=?", Date.now(), ending);
+            });
+          }
+          if (this.job(ending).cursor >= CATALOG_TOTAL && !this.job(ending).unknown) this.sql.exec("UPDATE jobs SET state='complete' WHERE ending=?", ending);
+          await this.wake();
+          return json(this.status());
+        }
+        throw new AppError('Not found.', 404);
+      } catch (error) { return json({ error: error instanceof AppError ? error.message : 'Catalog storage is unavailable. Retry after checking the deployment.' }, error instanceof AppError ? error.status : 503); }
+    });
+  }
+  async alarm() {
+    return this.ctx.blockConcurrencyWhile(async () => {
+      const now = Date.now();
+      const jobs = this.sql.exec("SELECT * FROM jobs WHERE state IN ('running','retrying') AND retry_at <= ? ORDER BY updated, ending", now).toArray();
+      let job, indices, isRetry;
+      for (const candidate of jobs) {
+        if (candidate.cursor < CATALOG_TOTAL) {
+          job = candidate; indices = Array.from({ length: Math.min(20, CATALOG_TOTAL - candidate.cursor) }, (_, i) => candidate.cursor + i); isRetry = false; break;
+        }
+        const pending = this.sql.exec('SELECT ordinal FROM retries WHERE ending=? AND due<=? ORDER BY due, ordinal LIMIT 20', candidate.ending, now).toArray();
+        if (pending.length) { job = candidate; indices = pending.map(row => row.ordinal); isRetry = true; break; }
+      }
+      if (!job) { await this.wake(); return; }
+      try {
+        const config = settings(this.env);
+        if (config.problems.length) throw new AppError(config.problems.join(' '), 503);
+        const results = await check(config, indices.map(i => shortName(i) + '.' + job.ending));
+        const checkedAt = new Date().toISOString();
+        this.ctx.storage.transactionSync(() => {
+          let sequence = job.sequence;
+          let cached = job.cached, checkedCount = job.checked, available = job.available, unknown = job.unknown;
+          results.forEach((row, i) => {
+            const ordinal = indices[i];
+            const data = { ...row, checkedAt };
+            const previousRow = this.sql.exec('SELECT checked, available FROM domains WHERE ending=? AND ordinal=?', job.ending, ordinal).toArray()[0];
+            if (!previousRow) cached++;
+            checkedCount += (row.checked ? 1 : 0) - (previousRow?.checked || 0);
+            available += (row.checked && row.registrable === true ? 1 : 0) - (previousRow?.checked && previousRow.available === 1 ? 1 : 0);
+            unknown = cached - checkedCount;
+            this.sql.exec('INSERT INTO domains(ending,ordinal,checked,available,data,sequence) VALUES(?,?,?,?,?,?) ON CONFLICT(ending,ordinal) DO UPDATE SET checked=excluded.checked, available=excluded.available, data=excluded.data, sequence=excluded.sequence', job.ending, ordinal, row.checked ? 1 : 0, row.registrable === true ? 1 : row.registrable === false ? 0 : null, JSON.stringify(data), ++sequence);
+            if (row.checked) this.sql.exec('DELETE FROM retries WHERE ending=? AND ordinal=?', job.ending, ordinal);
+            else {
+              const previous = this.sql.exec('SELECT attempts FROM retries WHERE ending=? AND ordinal=?', job.ending, ordinal).toArray()[0]?.attempts || 0;
+              if (previous >= 6) this.sql.exec('DELETE FROM retries WHERE ending=? AND ordinal=?', job.ending, ordinal);
+              else this.sql.exec('INSERT INTO retries(ending,ordinal,attempts,due) VALUES(?,?,?,?) ON CONFLICT(ending,ordinal) DO UPDATE SET attempts=excluded.attempts,due=excluded.due', job.ending, ordinal, previous + 1, now + Math.min(900000, 60000 * 2 ** previous));
+            }
+          });
+          const cursor = isRetry ? job.cursor : job.cursor + indices.length;
+          const pending = this.sql.exec('SELECT COUNT(*) AS count FROM retries WHERE ending=?', job.ending).toArray()[0].count;
+          const state = cursor < CATALOG_TOTAL ? 'running' : pending ? 'retrying' : unknown ? 'complete_with_unknown' : 'complete';
+          this.sql.exec('UPDATE jobs SET cursor=?,sequence=?,state=?,attempts=0,retry_at=?,error=\'\',updated=?,cached=?,checked=?,available=?,unknown=? WHERE ending=?', cursor, sequence, state, now + 10000, now, cached, checkedCount, available, unknown, job.ending);
+        });
+      } catch (error) {
+        const attempts = job.attempts + 1;
+        const message = error instanceof AppError ? error.message : 'Catalog check failed. It will retry automatically.';
+        this.sql.exec("UPDATE jobs SET state='retrying',attempts=?,retry_at=?,error=?,updated=? WHERE ending=?", attempts, now + Math.min(900000, 10000 * 2 ** Math.min(attempts, 7)), message, now, job.ending);
+      }
+      await this.wake();
+    });
+  }
+}

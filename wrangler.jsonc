@@ -5,6 +5,31 @@
   "workers_dev": true,
   "keep_vars": true,
   "rules": [
-    { "type": "Text", "globs": ["**/*.html"], "fallthrough": true }
-  ]
+    {
+      "type": "Text",
+      "globs": [
+        "**/*.html"
+      ],
+      "fallthrough": true
+    }
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "CATALOG",
+        "class_name": "DomainCatalog"
+      }
+    ]
+  },
+  "exports": {
+    "DomainCatalog": {
+      "type": "durable-object",
+      "storage": "sqlite"
+    }
+  },
+  "triggers": {
+    "crons": [
+      "* * * * *"
+    ]
+  }
 }

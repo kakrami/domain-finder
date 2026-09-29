@@ -20,17 +20,20 @@
 .search-options{display:flex;align-items:end;gap:10px;margin-top:13px}.option-field{display:flex;flex-direction:column;gap:5px;min-width:0}.option-field>label{font-size:11px;font-weight:650}.option-field select{height:40px;font-size:13px;color:var(--ink);min-width:145px}.ending-field{position:relative;flex:1;max-width:300px}.ending-toggle{height:40px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 11px;font-size:13px;min-width:0}.ending-toggle span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ending-panel{position:absolute;top:calc(100% + 7px);left:0;width:340px;max-width:calc(100vw - 60px);z-index:5;background:var(--paper);border:1px solid #d4dbe3;border-radius:12px;padding:13px;box-shadow:0 12px 35px #172a3a24}.ending-top{display:flex;gap:9px;justify-content:space-between;align-items:center;margin-bottom:9px}.ending-top strong{font-size:13px}.text-button{background:none;border:0;color:var(--accent);font-size:12px;padding:5px 0;min-height:32px}.ending-search{border:1px solid #cbd2db;border-radius:8px;background:var(--paper);color:var(--ink);font-size:16px;padding:9px 10px;width:100%;min-width:0;min-height:40px}.ending-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px 6px;max-height:220px;overflow-y:auto;overscroll-behavior:contain;margin-top:8px}.ending-choice{display:flex;align-items:center;gap:6px;font-size:12px;min-height:36px;overflow:hidden;cursor:pointer}.ending-choice span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ending-choice input{width:16px;height:16px;margin:0;accent-color:var(--accent);flex:none}.ending-message{font-size:11px;color:var(--muted);line-height:1.5;margin:9px 0 0;overflow-wrap:anywhere}.ending-bottom{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:7px;border-top:1px solid var(--line);padding-top:7px}.ending-bottom .secondary{min-height:34px;font-size:12px;padding:0 12px}.filter-summary{font-size:11px;color:var(--muted);margin:0 0 12px;line-height:1.6;overflow-wrap:anywhere}
 @media(max-width:620px){.search-options{gap:8px}.option-field select{min-width:130px;width:100%}.ending-field{max-width:none}.ending-panel{left:auto;right:0;max-width:calc(100vw - 62px)}.filter-summary{margin-bottom:10px}}
 @media(prefers-reduced-motion:reduce){.spinner{animation:none}}
+.tabs{display:flex;gap:8px;margin-bottom:14px}.tabs button{min-height:42px;border:1px solid var(--line);border-radius:10px;padding:0 18px;background:var(--paper);color:var(--ink);font-weight:650}.tabs button[aria-selected="true"]{background:var(--ink);color:white}.catalog-controls{display:flex;gap:8px;align-items:end;flex-wrap:wrap}.catalog-controls input{width:120px;min-height:42px;border:1px solid var(--line);border-radius:8px;padding:8px;font-size:16px}.catalog-controls .option-field select{min-width:100px}.catalog-card{margin-top:14px}.catalog-progress{width:100%;margin-top:10px}.length-input{width:90px;height:40px;border:1px solid var(--line);border-radius:8px;padding:8px}.catalog-filters{margin-top:10px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.catalog-filters .option-field select{min-width:0;width:100%;font-size:12px;padding:5px 18px 5px 8px}.ending-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.ending-chip{border:1px solid var(--line);border-radius:999px;padding:6px 10px;min-height:34px;background:var(--paper);color:var(--muted);font-size:12px}.ending-chip.selected{background:var(--soft);border-color:var(--accent);color:var(--accent)}@media(max-width:400px){.catalog-controls .primary,.catalog-controls .secondary{padding:0 11px;font-size:12px}.catalog-controls .option-field select{min-width:90px}}
 </style>
 </head>
 <body>
 <main class="shell">
   <header class="top">
-    <div class="brand"><span class="logo" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="14" cy="14" r="10.5"/><path d="M3.5 14h21M14 3.5c-6 5.5-6 15.5 0 21M14 3.5c6 5.5 6 15.5 0 21"/></svg></span><div><strong>Domain Finder</strong><span class="version">v1.2.0</span></div></div>
+    <div class="brand"><span class="logo" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="14" cy="14" r="10.5"/><path d="M3.5 14h21M14 3.5c-6 5.5-6 15.5 0 21M14 3.5c6 5.5 6 15.5 0 21"/></svg></span><div><strong>Domain Finder</strong><span class="version">v1.3.0</span></div></div>
     <span id="connection" class="connection">Checking setup</span>
   </header>
   <p class="eyebrow">Cloudflare Registrar</p>
   <h1>Find your next domain.</h1>
   <p class="lead">Search ideas. Check availability. See registration and renewal prices.</p>
+  <nav class="tabs" role="tablist" aria-label="Domain tools"><button id="searchTab" role="tab" aria-selected="true" aria-controls="searchPane">Search</button><button id="catalogTab" role="tab" aria-selected="false" aria-controls="catalogPane">Catalog</button></nav>
+  <section id="searchPane" role="tabpanel" aria-labelledby="searchTab">
   <form id="searchForm" class="search-card" novalidate>
     <label id="queryLabel" class="search-label" for="query">Name, phrase, or domain</label>
     <div class="search-line">
@@ -52,7 +55,8 @@
         </div>
       </div>
     </div>
-    <div id="regexOptions" class="search-options" hidden><div class="option-field"><label for="maxLength">Maximum name length</label><input id="maxLength" type="number" min="1" max="63" value="12" style="width:90px;height:40px;border:1px solid var(--line);border-radius:8px;padding:8px"></div><p class="hint">Checks 200 candidates at a time. Stop and resume any time.</p></div>
+    <div id="endingChips" class="ending-chips" aria-label="Saved endings" hidden></div>
+    <div id="regexOptions" class="search-options" hidden><div class="option-field"><label for="maxLength">Maximum name length</label><input id="maxLength" type="number" min="1" max="63" value="12" class="length-input"></div><p class="hint">Checks 200 candidates at a time. Stop and resume any time.</p></div>
     <p id="searchHint" class="hint">Use a phrase for suggestions, or separate up to 20 full domains with commas.</p>
   </form>
   <noscript><div class="notice error">Enable JavaScript to search domains.</div></noscript>
@@ -72,6 +76,22 @@
     <div class="results-bottom"><span>Availability can change. Confirm again before buying.</span><button id="continueScan" class="secondary" type="button" hidden>Check next 200</button><button id="copyButton" class="copy" type="button">Copy shown domains</button></div>
   </section>
   <p id="introNote" class="intro-note">Results come from Cloudflare Registrar. This page only searches and checks; it cannot buy or change domains.</p>
+  </section>
+<section id="catalogPane" role="tabpanel" aria-labelledby="catalogTab" hidden>
+  <div class="search-card">
+    <div class="catalog-controls"><div class="option-field"><label for="catalogEnding">Ending</label><input id="catalogEnding" list="catalogEndings" value="com" placeholder="com" autocomplete="off" autocapitalize="none" spellcheck="false"><datalist id="catalogEndings"></datalist></div><button id="catalogStart" class="primary" type="button">Add ending</button><button id="catalogPause" class="secondary" type="button" hidden>Pause</button><button id="catalogRefresh" class="secondary" type="button">Refresh</button></div>
+    <p class="hint">3 letters · a–z · 17,576 names per ending. Runs in the background even when this page is closed.</p>
+    <p id="catalogStatus" class="hint" role="status">Loading catalog…</p><progress id="catalogProgress" max="17576" value="0" class="catalog-progress"></progress>
+    <p id="catalogLoaded" class="sr-only">0 cached names loaded</p>
+  </div>
+  <div id="catalogMessage" class="notice" role="alert" hidden></div>
+  <div class="search-card catalog-card">
+    <label class="search-label" for="catalogQuery">Filter cached names</label><input id="catalogQuery" class="ending-search" placeholder="Name or regex pattern" autocomplete="off" autocapitalize="none" spellcheck="false">
+    <div class="catalog-controls catalog-filters"><div class="option-field"><label for="catalogMatch">Match</label><select id="catalogMatch"><option value="contains">Contains</option><option value="exact">Exact</option><option value="begins">Begins with</option><option value="ends">Ends with</option><option value="regex">Regex</option></select></div><div class="option-field"><label for="catalogAvailability">Availability</label><select id="catalogAvailability"><option value="all">All cached</option><option value="available">Available</option><option value="unavailable">Unavailable</option><option value="unknown">Unchecked</option></select></div><div class="option-field"><label for="catalogSort">Sort</label><select id="catalogSort"><option value="name">Domain</option><option value="price">First-year price</option></select></div></div>
+    <p class="hint">Filters the saved list instantly. Regex matches the name before its ending; availability is dated and can change.</p><p id="catalogFilterError" class="notice error" role="alert" hidden></p>
+  </div>
+  <section class="results catalog-card" aria-label="Cached domains"><div class="tools"><span id="catalogCount" class="tools-title">Cached domains</span><button id="catalogExport" class="copy" type="button">Export filtered CSV</button></div><div class="table-heading" aria-hidden="true"><span>Domain / status</span><span>First year</span><span>Renewal / yr</span><span>Details</span></div><div id="catalogRows"></div><div id="catalogEmpty" class="empty">Loading…</div><div class="results-bottom"><button id="catalogPrevious" class="secondary" type="button" disabled>Previous</button><span id="catalogPage">1 / 1</span><button id="catalogNext" class="secondary" type="button" disabled>Next</button></div></section>
+</section>
   <footer><span>API-supported extensions only. No DNS-based availability guesses.</span><a href="https://www.cloudflare.com/domains/" target="_blank" rel="noopener noreferrer">Open Cloudflare Registrar ↗</a></footer>
 </main>
 <script nonce="__CSP_NONCE__">
@@ -92,7 +112,7 @@ function validEnding(value) {
 }
 // Only display preferences are saved. Credentials never enter this page.
 function saveOptions() {
-  try { localStorage.setItem(PREFERENCE_KEY, JSON.stringify({ mode: $('matchMode').value, maxLength: $('maxLength').value, endings: [...selectedEndings] })); }
+  try { localStorage.setItem(PREFERENCE_KEY, JSON.stringify({ mode: $('matchMode').value, maxLength: $('maxLength').value, recentEndings: [...recentEndings].slice(-50), endings: [...selectedEndings] })); }
   catch { /* Search works when browser storage is disabled. */ }
 }
 function restoreOptions() {
@@ -101,6 +121,7 @@ function restoreOptions() {
     if (!saved || typeof saved !== 'object') return;
     if (MATCH_MODES.includes(saved.mode)) $('matchMode').value = saved.mode;
     if (Number(saved.maxLength) >= 1 && Number(saved.maxLength) <= 63) $('maxLength').value = saved.maxLength;
+    if (Array.isArray(saved.recentEndings)) for (const ending of saved.recentEndings.slice(-50)) if (validEnding(ending)) recentEndings.add(ending);
     if (Array.isArray(saved.endings)) {
       for (const value of saved.endings.slice(0, 50)) {
         if (validEnding(value)) selectedEndings.add(value);
@@ -127,6 +148,7 @@ function updateOptions() {
     : mode === 'regex' ? 'Generates matching names and checks availability. Choose endings. Matches the whole name, ignoring case; maximum length bounds * and +. Supports classes, groups, alternatives, and repetitions.'
     : mode === 'exact' ? 'Check this exact name with each selected ending. Choose endings or enter a full domain.'
     : 'Cloudflare suggestions; Contains, Begins with, and Ends with filter the returned names.';
+  renderEndingChips();
   if (fullDomain) closeEndings();
 }
 function closeEndings(returnFocus = false) {
@@ -138,6 +160,8 @@ function renderEndings() {
   const query = $('endingSearch').value.trim().toLowerCase().replace(/^\./, '');
   const priority = ['com', 'net', 'org', 'io', 'ai', 'app', 'dev', 'co'];
   const names = [...new Set([...selectedEndings, ...endingCatalog])].sort((a, b) => {
+    const pinned = Number(selectedEndings.has(b)) - Number(selectedEndings.has(a)) || Number(recentEndings.has(b)) - Number(recentEndings.has(a));
+    if (pinned) return pinned;
     const ai = priority.indexOf(a), bi = priority.indexOf(b);
     return (ai < 0 ? 100 : ai) - (bi < 0 ? 100 : bi) || a.localeCompare(b);
   }).filter(name => name.includes(query));
@@ -157,6 +181,7 @@ function renderEndings() {
       input.checked ? selectedEndings.add(name) : selectedEndings.delete(name);
       updateOptions();
       saveOptions();
+      renderEndings();
     });
     label.title = '.' + name;
     label.append(input, element('span', '', '.' + name));
@@ -726,6 +751,174 @@ $('retrySetup').addEventListener('click', checkSetup);
 $('availableOnly').addEventListener('change', render);
 $('sort').addEventListener('change', render);
 $('copyButton').addEventListener('click', copyShown);
+const recentEndings = new Set();
+function rememberEndings() { for (const ending of selectedEndings) recentEndings.add(ending); }
+function renderEndingChips() {
+  rememberEndings();
+  const holder = $('endingChips'); holder.replaceChildren();
+  const names = [...new Set([...selectedEndings, ...recentEndings])];
+  for (const ending of names) {
+    const button = element('button', 'ending-chip' + (selectedEndings.has(ending) ? ' selected' : ''), '.' + ending + (selectedEndings.has(ending) ? ' ×' : ' +'));
+    button.type = 'button'; button.setAttribute('aria-pressed', String(selectedEndings.has(ending)));
+    button.setAttribute('aria-label', (selectedEndings.has(ending) ? 'Deselect ' : 'Select ') + '.' + ending);
+    button.addEventListener('click', () => {
+      if (selectedEndings.has(ending)) selectedEndings.delete(ending);
+      else if (selectedEndings.size < 50) selectedEndings.add(ending);
+      updateOptions(); renderEndings(); saveOptions();
+    });
+    holder.append(button);
+  }
+  holder.hidden = !names.length;
+}
+let catalogVisible = false, catalogTimer = null, catalogBusy = false, catalogEpoch = 0;
+let catalogEnding = 'com', catalogAfter = 0, catalogJobs = [], catalogPage = 0, catalogRows = new Map(), catalogFiltered = [];
+let catalogFilterEpoch = 0, catalogWorker = null;
+function catalogMessage(text, error = false) {
+  $('catalogMessage').textContent = text; $('catalogMessage').hidden = !text; $('catalogMessage').className = 'notice' + (error ? ' error' : '');
+}
+function catalogStatus() {
+  const job = catalogJobs.find(job => job.ending === catalogEnding);
+  const state = { running: 'Scanning in background', retrying: 'Retrying in background', paused: 'Paused', complete: 'Complete', complete_with_unknown: 'Complete · some checks unresolved' };
+  $('catalogStatus').textContent = job ? `${state[job.state] || job.state} · ${job.checked.toLocaleString()} / ${job.total.toLocaleString()} checked · ${job.available.toLocaleString()} available` : 'This ending has not been added yet.';
+  $('catalogProgress').value = job?.cursor || 0;
+  $('catalogPause').hidden = !job || ['complete','complete_with_unknown'].includes(job.state);
+  $('catalogPause').textContent = job?.state === 'paused' ? 'Resume' : 'Pause';
+  $('catalogStart').textContent = job ? job.state === 'complete_with_unknown' ? 'Retry unresolved' : 'Scan / resume' : 'Add ending';
+  $('catalogStart').disabled = catalogBusy || job?.state === 'complete';
+  $('catalogStart').hidden = !!job && job.state !== 'complete_with_unknown';
+  const choices = [...new Set(['com', ...catalogJobs.map(j => j.ending), ...recentEndings, ...selectedEndings, ...endingCatalog])];
+  $('catalogEndings').replaceChildren(...choices.map(name => { const option = element('option'); option.value = name; return option; }));
+  if (job?.error) catalogMessage(job.error + ' Progress is saved; failed requests will retry automatically.', true);
+}
+async function refreshCatalog() {
+  if (catalogBusy) return;
+  catalogBusy = true; const epoch = catalogEpoch, ending = catalogEnding;
+  $('catalogRefresh').disabled = true;
+  try {
+    const status = await request('/api/catalog/status');
+    if (epoch !== catalogEpoch) return;
+    if (!Array.isArray(status.jobs)) throw new Error('Invalid catalog status.');
+    catalogJobs = status.jobs; catalogMessage(''); catalogStatus();
+    const job = catalogJobs.find(j => j.ending === ending);
+    let changes = false;
+    if (job && job.sequence > catalogAfter) {
+      let more = true;
+      while (more) {
+        const data = await request('/api/catalog/list?ending=' + encodeURIComponent(ending) + '&after=' + catalogAfter);
+        if (epoch !== catalogEpoch) return;
+        if (!Array.isArray(data.domains) || !Number.isSafeInteger(data.after)) throw new Error('Invalid catalog results.');
+        for (const row of data.domains) catalogRows.set(row.name, row);
+        catalogAfter = data.after; more = data.hasMore; changes = true;
+        $('catalogLoaded').textContent = catalogRows.size.toLocaleString() + ' cached names loaded';
+      }
+    }
+    if (changes || !catalogRows.size) await filterCatalog(false);
+  } catch (error) { if (epoch === catalogEpoch) catalogMessage(error.message, true); }
+  finally {
+    catalogBusy = false; $('catalogRefresh').disabled = false; catalogStatus();
+    if (epoch !== catalogEpoch && catalogVisible) refreshCatalog();
+    else if (catalogVisible && !document.hidden) { clearTimeout(catalogTimer); catalogTimer = setTimeout(refreshCatalog, 15000); }
+  }
+}
+function setCatalogEnding() {
+  const ending = $('catalogEnding').value.trim().toLowerCase().replace(/^\./, '');
+  if (!validEnding(ending)) { catalogMessage('Enter an ending such as com, io, or co.uk.', true); return false; }
+  if (ending !== catalogEnding) {
+    catalogEnding = ending; catalogAfter = 0; catalogRows.clear(); catalogPage = 0; catalogEpoch++;
+    catalogFiltered = []; renderCatalog();
+  }
+  $('catalogEnding').value = ending; return true;
+}
+async function catalogControl(action) {
+  if (!setCatalogEnding()) return;
+  try {
+    const result = await request('/api/catalog/control', { ending: catalogEnding, action });
+    catalogJobs = result.jobs;
+    recentEndings.add(catalogEnding); saveOptions(); renderEndingChips();
+    catalogMessage(''); catalogStatus(); await refreshCatalog();
+  } catch (error) { catalogMessage(error.message, true); }
+}
+function catalogRegex(pattern, labels) {
+  return new Promise((resolve, reject) => {
+    const task = () => { self.onmessage = ({data}) => { try { const regex = new RegExp(data.pattern, 'i'); self.postMessage({matches:data.labels.map(name=>regex.test(name))}); } catch(error){self.postMessage({error:error.message});} }; };
+    const url = URL.createObjectURL(new Blob(['(' + task.toString() + ')()'], {type:'text/javascript'}));
+    const worker = new Worker(url); catalogWorker = worker;
+    const finish = (error, data) => { clearTimeout(timer); worker.terminate(); URL.revokeObjectURL(url); if(catalogWorker === worker) catalogWorker=null; error?reject(error):resolve(data); };
+    const timer = setTimeout(()=>finish(new Error('Regex took too long. Simplify the pattern.')),1000);
+    worker.onmessage=({data})=>finish(data.error?new Error('Invalid regex: '+data.error):null,data.matches);
+    worker.onerror=()=>finish(new Error('Regex could not run in this browser.'));
+    worker.postMessage({pattern,labels});
+  });
+}
+async function filterCatalog(reset = true) {
+  const epoch = ++catalogFilterEpoch;
+  if (reset) catalogPage = 0;
+  const query = $('catalogQuery').value.trim(), mode = $('catalogMatch').value, availability = $('catalogAvailability').value;
+  let list = [...catalogRows.values()].filter(row => availability === 'all' || (availability === 'available' ? row.checked && row.registrable === true : availability === 'unavailable' ? row.checked && row.registrable === false : !row.checked));
+  try {
+    if (query) {
+      const labels = list.map(row => row.name.split('.')[0]);
+      if (mode === 'regex') {
+        if (query.length > 256) throw new Error('Regex is limited to 256 characters.');
+        const matches = await catalogRegex(query, labels);
+        if (epoch !== catalogFilterEpoch) return;
+        list = list.filter((row,i)=>matches[i]);
+      } else {
+        const text = query.toLowerCase();
+        list = list.filter((row,i)=>mode==='exact'?labels[i]===text:mode==='begins'?labels[i].startsWith(text):mode==='ends'?labels[i].endsWith(text):labels[i].includes(text));
+      }
+    }
+    if (epoch !== catalogFilterEpoch) return;
+    const sort = $('catalogSort').value;
+    list.sort((a,b)=>sort==='price' ? (Number(a.pricing?.registration_cost ?? Infinity)-Number(b.pricing?.registration_cost ?? Infinity) || a.name.localeCompare(b.name)) : a.name.localeCompare(b.name));
+    $('catalogFilterError').hidden = true; catalogFiltered = list; renderCatalog();
+  } catch(error) { if(epoch===catalogFilterEpoch){catalogFiltered=[];renderCatalog();$('catalogFilterError').textContent=error.message;$('catalogFilterError').hidden=false;} }
+}
+function renderCatalog() {
+  const pageCount = Math.max(1, Math.ceil(catalogFiltered.length / 100));
+  catalogPage = Math.min(catalogPage, pageCount - 1);
+  const items = catalogFiltered.slice(catalogPage*100, (catalogPage+1)*100);
+  const fragment = document.createDocumentFragment();
+  for (const row of items) {
+    const article = element('article','domain-row');
+    const info = element('div','domain-info');
+    info.append(element('div','name',row.name));
+    const detail = element('div','domain-detail');
+    detail.append(element('span','badge '+(!row.checked?'unknown':row.registrable?'available':''),!row.checked?'Unchecked':row.registrable?'Available':'Unavailable'));
+    detail.append(element('span','source',row.checkedAt ? 'Checked '+new Date(row.checkedAt).toLocaleString() : 'Not checked'));
+    info.append(detail);
+    article.append(info,priceCell(row,'registration_cost','First year'),priceCell(row,'renewal_cost','Renewal / yr'),element('span','source',row.reason||''));fragment.append(article);
+  }
+  $('catalogRows').replaceChildren(fragment);
+  $('catalogEmpty').hidden = !!items.length;
+  $('catalogEmpty').textContent = catalogRows.size ? 'No cached names match these filters.' : 'No results saved for this ending yet. The background scan will populate this list.';
+  $('catalogCount').textContent = catalogFiltered.length.toLocaleString()+' matches · '+catalogRows.size.toLocaleString()+' cached';
+  $('catalogPage').textContent = (catalogPage+1)+' / '+pageCount;
+  $('catalogPrevious').disabled = catalogPage === 0; $('catalogNext').disabled = catalogPage+1 >= pageCount;
+  $('catalogLoaded').textContent = catalogRows.size.toLocaleString()+' cached names loaded';
+}
+function showTab(catalog) {
+  catalogVisible = catalog;
+  $('searchPane').hidden = catalog; $('catalogPane').hidden = !catalog;
+  $('searchTab').setAttribute('aria-selected',String(!catalog)); $('catalogTab').setAttribute('aria-selected',String(catalog));
+  clearTimeout(catalogTimer);
+  if (catalog) refreshCatalog();
+}
+$('searchTab').addEventListener('click',()=>showTab(false));
+$('catalogTab').addEventListener('click',()=>showTab(true));
+$('catalogStart').addEventListener('click',()=>catalogControl('start'));
+$('catalogPause').addEventListener('click',()=>catalogControl(catalogJobs.find(j=>j.ending===catalogEnding)?.state==='paused'?'resume':'pause'));
+$('catalogRefresh').addEventListener('click',()=>{ if(setCatalogEnding()) refreshCatalog(); });
+$('catalogEnding').addEventListener('change',()=>{if(setCatalogEnding()) refreshCatalog();});
+for (const id of ['catalogQuery','catalogMatch','catalogAvailability','catalogSort']) $(id).addEventListener(id==='catalogQuery'?'input':'change',()=>filterCatalog());
+$('catalogPrevious').addEventListener('click',()=>{catalogPage--;renderCatalog();});
+$('catalogNext').addEventListener('click',()=>{catalogPage++;renderCatalog();});
+document.addEventListener('visibilitychange',()=>{clearTimeout(catalogTimer);if(!document.hidden&&catalogVisible)refreshCatalog();});
+$('catalogExport').addEventListener('click',()=>{
+  const csv = [['Domain','Status','First year','Renewal','Currency','Checked at'],...catalogFiltered.map(row=>[row.name,!row.checked?'unchecked':row.registrable?'available':'unavailable',row.pricing?.registration_cost||'',row.pricing?.renewal_cost||'',row.pricing?.currency||'',row.checkedAt||''])].map(row=>row.map(value=>'"'+String(value).replaceAll('"','""')+'"').join(',')).join('\r\n');
+  const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));const link=element('a');link.href=url;link.download='three-letter-'+catalogEnding+'.csv';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+});
+
 restoreOptions();
 updateOptions();
 checkSetup();
