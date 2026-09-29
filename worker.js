@@ -1,6 +1,6 @@
 import page from './index.html';
 
-// Domain Finder 1.1.0. Only search, check, and extension-list Registrar operations are exposed.
+// Domain Finder 1.2.0. Only search, check, and extension-list Registrar operations are exposed.
 // Runtime secrets: CF_ACCOUNT_ID and CF_API_TOKEN. Never put values in this file.
 const VERSION = '1.1.0';
 const LIMIT = 20; // Cloudflare domain-check request limit.

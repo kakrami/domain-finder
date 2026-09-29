@@ -1,43 +1,21 @@
-# Domain Finder · v1.1.0
+# Domain Finder · v1.2.0
 
-A single-file HTML interface with a small Cloudflare Worker for private API calls. No frontend libraries, database, separate API URL, or code edits are needed.
+Replace the same four files in your existing repository. Worker settings and secrets are unchanged.
 
-**Upload the extracted files, not the ZIP itself.** HTML alone previews the interface; live searches need the included Worker.
+## Search
 
-## Update your existing deployment
+One search field, a Match selector, and selected endings.
 
-Replace the same four files in the repository root, commit, and let the existing Cloudflare deployment finish. Refresh the page and confirm **v1.1.0**. No new Worker, secrets, variables, or build settings are required. `wrangler.jsonc` is unchanged from the working v1.0.1 repository; neither secret value is in this package.
+- Exact: `mango` with `.com` and `.io` checks `mango.com` and `mango.io` directly.
+- Regex: enter the pattern in the search field. Matching names are generated and checked directly; no suggestion keyword is used.
+- All suggestions / Contains / Begins with / Ends with: use Cloudflare suggestions and apply the chosen text filter.
+- Full domains and comma-separated domain lists are checked exactly.
 
-## Match modes and endings
+Regex example: `^mango[a-z0-9]{1,4}$` generates every valid name matching that pattern, for each selected ending. Checks run in pages of 200, with progress, Stop, Resume checks, and Check next 200. Results display the current page. Scans run while the page is open; reloading does not preserve progress.
 
-Enter a keyword in the main search box, choose a Match mode and any endings, then select Search.
+Supports literals, `.`, character classes and ranges, negated classes, `\d`, `\w` (domain-valid characters), groups including `(?:...)`, alternation, `?`, `*`, `+`, `{n}`, `{n,m}`, and `{n,}`. Patterns match the entire name; surrounding `^` and `$` are optional. Case-insensitive. Maximum name length (default 12, adjustable to 63) bounds the scan, including unbounded repeats. Invalid names are skipped. Unsupported lookarounds, backreferences, and other syntax produce an explicit error. Counts are upper bounds: alternatives can overlap and invalid hyphen placements are excluded from checks. Very large counts saturate at JavaScript's largest safe integer.
 
-| Match | Behavior |
-| --- | --- |
-| All suggestions | Keep Cloudflare's suggestions, limited to the selected endings. |
-| Contains | Keep names containing the search text. |
-| Begins with | Keep names beginning with the search text. |
-| Ends with | Keep names ending with the search text, before the domain ending. |
-| Regex | Use the keyword to get suggestions, then apply the separate regex pattern to those names. |
-
-Matching is case-insensitive. Literal modes ignore spaces in the search text. Matching uses the registrable name before its ending: `mangoplay` in both `mangoplay.com` and `mangoplay.co.uk`. Cloudflare returns ASCII/punycode names; regex and text filters operate on those returned names.
-
-The Endings button opens a searchable checkbox list fetched from Cloudflare's current extension catalog, following all returned pagination cursors. Select one or multiple endings; **Use all** clears the selection. Some listed extensions may be available only through Cloudflare's dashboard. Incomplete catalog loads show an error and a refresh control; loaded choices and ordinary searches remain usable. Endings, Match mode, and the regex pattern are remembered locally. Credentials are never stored in the browser.
-
-### Regex example
-
-```text
-Keyword: mango
-Match: Regex
-Pattern: ^mango[a-z]{3,8}$
-Endings: .com, .io
-```
-
-This pattern keeps returned names beginning with `mango` followed by 3–8 letters. It does not construct or enumerate new candidate names. Use a raw JavaScript regex pattern, without surrounding `/slashes/` or flags; the app uses case-insensitive matching. Patterns are limited to 256 characters and run in a separate browser worker with a one-second safety timeout. Invalid patterns are rejected before making a search request.
-
-**These filters cover only the suggestions Cloudflare returns, not every possible unregistered domain.** Each search requests up to 50 suggestions. Only matching names are verified, in batches of at most 20. Completed batches remain checked if a later batch fails or is stopped; unfinished results remain unverified.
-
-Full domain names and comma-separated domain lists still use exact checks. Match and ending controls are temporarily disabled for those inputs, so a saved filter cannot hide a domain you explicitly requested. Up to 20 full domains can be checked at once.
+This is an exhaustive generator within the supported grammar and chosen maximum length. It is not a search of registered-domain databases. Availability comes from Cloudflare checks. Broad expressions may require millions of checks. Select endings explicitly for Regex and Exact.
 
 ## Deploy from GitHub
 
