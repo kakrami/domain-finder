@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="Search domain names and check current availability and pricing with Cloudflare Registrar.">
+<title>Domain Finder</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23ed6a23'/%3E%3Ccircle cx='20' cy='20' r='11' fill='none' stroke='white' stroke-width='2'/%3E%3Cpath d='M9 20h22M20 9c-7 6-7 16 0 22M20 9c7 6 7 16 0 22' fill='none' stroke='white' stroke-width='2'/%3E%3C/svg%3E">
+<style nonce="__CSP_NONCE__">
+:root{--bg:#f6f7f9;--paper:#fff;--ink:#202731;--muted:#657080;--line:#e2e6eb;--accent:#c64c0d;--soft:#fff3ea;--green:#166742;--green-bg:#eaf6ee;--amber:#855500;--amber-bg:#fff6df;--red:#a52828;--red-bg:#fff0ef;--radius:15px;font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg);font-size:15px}
+*{box-sizing:border-box}body{margin:0;min-width:280px}button,input,select{font:inherit}button,a,input,select{touch-action:manipulation}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.5}a{color:var(--accent);text-underline-offset:3px}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #efad7b;outline-offset:3px}[hidden]{display:none!important}
+.shell{width:min(940px,100%);margin:0 auto;padding:26px 22px 36px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:36px}.brand{display:flex;align-items:center;gap:11px}.logo{display:grid;place-items:center;width:39px;height:39px;border-radius:12px;color:#fff;background:#ed6a23}.logo svg{width:26px;height:26px}.brand strong{font-size:17px;letter-spacing:-.5px}.version{margin-left:7px;color:var(--muted);font-size:11px}.connection{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);white-space:nowrap}.connection:before{content:"";width:7px;height:7px;border-radius:50%;background:#a3aab5}.connection.ready:before{background:var(--green)}.connection.error:before{background:var(--accent)}
+.eyebrow{text-transform:uppercase;letter-spacing:1.8px;font-size:11px;font-weight:750;color:var(--accent);margin:0 0 9px}h1{font-size:clamp(26px,5vw,38px);letter-spacing:-1.3px;line-height:1.14;margin:0 0 10px}.lead{color:var(--muted);line-height:1.6;margin:0 0 22px}.search-card{padding:20px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 4px 18px #172a3a05}.search-label{font-size:12px;font-weight:650;display:block;margin-bottom:9px}.search-line{display:flex;gap:9px}.input-wrap{flex:1;min-width:0;position:relative}.input-wrap svg{position:absolute;left:14px;top:16px;width:18px;height:18px;pointer-events:none;color:var(--muted)}#query{width:100%;height:50px;border:1px solid #cbd2db;border-radius:10px;padding:0 13px 0 42px;background:#fff;color:var(--ink);font-size:16px}#query::placeholder{color:#818b98}.primary,.secondary{min-height:44px;border-radius:10px;padding:0 18px;font-weight:650;border:1px solid transparent}.primary{background:var(--ink);color:white}.primary:hover:not(:disabled){background:#384452}.secondary{background:var(--paper);border-color:var(--line);color:var(--ink)}.secondary:hover:not(:disabled){background:var(--bg)}.hint{font-size:12px;color:var(--muted);margin:11px 0 0;line-height:1.6}.hint code,code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}.search-actions{display:flex;gap:7px}
+.notice{margin-top:14px;border:1px solid #f0d7a4;border-radius:11px;padding:12px 14px;background:var(--amber-bg);font-size:13px;line-height:1.6;overflow-wrap:anywhere}.notice.error{background:var(--red-bg);border-color:#eed0cc;color:#822b26}.setup{margin-top:14px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:17px}.setup h2{font-size:16px;margin:0 0 9px}.setup p{font-size:13px;color:var(--muted);line-height:1.65;margin:8px 0}.setup code{color:var(--ink)}.setup .secondary{font-size:12px;min-height:36px;margin-top:7px}.setup-links{display:flex;align-items:center;gap:14px;flex-wrap:wrap}.setup-links a{font-size:12px}
+.progress{min-height:40px;display:flex;align-items:center;gap:9px;color:var(--muted);font-size:12px;line-height:1.5;padding:8px 2px}.spinner{width:13px;height:13px;border:2px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;flex:none}@keyframes spin{to{transform:rotate(360deg)}}
+.results{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}.tools{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 17px;border-bottom:1px solid var(--line);flex-wrap:wrap}.tools-title{font-size:13px;font-weight:700}.filters{display:flex;align-items:center;gap:13px;flex-wrap:wrap}.check-label{font-size:12px;display:flex;align-items:center;gap:6px;min-height:32px}.check-label input{width:16px;height:16px;margin:0;accent-color:var(--accent)}select{min-height:35px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--muted);font-size:12px;padding:5px 26px 5px 9px}.table-heading,.domain-row{display:grid;grid-template-columns:minmax(0,1fr) 100px 100px 86px;gap:14px;align-items:center;padding:13px 17px}.table-heading{background:#fafbfc;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.7px}.table-heading span:not(:first-child){text-align:right}.domain-row+.domain-row{border-top:1px solid var(--line)}.name{font-weight:680;font-size:16px;overflow-wrap:anywhere;letter-spacing:-.25px;margin:0 0 6px}.domain-detail{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 7px;border-radius:5px;background:#f0f2f5;color:#596371;font-size:10px;font-weight:700;line-height:1.4;letter-spacing:.1px}.badge.available{color:var(--green);background:var(--green-bg)}.badge.likely,.badge.unknown{color:var(--amber);background:var(--amber-bg)}.source{font-size:10px;color:var(--muted)}.cost{text-align:right;font-size:14px;font-variant-numeric:tabular-nums;white-space:nowrap}.cost small{font-size:10px;color:var(--muted);display:block;margin-top:4px}.price-label{display:none}.row-actions{display:flex;justify-content:flex-end}.recheck{background:#fff;border:1px solid var(--line);border-radius:8px;font-size:12px;padding:8px 11px;min-height:36px;color:var(--ink)}.recheck:hover:not(:disabled){background:var(--bg)}mark{background:#fff0db;color:inherit;border-radius:2px}.empty{padding:34px 20px;text-align:center;color:var(--muted);font-size:13px;line-height:1.7}.results-bottom{border-top:1px solid var(--line);padding:11px 17px;display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;font-size:11px;color:var(--muted)}.copy{border:0;background:none;color:var(--accent);padding:7px 0;font-size:12px;font-weight:650;min-height:32px}footer{margin-top:17px;color:var(--muted);font-size:11px;line-height:1.75;display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}footer a{white-space:nowrap}.intro-note{padding:18px 2px 5px;color:var(--muted);font-size:12px;line-height:1.7}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:620px){.shell{padding:18px 15px 25px}.top{margin-bottom:27px}.brand strong{font-size:16px}.version{font-size:10px}.logo{width:34px;height:34px;border-radius:10px}.connection{font-size:10px}.search-card{padding:15px}.search-line{flex-wrap:wrap}.input-wrap{flex-basis:100%}.search-actions{width:100%}.primary{flex:1;min-height:44px}.lead{font-size:14px;margin-bottom:17px}.tools{padding:10px 13px;gap:6px}.filters{gap:10px}.table-heading{display:none}.domain-row{grid-template-columns:1fr 1fr 84px;gap:12px 10px;padding:15px}.domain-info{grid-column:1/-1}.name{font-size:17px}.cost{text-align:left;font-size:14px}.price-label{display:block;color:var(--muted);font-size:10px;margin-bottom:4px}.cost small{display:inline;font-size:9px;margin:0 0 0 3px}.row-actions{align-self:end}.results-bottom{padding:8px 13px}.source{font-size:10px}footer{gap:6px}}
+@media(prefers-reduced-motion:reduce){.spinner{animation:none}}
+</style>
+</head>
+<body>
+<main class="shell">
+  <header class="top">
+    <div class="brand"><span class="logo" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="14" cy="14" r="10.5"/><path d="M3.5 14h21M14 3.5c-6 5.5-6 15.5 0 21M14 3.5c6 5.5 6 15.5 0 21"/></svg></span><div><strong>Domain Finder</strong><span class="version">v1.0.0</span></div></div>
+    <span id="connection" class="connection">Checking setup</span>
+  </header>
+  <p class="eyebrow">Cloudflare Registrar</p>
+  <h1>Find your next domain.</h1>
+  <p class="lead">Search ideas. Check availability. See registration and renewal prices.</p>
+  <form id="searchForm" class="search-card" novalidate>
+    <label class="search-label" for="query">Name, phrase, or domain</label>
+    <div class="search-line">
+      <div class="input-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><input id="query" name="q" type="text" maxlength="2000" placeholder="Your idea or example.com" autocomplete="off" autocapitalize="none" spellcheck="false" enterkeyhint="search" aria-describedby="searchHint"></div>
+      <div class="search-actions"><button id="searchButton" class="primary" type="submit" disabled>Search</button><button id="cancelButton" class="secondary" type="button" hidden>Stop</button></div>
+    </div>
+    <p id="searchHint" class="hint">Use a phrase for suggestions, or separate up to 20 full domains with commas.</p>
+  </form>
+  <noscript><div class="notice error">Enable JavaScript to search domains.</div></noscript>
+  <div id="notice" class="notice" role="alert" hidden></div>
+  <section id="setup" class="setup" aria-labelledby="setupTitle" hidden>
+    <h2 id="setupTitle">Cloudflare setup needed</h2>
+    <p id="setupMessage"></p>
+    <div id="secretHelp"><p>Open this Worker in Cloudflare → <strong>Settings → Variables and Secrets</strong>. Add both as <strong>Secret</strong>, then select <strong>Deploy</strong>:</p><p><code>CF_ACCOUNT_ID</code> — your 32-character account ID.<br><code>CF_API_TOKEN</code> — your API token with Registrar write permissions.</p><p>Keep these values in Cloudflare, not in the HTML or GitHub repository.</p></div>
+    <div class="setup-links"><button id="retrySetup" type="button" class="secondary">Check again</button><a href="https://developers.cloudflare.com/registrar/registrar-api/" target="_blank" rel="noopener noreferrer">Cloudflare API setup ↗</a></div>
+  </section>
+  <div class="progress" role="status" aria-live="polite"><span id="spinner" class="spinner" hidden></span><span id="progressText"></span></div>
+  <section id="results" class="results" aria-label="Domain results" hidden>
+    <div class="tools"><span id="resultCount" class="tools-title">Results</span><div class="filters"><label class="check-label"><input type="checkbox" id="availableOnly">Available only</label><label for="sort" class="sr-only">Sort results</label><select id="sort"><option value="relevance">Sort: relevance</option><option value="name">Sort: domain</option><option value="price">Sort: first-year price</option><option value="availability">Sort: availability</option></select></div></div>
+    <div class="table-heading" aria-hidden="true"><span>Domain / status</span><span>First year</span><span>Renewal / yr</span><span>Verify</span></div>
+    <div id="rows"></div><div id="emptyResults" class="empty" hidden></div>
+    <div class="results-bottom"><span>Availability can change. Confirm again before buying.</span><button id="copyButton" class="copy" type="button">Copy shown domains</button></div>
+  </section>
+  <p id="introNote" class="intro-note">Results come from Cloudflare Registrar. This page only searches and checks; it cannot buy or change domains.</p>
+  <footer><span>API-supported extensions only. No DNS-based availability guesses.</span><a href="https://www.cloudflare.com/domains/" target="_blank" rel="noopener noreferrer">Open Cloudflare Registrar ↗</a></footer>
+</main>
+<script nonce="__CSP_NONCE__">
+'use strict';
+const $ = id => document.getElementById(id);
+let rows = [], lastQuery = '', active = null, generation = 0, ready = false;
+
+function notice(message, error = false) {
+  $('notice').textContent = message;
+  $('notice').className = 'notice' + (error ? ' error' : '');
+  $('notice').hidden = !message;
+}
+function progress(message, busy = false) {
+  $('progressText').textContent = message;
+  $('spinner').hidden = !busy;
+  $('cancelButton').hidden = !busy;
+  $('results').setAttribute('aria-busy', String(busy));
+  document.querySelectorAll('.recheck').forEach(button => { button.disabled = busy; });
+}
+function standaloneMessage() {
+  if (location.protocol === 'file:') return 'This is a local HTML preview. Upload all package files to your GitHub repository, deploy it through Cloudflare Workers, then open the address Cloudflare provides.';
+  if (location.hostname.endsWith('.github.io')) return 'GitHub Pages cannot run the included Worker. Keep the files in GitHub, connect the repository to Cloudflare Workers, and open the Cloudflare address instead.';
+  return 'The search backend is not available at this address. Deploy index.html, worker.js, and wrangler.jsonc together through Cloudflare Workers. Uploading only the HTML does not enable live searches.';
+}
+async function request(path, body, signal) {
+  const controller = new AbortController();
+  const stop = () => controller.abort();
+  if (signal?.aborted) controller.abort();
+  signal?.addEventListener('abort', stop, { once: true });
+  let timedOut = false;
+  const timeout = setTimeout(() => { timedOut = true; controller.abort(); }, 20000);
+  try {
+    const response = await fetch(path, {
+      method: body === undefined ? 'GET' : 'POST',
+      headers: body === undefined ? { Accept: 'application/json' } : { Accept: 'application/json', 'Content-Type': 'application/json' },
+      body: body === undefined ? undefined : JSON.stringify(body),
+      signal: controller.signal, credentials: 'same-origin', cache: 'no-store',
+    });
+    if (!response.headers.get('content-type')?.includes('application/json')) throw new Error(standaloneMessage());
+    let result;
+    try { result = await response.json(); }
+    catch { throw new Error('The server returned an unreadable response. Please retry.'); }
+    if (!response.ok || result.error) throw new Error(result.error || `Search failed (HTTP ${response.status}).`);
+    return result;
+  } catch (error) {
+    if (timedOut) throw new Error('The request timed out. Check your connection and retry.');
+    if (signal?.aborted) throw new DOMException('Stopped', 'AbortError');
+    if (error instanceof TypeError) throw new Error('Could not reach the search service. Check your connection and try again.');
+    throw error;
+  } finally { clearTimeout(timeout); signal?.removeEventListener('abort', stop); }
+}
+async function checkSetup() {
+  ready = false;
+  $('searchButton').disabled = true;
+  $('retrySetup').disabled = true;
+  $('connection').className = 'connection';
+  $('connection').textContent = 'Checking setup';
+  try {
+    if (location.protocol === 'file:') throw new Error(standaloneMessage());
+    const result = await request('/api/status');
+    if (typeof result.configured !== 'boolean' || !Array.isArray(result.problems)) throw new Error(standaloneMessage());
+    ready = result.configured;
+    $('setup').hidden = ready;
+    $('secretHelp').hidden = false;
+    $('setupMessage').textContent = result.problems.join(' ');
+    $('connection').textContent = ready ? 'Ready to search' : 'Setup needed';
+    $('connection').className = 'connection ' + (ready ? 'ready' : 'error');
+    if (ready) notice('');
+  } catch (error) {
+    $('setup').hidden = false;
+    $('secretHelp').hidden = true;
+    $('setupMessage').textContent = error.message;
+    $('connection').textContent = 'Preview only';
+    $('connection').className = 'connection error';
+  } finally {
+    $('searchButton').disabled = !ready;
+    $('retrySetup').disabled = false;
+  }
+}
+function statusFor(row) {
+  if (row.registrable === true && row.checked) return ['Available', 'available'];
+  if (row.registrable === true) return ['Likely available', 'likely'];
+  if (row.registrable === null || row.reason === 'not_returned') return ['Not verified', 'unknown'];
+  const reasons = {
+    domain_unavailable: [row.checked ? 'Unavailable' : 'Likely unavailable', ''],
+    extension_not_supported_via_api: ['Check dashboard', 'unknown'],
+    extension_not_supported: ['Not supported', ''],
+    extension_disallows_registration: ['Registry restricted', ''],
+    domain_premium: ['Premium · API unsupported', 'unknown'],
+  };
+  return reasons[row.reason] || ['Not registrable', ''];
+}
+function element(tag, className, text) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+function highlightedName(name) {
+  const node = element('p', 'name');
+  const needle = lastQuery.toLowerCase().replace(/^https?:\/\//, '').replace(/\s+/g, '');
+  const start = needle.length > 1 ? name.toLowerCase().indexOf(needle) : -1;
+  if (start < 0) { node.textContent = name; return node; }
+  node.append(document.createTextNode(name.slice(0, start)), element('mark', '', name.slice(start, start + needle.length)), document.createTextNode(name.slice(start + needle.length)));
+  return node;
+}
+function money(price, key) {
+  if (!price || typeof price[key] !== 'string' || !/^\d+(\.\d+)?$/.test(price[key])) return null;
+  const amount = Number(price[key]);
+  if (!Number.isFinite(amount)) return null;
+  try { return new Intl.NumberFormat('en-US', { style: 'currency', currency: price.currency, maximumFractionDigits: 2 }).format(amount); }
+  catch { return price[key] + ' ' + (price.currency || ''); }
+}
+function priceCell(row, key, label) {
+  const node = element('div', 'cost');
+  node.append(element('span', 'price-label', label));
+  const amount = money(row.pricing, key);
+  node.append(document.createTextNode(amount || '—'));
+  if (amount) node.append(element('small', '', row.pricing.currency));
+  return node;
+}
+function visibleRows() {
+  const list = rows.filter(row => !$('availableOnly').checked || (row.checked && row.registrable === true));
+  const sort = $('sort').value;
+  if (sort === 'name') list.sort((a, b) => a.name.localeCompare(b.name));
+  if (sort === 'price') list.sort((a, b) => {
+    const aPrice = money(a.pricing, 'registration_cost'), bPrice = money(b.pricing, 'registration_cost');
+    if (!aPrice || !bPrice) return aPrice ? -1 : bPrice ? 1 : 0;
+    const currency = a.pricing.currency.localeCompare(b.pricing.currency);
+    return currency || Number(a.pricing.registration_cost) - Number(b.pricing.registration_cost);
+  });
+  if (sort === 'availability') {
+    const rank = row => row.checked && row.registrable === true ? 0 : row.registrable === true ? 1 : row.registrable === null ? 2 : 3;
+    list.sort((a, b) => rank(a) - rank(b));
+  }
+  return list;
+}
+function render() {
+  const shown = visibleRows();
+  $('rows').replaceChildren();
+  const fragment = document.createDocumentFragment();
+  for (const row of shown) {
+    const article = element('article', 'domain-row');
+    const info = element('div', 'domain-info');
+    const details = element('div', 'domain-detail');
+    const [label, type] = statusFor(row);
+    const source = row.checked ? 'Cloudflare checked' : row.reason === 'not_returned' ? 'No check result returned' : 'Search result · unverified';
+    details.append(element('span', 'badge ' + type, label), element('span', 'source', source));
+    info.append(highlightedName(row.name), details);
+    const actions = element('div', 'row-actions');
+    const button = element('button', 'recheck', 'Recheck');
+    button.type = 'button';
+    button.disabled = !!active;
+    button.setAttribute('aria-label', 'Recheck ' + row.name);
+    button.addEventListener('click', () => recheck(row.name));
+    actions.append(button);
+    article.append(info, priceCell(row, 'registration_cost', 'First year'), priceCell(row, 'renewal_cost', 'Renewal / yr'), actions);
+    fragment.append(article);
+  }
+  $('rows').append(fragment);
+  $('resultCount').textContent = shown.length + (shown.length === 1 ? ' domain' : ' domains');
+  $('emptyResults').hidden = shown.length > 0;
+  $('emptyResults').textContent = rows.length ? 'No confirmed available domains in this view. Turn off “Available only” to see every result.' : 'Cloudflare returned no suggestions. Try another phrase or check a full domain name.';
+  $('copyButton').disabled = !shown.length;
+  $('copyButton').textContent = 'Copy shown domains';
+  $('results').hidden = false;
+  $('introNote').hidden = true;
+}
+function resultRows(data) {
+  if (!Array.isArray(data?.domains) || data.domains.some(row => !row || typeof row.name !== 'string' || ![true, false, null].includes(row.registrable))) throw new Error('The search service returned an unexpected result. Please retry.');
+  return data.domains;
+}
+function completedText() {
+  const verified = rows.filter(row => row.checked).length;
+  const available = rows.filter(row => row.checked && row.registrable === true).length;
+  return `${verified} of ${rows.length} checked · ${available} available`;
+}
+async function search(event) {
+  event.preventDefault();
+  const query = $('query').value.trim();
+  if (!ready) return;
+  if (!query) { notice('Enter a name, phrase, or full domain.', true); $('query').focus(); return; }
+  active?.abort();
+  const id = ++generation;
+  const controller = new AbortController();
+  active = controller;
+  lastQuery = query;
+  rows = [];
+  $('results').hidden = true;
+  $('introNote').hidden = true;
+  notice('');
+  progress('Searching Cloudflare…', true);
+  try {
+    const result = await request('/api/search', { q: query }, controller.signal);
+    if (id !== generation) return;
+    rows = resultRows(result);
+    render();
+    if (result.mode === 'suggestions' && rows.length) {
+      progress(`Checking ${rows.length} domains with the registry…`, true);
+      try {
+        const checked = await request('/api/check', { domains: rows.map(row => row.name) }, controller.signal);
+        if (id !== generation) return;
+        const verified = new Map(resultRows(checked).map(row => [row.name, row]));
+        rows = rows.map(row => verified.get(row.name) || { name: row.name, registrable: null, checked: false, reason: 'not_returned' });
+        render();
+      } catch (error) {
+        if (id !== generation || controller.signal.aborted) throw error;
+        notice('Live verification did not complete. Unverified results are suggestions, not confirmed availability. ' + error.message);
+      }
+    }
+    progress(rows.length ? completedText() : 'Search complete.');
+  } catch (error) {
+    if (id !== generation) return;
+    if (controller.signal.aborted) {
+      progress('Search stopped.');
+      if (rows.some(row => !row.checked)) notice('Verification stopped. Unverified suggestions are not confirmed availability.');
+    } else { notice(error.message, true); progress('Search could not finish.'); }
+  } finally {
+    if (id === generation) {
+      active = null;
+      $('spinner').hidden = true;
+      $('cancelButton').hidden = true;
+      $('results').setAttribute('aria-busy', 'false');
+      document.querySelectorAll('.recheck').forEach(button => { button.disabled = false; });
+    }
+  }
+}
+async function recheck(name) {
+  if (active) return;
+  const id = ++generation;
+  const controller = new AbortController();
+  active = controller;
+  notice('');
+  progress('Rechecking ' + name + '…', true);
+  try {
+    const result = await request('/api/check', { domains: [name] }, controller.signal);
+    if (id !== generation) return;
+    const replacement = resultRows(result).find(row => row.name === name);
+    if (!replacement) throw new Error('Cloudflare did not return a check result for this domain.');
+    rows = rows.map(row => row.name === name ? replacement : row);
+    render();
+    progress(completedText());
+  } catch (error) {
+    if (id !== generation) return;
+    progress(controller.signal.aborted ? 'Recheck stopped.' : 'Recheck failed.');
+    if (!controller.signal.aborted) notice(error.message, true);
+  } finally {
+    if (id === generation) {
+      active = null;
+      $('spinner').hidden = true;
+      $('cancelButton').hidden = true;
+      $('results').setAttribute('aria-busy', 'false');
+      document.querySelectorAll('.recheck').forEach(button => { button.disabled = false; });
+    }
+  }
+}
+async function copyShown() {
+  const text = visibleRows().map(row => row.name).join('\n');
+  if (!text) return;
+  try {
+    await navigator.clipboard.writeText(text);
+    $('copyButton').textContent = 'Copied';
+  } catch { notice('Clipboard access was blocked. Select and copy the domain names directly.'); }
+}
+$('searchForm').addEventListener('submit', search);
+$('cancelButton').addEventListener('click', () => active?.abort());
+$('retrySetup').addEventListener('click', checkSetup);
+$('availableOnly').addEventListener('change', render);
+$('sort').addEventListener('change', render);
+$('copyButton').addEventListener('click', copyShown);
+checkSetup();
+</script>
+</body>
+</html>
