@@ -1,14 +1,14 @@
-# Domain Finder · v1.3.5
+# Domain Finder · v1.4.0
 
 Replace the same four files in your existing repository. Keep the same secrets. The updated wrangler.jsonc provisions Catalog storage and a background schedule automatically; upload all four files together.
 
 ## Search
 
-One search field, a Match selector, and selected endings.
+Choose Ideas, Exact, or Regex first. Each mode shows its relevant options and a preview before running. The pinned endings are directly selectable on the page; More endings expands a searchable cached list inline. The action follows the options. Desktop places the query and endings side by side; mobile stacks them in order.
 
 - Exact: `mango` with `.com` and `.io` checks `mango.com` and `mango.io` directly.
 - Regex: enter the pattern in the search field. Matching names are generated and checked directly; no suggestion keyword is used.
-- All suggestions / Contains / Begins with / Ends with: request up to 50 Cloudflare suggestions and apply the chosen text and ending filters to that page. A zero match means none of those returned suggestions matched; it does not rule out other domains.
+- Ideas (Any match / Contains / Starts with / Ends with): request up to 50 Cloudflare suggestions and apply the chosen text and ending filters to that page. A zero match means none of those returned suggestions matched; it does not rule out other domains.
 - Full domains and comma-separated domain lists are checked exactly.
 
 Regex example: `^mango[a-z0-9]{1,4}$` generates every valid name matching that pattern, for each selected ending. Checks run in pages of 200, with progress, Stop, Resume checks, and Check next 200. Results display the current page. Scans run while the page is open; reloading does not preserve progress.
@@ -99,7 +99,7 @@ The Worker uses one SQLite-backed Durable Object with a persistent cursor, saved
 
 The Catalog tab incrementally fetches saved rows and filters them locally using Exact/Contains/Begins with/Ends with/Regex, availability, and sort. Catalog regex is a filter against the complete saved list for that ending and accepts JavaScript regex syntax with a timeout. CSV exports the filtered cached list. Search regex remains a candidate generator.
 
-Selected endings appear as removable chips above the search options. The shared Search/Catalog picker places the 13 requested endings first, followed by popular choices, saved choices, and the complete alphabetical list. Search supports multiple selections; Catalog selects one ending to view or scan. Previously used endings remain available in the picker. Browser preferences are local; catalog data is stored on the server.
+The 13 pinned endings are always available as toggles in Search. Selected additional endings also appear there. More endings expands inline with popular choices first and supports text filtering. Catalog uses its own single-selection dialog. Browser preferences are local; catalog data is stored on the server.
 
 Deployment requires a Wrangler version supporting the current declarative Durable Object exports field. Existing deploy command npx wrangler deploy resolves the current release; no database IDs, manual binding setup, or new secrets are required.
 
@@ -123,10 +123,12 @@ Verified with local browser tests: pinned order, shared picker, mobile/desktop b
 
 Cloudflare Cache API: https://developers.cloudflare.com/workers/runtime-apis/cache/
 
-## Ending selector rebuild
+## Search experience
 
-The old dropdown has been replaced by one native modal dialog shared by Search and Catalog. Desktop uses a centered dialog; phones use a full-width bottom sheet. Quick picks shows pinned and popular choices; All shows the full cached list; Selected shows only current choices. Search finds endings directly, and Select pinned chooses the requested 13 endings in one action. Full names remain readable in large selection tiles. The list scrolls independently, with the selection total, Clear all, and Done always visible.
+Ideas, Exact, and Regex use separate visible mode buttons. Full domain input switches to Exact automatically, with the supplied endings used directly. Exact previews the domains that will be checked. Regex validates the supported grammar, shows the candidate count and first batch size before execution, and exposes maximum length and concise pattern help. Invalid or incomplete searches cannot be submitted.
 
-Search selections apply immediately and retain checkbox focus and scroll position. Catalog chooses one ending and closes immediately. The dialog handles keyboard focus, Escape, backdrop dismissal and return focus to its opener. Phones do not open the keyboard until the search field is tapped. Existing preferences, ending caches, search caches, catalog results, and all scan cursors are retained.
+Pinned endings are selected directly on the page. Additional endings expand inline; there is no selection modal in Search. Checkbox and quick-toggle elements retain focus and scroll position during selection. Choices and API list caches persist across reloads. Catalog keeps a native single-selection dialog.
 
-Browser verification covered selected-view removal, bulk pinned selection, unchanged input elements after selection, scrolling through a long list, keyboard focus wrapping, Escape/backdrop dismissal, automatic Catalog closing, 360/390-pixel mobile layouts, desktop layout, and a reduced 500-pixel viewport. The existing search-cache and catalog checks also passed.
+Results identify the original query and search type. Changing the form shows a draft notice without relabeling existing results. Refresh belongs to the results and targets the completed search, not an edited draft. For Regex it refreshes the current displayed batch while preserving the generator position. Stop, Resume checks, and Check next 200 remain supported.
+
+Whole-flow Chromium tests covered Ideas, Exact, Regex, inline ending selection, cache reuse across reloads, negative results, previews and validation, automatic exact-domain detection, refreshing an existing search after editing the draft, stop/resume, continuing regex batches, and refreshing a later batch without restarting it. Layouts were checked at 360px, 390px, and 1280px. Backend catalog storage, identity, and cursors are unchanged.

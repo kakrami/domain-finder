@@ -11,45 +11,54 @@
 :root{--bg:#f6f7f9;--paper:#fff;--ink:#202731;--muted:#657080;--line:#e2e6eb;--accent:#c64c0d;--soft:#fff3ea;--green:#166742;--green-bg:#eaf6ee;--amber:#855500;--amber-bg:#fff6df;--red:#a52828;--red-bg:#fff0ef;--radius:15px;font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg);font-size:15px}
 *{box-sizing:border-box}body{margin:0;min-width:280px}button,input,select{font:inherit}button,a,input,select{touch-action:manipulation}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.5}a{color:var(--accent);text-underline-offset:3px}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #efad7b;outline-offset:3px}[hidden]{display:none!important}
 .shell{width:min(940px,100%);margin:0 auto;padding:26px 22px 36px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:36px}.brand{display:flex;align-items:center;gap:11px}.logo{display:grid;place-items:center;width:39px;height:39px;border-radius:12px;color:#fff;background:#ed6a23}.logo svg{width:26px;height:26px}.brand strong{font-size:17px;letter-spacing:-.5px}.version{margin-left:7px;color:var(--muted);font-size:11px}.connection{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);white-space:nowrap}.connection:before{content:"";width:7px;height:7px;border-radius:50%;background:#a3aab5}.connection.ready:before{background:var(--green)}.connection.error:before{background:var(--accent)}
-.eyebrow{text-transform:uppercase;letter-spacing:1.8px;font-size:11px;font-weight:750;color:var(--accent);margin:0 0 9px}h1{font-size:clamp(26px,5vw,38px);letter-spacing:-1.3px;line-height:1.14;margin:0 0 10px}.lead{color:var(--muted);line-height:1.6;margin:0 0 22px}.search-card{padding:20px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 4px 18px #172a3a05}.search-label{font-size:12px;font-weight:650;display:block;margin-bottom:9px}.search-line{display:flex;gap:9px}.input-wrap{flex:1;min-width:0;position:relative}.input-wrap svg{position:absolute;left:14px;top:16px;width:18px;height:18px;pointer-events:none;color:var(--muted)}#query{width:100%;height:50px;border:1px solid #cbd2db;border-radius:10px;padding:0 13px 0 42px;background:#fff;color:var(--ink);font-size:16px}#query::placeholder{color:#818b98}.primary,.secondary{min-height:44px;border-radius:10px;padding:0 18px;font-weight:650;border:1px solid transparent}.primary{background:var(--ink);color:white}.primary:hover:not(:disabled){background:#384452}.secondary{background:var(--paper);border-color:var(--line);color:var(--ink)}.secondary:hover:not(:disabled){background:var(--bg)}.hint{font-size:12px;color:var(--muted);margin:11px 0 0;line-height:1.6}.hint code,code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}.search-actions{display:flex;gap:7px}
+h1{font-size:clamp(26px,5vw,38px);letter-spacing:-1.3px;line-height:1.14;margin:0 0 10px}.search-card{padding:20px;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 4px 18px #172a3a05}.search-label{font-size:12px;font-weight:650;display:block;margin-bottom:9px}#query{width:100%;height:50px;border:1px solid #cbd2db;border-radius:10px;padding:0 13px 0 42px;background:#fff;color:var(--ink);font-size:16px}#query::placeholder{color:#818b98}.primary,.secondary{min-height:44px;border-radius:10px;padding:0 18px;font-weight:650;border:1px solid transparent}.primary{background:var(--ink);color:white}.primary:hover:not(:disabled){background:#384452}.secondary{background:var(--paper);border-color:var(--line);color:var(--ink)}.secondary:hover:not(:disabled){background:var(--bg)}.hint{font-size:12px;color:var(--muted);margin:11px 0 0;line-height:1.6}.hint code,code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
 .notice{margin-top:14px;border:1px solid #f0d7a4;border-radius:11px;padding:12px 14px;background:var(--amber-bg);font-size:13px;line-height:1.6;overflow-wrap:anywhere}.notice.error{background:var(--red-bg);border-color:#eed0cc;color:#822b26}.setup{margin-top:14px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:17px}.setup h2{font-size:16px;margin:0 0 9px}.setup p{font-size:13px;color:var(--muted);line-height:1.65;margin:8px 0}.setup code{color:var(--ink)}.setup .secondary{font-size:12px;min-height:36px;margin-top:7px}.setup-links{display:flex;align-items:center;gap:14px;flex-wrap:wrap}.setup-links a{font-size:12px}
 .progress{min-height:40px;display:flex;align-items:center;gap:9px;color:var(--muted);font-size:12px;line-height:1.5;padding:8px 2px}.spinner{width:13px;height:13px;border:2px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;flex:none}@keyframes spin{to{transform:rotate(360deg)}}
 .results{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}.tools{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 17px;border-bottom:1px solid var(--line);flex-wrap:wrap}.tools-title{font-size:13px;font-weight:700}.filters{display:flex;align-items:center;gap:13px;flex-wrap:wrap}.check-label{font-size:12px;display:flex;align-items:center;gap:6px;min-height:32px}.check-label input{width:16px;height:16px;margin:0;accent-color:var(--accent)}select{min-height:35px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--muted);font-size:12px;padding:5px 26px 5px 9px}.table-heading,.domain-row{display:grid;grid-template-columns:minmax(0,1fr) 100px 100px 86px;gap:14px;align-items:center;padding:13px 17px}.table-heading{background:#fafbfc;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.7px}.table-heading span:not(:first-child){text-align:right}.domain-row+.domain-row{border-top:1px solid var(--line)}.name{font-weight:680;font-size:16px;overflow-wrap:anywhere;letter-spacing:-.25px;margin:0 0 6px}.domain-detail{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 7px;border-radius:5px;background:#f0f2f5;color:#596371;font-size:10px;font-weight:700;line-height:1.4;letter-spacing:.1px}.badge.available{color:var(--green);background:var(--green-bg)}.badge.likely,.badge.unknown{color:var(--amber);background:var(--amber-bg)}.source{font-size:10px;color:var(--muted)}.cost{text-align:right;font-size:14px;font-variant-numeric:tabular-nums;white-space:nowrap}.cost small{font-size:10px;color:var(--muted);display:block;margin-top:4px}.price-label{display:none}.row-actions{display:flex;justify-content:flex-end}.recheck{background:#fff;border:1px solid var(--line);border-radius:8px;font-size:12px;padding:8px 11px;min-height:36px;color:var(--ink)}.recheck:hover:not(:disabled){background:var(--bg)}mark{background:#fff0db;color:inherit;border-radius:2px}.empty{padding:34px 20px;text-align:center;color:var(--muted);font-size:13px;line-height:1.7}.results-bottom{border-top:1px solid var(--line);padding:11px 17px;display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;font-size:11px;color:var(--muted)}.copy{border:0;background:none;color:var(--accent);padding:7px 0;font-size:12px;font-weight:650;min-height:32px}footer{margin-top:17px;color:var(--muted);font-size:11px;line-height:1.75;display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}footer a{white-space:nowrap}.intro-note{padding:18px 2px 5px;color:var(--muted);font-size:12px;line-height:1.7}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-@media(max-width:620px){.shell{padding:18px 15px 25px}.top{margin-bottom:27px}.brand strong{font-size:16px}.version{font-size:10px}.logo{width:34px;height:34px;border-radius:10px}.connection{font-size:10px}.search-card{padding:15px}.search-line{flex-wrap:wrap}.input-wrap{flex-basis:100%}.search-actions{width:100%}.primary{flex:1;min-height:44px}.lead{font-size:14px;margin-bottom:17px}.tools{padding:10px 13px;gap:6px}.filters{gap:10px}.table-heading{display:none}.domain-row{grid-template-columns:1fr 1fr 84px;gap:12px 10px;padding:15px}.domain-info{grid-column:1/-1}.name{font-size:17px}.cost{text-align:left;font-size:14px}.price-label{display:block;color:var(--muted);font-size:10px;margin-bottom:4px}.cost small{display:inline;font-size:9px;margin:0 0 0 3px}.row-actions{align-self:end}.results-bottom{padding:8px 13px}.source{font-size:10px}footer{gap:6px}}
+@media(max-width:620px){.shell{padding:18px 15px 25px}.top{margin-bottom:27px}.brand strong{font-size:16px}.version{font-size:10px}.logo{width:34px;height:34px;border-radius:10px}.connection{font-size:10px}.search-card{padding:15px}.primary{flex:1;min-height:44px}.tools{padding:10px 13px;gap:6px}.filters{gap:10px}.table-heading{display:none}.domain-row{grid-template-columns:1fr 1fr 84px;gap:12px 10px;padding:15px}.domain-info{grid-column:1/-1}.name{font-size:17px}.cost{text-align:left;font-size:14px}.price-label{display:block;color:var(--muted);font-size:10px;margin-bottom:4px}.cost small{display:inline;font-size:9px;margin:0 0 0 3px}.row-actions{align-self:end}.results-bottom{padding:8px 13px}.source{font-size:10px}footer{gap:6px}}
 
-.search-options{display:flex;align-items:end;gap:10px;margin-top:13px}.option-field{display:flex;flex-direction:column;gap:5px;min-width:0}.option-field>label{font-size:11px;font-weight:650}.option-field select{height:40px;font-size:13px;color:var(--ink);min-width:145px}.ending-field{position:relative;flex:1;max-width:300px}.ending-toggle{height:40px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 11px;font-size:13px;min-width:0}.ending-toggle span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .ending-modal-open{overflow:hidden}.ending-panel{position:fixed;inset:0;margin:auto;width:min(580px,calc(100vw - 32px));height:min(760px,calc(100dvh - 64px));max-width:none;max-height:none;display:flex;flex-direction:column;padding:0;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:18px;box-shadow:0 22px 70px #172a3a35;overflow:hidden}.ending-panel::backdrop{background:#151c2866}.ending-header{padding:18px 20px 12px;flex:none;border-bottom:1px solid var(--line)}.ending-title-row{display:flex;align-items:center;justify-content:space-between;gap:12px}.ending-title-row h2{font-size:20px;letter-spacing:-.5px;margin:0}.ending-title-row h2:focus{outline:none}.icon-button{display:grid;place-items:center;border:0;background:var(--bg);color:var(--muted);width:40px;height:40px;border-radius:50%;font-size:25px}.ending-header p{font-size:12px;color:var(--muted);margin:2px 0 14px;line-height:1.5}.ending-search-wrap{position:relative}.ending-search-wrap svg{position:absolute;width:18px;height:18px;left:13px;top:14px;fill:none;stroke:var(--muted);stroke-width:1.8;pointer-events:none}.ending-search{border:1px solid #cbd2db;border-radius:10px;background:var(--paper);color:var(--ink);font-size:16px;padding:11px 12px;width:100%;min-width:0;min-height:46px}.ending-search-wrap .ending-search{padding-left:39px}.ending-views{display:flex;gap:4px;background:var(--bg);border-radius:10px;padding:4px;margin-top:12px}.ending-views button{flex:1;min-height:38px;padding:5px 10px;font-size:13px;font-weight:650;color:var(--muted);background:none;border:0;border-radius:7px}.ending-views button[aria-pressed="true"]{background:var(--paper);color:var(--ink);box-shadow:0 1px 4px #172a3a12}.ending-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-content:start;gap:8px;flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:12px 20px 18px;scrollbar-gutter:stable}.ending-group{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:11px;font-weight:650;padding:9px 0 2px}.ending-group:first-child{padding-top:0}.ending-choice{display:flex;align-items:center;justify-content:space-between;gap:6px;min-width:0;min-height:48px;padding:10px;border:1px solid var(--line);border-radius:9px;background:var(--paper);cursor:pointer;font-size:13px;font-weight:600}.ending-choice:hover{border-color:#b6bfca}.ending-choice:has(input:checked){border-color:var(--accent);background:var(--soft);color:var(--accent)}.ending-choice:focus-within{outline:2px solid #efad7b;outline-offset:2px}.ending-choice span{overflow-wrap:anywhere;min-width:0}.ending-choice input{width:17px;height:17px;margin:0;accent-color:var(--accent);flex:none;outline:none}.ending-footer{padding:10px 20px 16px;border-top:1px solid var(--line);background:var(--paper);flex:none}.ending-footer-top,.ending-footer-actions{display:flex;align-items:center;justify-content:space-between;gap:12px}.ending-footer-top{margin-bottom:5px;min-height:32px}.ending-footer-top>span{font-size:12px;font-weight:600}.ending-footer-actions .primary{min-width:130px}.text-button{background:none;border:0;color:var(--accent);font-size:12px;padding:6px 0;min-height:32px}.ending-message{font-size:11px;color:var(--red);line-height:1.5;margin:8px 0 0}.ending-empty{padding:30px 20px;color:var(--muted);font-size:13px;text-align:center}.ending-list:empty{padding:0}.ending-list:empty+.ending-empty{flex:1}.ending-select-group{border:0;background:none;color:var(--accent);font-size:11px;min-height:28px;padding:0 3px;font-weight:650}.filter-summary{font-size:11px;color:var(--muted);margin:0 0 12px;line-height:1.6;overflow-wrap:anywhere}
-@media(max-width:620px){.search-options{gap:8px}.option-field select{min-width:130px;width:100%}.ending-field{max-width:none}.ending-panel{inset:auto 0 0;margin:0;width:100%;height:min(760px,92dvh);border-radius:18px 18px 0 0}.ending-header{padding:16px 16px 12px}.ending-list{grid-template-columns:repeat(3,minmax(0,1fr));padding:12px 16px 18px}.ending-footer{padding:10px 16px max(16px,env(safe-area-inset-bottom))}.ending-choice{padding:9px 7px}.filter-summary{margin-bottom:10px}}
+.option-field{display:flex;flex-direction:column;gap:5px;min-width:0}.option-field>label{font-size:11px;font-weight:650}.option-field select{height:40px;font-size:13px;color:var(--ink);min-width:145px}.ending-field{position:relative;flex:1;max-width:300px}.ending-toggle{height:40px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 11px;font-size:13px;min-width:0}.ending-toggle span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap} .ending-modal-open{overflow:hidden}.ending-panel{position:fixed;inset:0;margin:auto;width:min(580px,calc(100vw - 32px));height:min(760px,calc(100dvh - 64px));max-width:none;max-height:none;display:flex;flex-direction:column;padding:0;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:18px;box-shadow:0 22px 70px #172a3a35;overflow:hidden}.ending-panel::backdrop{background:#151c2866}.ending-header{padding:18px 20px 12px;flex:none;border-bottom:1px solid var(--line)}.ending-title-row{display:flex;align-items:center;justify-content:space-between;gap:12px}.ending-title-row h2{font-size:20px;letter-spacing:-.5px;margin:0}.ending-title-row h2:focus{outline:none}.icon-button{display:grid;place-items:center;border:0;background:var(--bg);color:var(--muted);width:40px;height:40px;border-radius:50%;font-size:25px}.ending-header p{font-size:12px;color:var(--muted);margin:2px 0 14px;line-height:1.5}.ending-search-wrap{position:relative}.ending-search-wrap svg{position:absolute;width:18px;height:18px;left:13px;top:14px;fill:none;stroke:var(--muted);stroke-width:1.8;pointer-events:none}.ending-search{border:1px solid #cbd2db;border-radius:10px;background:var(--paper);color:var(--ink);font-size:16px;padding:11px 12px;width:100%;min-width:0;min-height:46px}.ending-search-wrap .ending-search{padding-left:39px}.ending-views{display:flex;gap:4px;background:var(--bg);border-radius:10px;padding:4px;margin-top:12px}.ending-views button{flex:1;min-height:38px;padding:5px 10px;font-size:13px;font-weight:650;color:var(--muted);background:none;border:0;border-radius:7px}.ending-views button[aria-pressed="true"]{background:var(--paper);color:var(--ink);box-shadow:0 1px 4px #172a3a12}.ending-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-content:start;gap:8px;flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:12px 20px 18px;scrollbar-gutter:stable}.ending-group{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:11px;font-weight:650;padding:9px 0 2px}.ending-group:first-child{padding-top:0}.ending-choice{display:flex;align-items:center;justify-content:space-between;gap:6px;min-width:0;min-height:48px;padding:10px;border:1px solid var(--line);border-radius:9px;background:var(--paper);cursor:pointer;font-size:13px;font-weight:600}.ending-choice:hover{border-color:#b6bfca}.ending-choice:has(input:checked){border-color:var(--accent);background:var(--soft);color:var(--accent)}.ending-choice:focus-within{outline:2px solid #efad7b;outline-offset:2px}.ending-choice span{overflow-wrap:anywhere;min-width:0}.ending-choice input{width:17px;height:17px;margin:0;accent-color:var(--accent);flex:none;outline:none}.ending-footer{padding:10px 20px 16px;border-top:1px solid var(--line);background:var(--paper);flex:none}.ending-footer-top,.ending-footer-actions{display:flex;align-items:center;justify-content:space-between;gap:12px}.ending-footer-top{margin-bottom:5px;min-height:32px}.ending-footer-top>span{font-size:12px;font-weight:600}.ending-footer-actions .primary{min-width:130px}.text-button{background:none;border:0;color:var(--accent);font-size:12px;padding:6px 0;min-height:32px}.ending-message{font-size:11px;color:var(--red);line-height:1.5;margin:8px 0 0}.ending-empty{padding:30px 20px;color:var(--muted);font-size:13px;text-align:center}.ending-list:empty{padding:0}.ending-list:empty+.ending-empty{flex:1}.filter-summary{font-size:11px;color:var(--muted);margin:0 0 12px;line-height:1.6;overflow-wrap:anywhere}
+@media(max-width:620px){.option-field select{min-width:130px;width:100%}.ending-field{max-width:none}.ending-panel{inset:auto 0 0;margin:0;width:100%;height:min(760px,92dvh);border-radius:18px 18px 0 0}.ending-header{padding:16px 16px 12px}.ending-list{grid-template-columns:repeat(3,minmax(0,1fr));padding:12px 16px 18px}.ending-footer{padding:10px 16px max(16px,env(safe-area-inset-bottom))}.ending-choice{padding:9px 7px}.filter-summary{margin-bottom:10px}}
 @media(prefers-reduced-motion:reduce){.spinner{animation:none}}
 .tabs{display:flex;gap:8px;margin-bottom:14px}.tabs button{min-height:42px;border:1px solid var(--line);border-radius:10px;padding:0 18px;background:var(--paper);color:var(--ink);font-weight:650}.tabs button[aria-selected="true"]{background:var(--ink);color:white}.catalog-controls{display:flex;gap:8px;align-items:end;flex-wrap:wrap}.catalog-controls>.option-field>input{width:120px;min-height:42px;border:1px solid var(--line);border-radius:8px;padding:8px;font-size:16px}.catalog-controls .option-field select{min-width:100px}.catalog-options{margin-top:10px}.catalog-card{margin-top:14px}.catalog-progress{width:100%;margin-top:10px}.length-input{width:90px;height:40px;border:1px solid var(--line);border-radius:8px;padding:8px}.catalog-filters{margin-top:10px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.catalog-filters .option-field select{min-width:0;width:100%;font-size:12px;padding:5px 18px 5px 8px}.ending-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.ending-chip{border:1px solid var(--line);border-radius:999px;padding:6px 10px;min-height:34px;background:var(--paper);color:var(--muted);font-size:12px}.ending-chip.selected{background:var(--soft);border-color:var(--accent);color:var(--accent)}@media(max-width:400px){.catalog-controls .primary,.catalog-controls .secondary{padding:0 11px;font-size:12px}.catalog-controls .option-field select{min-width:90px}}
+
+.page-title{font-size:25px;letter-spacing:-.7px;margin:0 0 18px}.top{margin-bottom:22px}.search-workspace{background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden}.search-intents{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;padding:7px;background:#eef1f4;border-bottom:1px solid var(--line)}.search-intents button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:64px;border:1px solid transparent;border-radius:10px;background:none;color:var(--muted)}.search-intents button strong{font-size:14px}.search-intents button span{font-size:11px}.search-intents button[aria-pressed="true"]{color:var(--ink);background:#fff;border-color:var(--line);box-shadow:0 1px 4px #172a3a0c}.search-query-section,.search-ending-section,.search-run-section{padding:18px 22px}.search-ending-section{border-top:1px solid var(--line)}.field-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;font-size:12px;font-weight:650}.field-heading>label{font-size:12px}.field-heading .text-button{font-weight:500;min-height:30px}.search-workspace #query{height:50px;padding:0 14px;border-radius:10px;font-size:17px}.search-detail-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--muted)}.search-detail-row select{flex:1;max-width:240px;min-height:40px;font-size:13px;color:var(--ink)}.search-detail-row .length-input{width:75px}.search-explanation{font-size:12px;line-height:1.5;color:var(--muted);margin:10px 0 0}.search-explanation:empty{display:none}.pattern-help{font-size:12px;margin-left:auto}.pattern-help summary{cursor:pointer;color:var(--accent);min-height:32px;display:flex;align-items:center}.pattern-help[open]{width:100%;margin:0}.pattern-help p{line-height:1.7;margin:5px 0}.ending-shortcuts{display:flex;gap:16px}#endingSummary{color:var(--muted);font-weight:400;margin-left:5px}.quick-ending-grid{display:flex;flex-wrap:wrap;gap:7px}.quick-ending-grid button{display:flex;align-items:center;gap:7px;justify-content:center;min-height:42px;padding:7px 12px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--muted);font-size:13px}.quick-ending-grid button[aria-pressed="true"]{background:var(--soft);color:var(--accent);border-color:var(--accent);font-weight:600}.quick-ending-grid button span{font-size:13px;min-width:10px}.more-endings-button{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:40px;padding:8px 0 0;border:0;background:none;color:var(--accent);font-size:12px;font-weight:600}.more-endings-button[aria-expanded="true"] span{transform:rotate(180deg)}.inline-endings{padding-top:12px}.inline-ending-search{display:flex;gap:12px;align-items:center}.inline-ending-search input{flex:1}.inline-ending-search button{white-space:nowrap}.inline-ending-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:10px;max-height:245px;overflow:auto;overscroll-behavior:contain;padding:2px}.inline-ending-list .ending-choice{font-size:12px;padding:8px;min-height:44px}.search-run-section{border-top:1px solid var(--line);background:#fafbfc}.search-preview{font-size:13px;line-height:1.5;color:var(--ink);margin:0 0 12px;overflow-wrap:anywhere}.search-preview.invalid{color:var(--red)}.run-actions{display:flex;gap:8px}.run-actions .primary{flex:1;min-height:46px}.draft-notice{font-size:11px;color:var(--muted);margin:10px 0 0}.result-heading{display:flex;align-items:center;justify-content:space-between;padding:14px 17px;border-bottom:1px solid var(--line);gap:12px}.result-heading h2{font-size:15px;margin:0;overflow-wrap:anywhere}.search-workspace button:disabled{opacity:.5}.search-workspace .search-intents button:disabled{opacity:.7}@media(max-width:620px){.page-title{font-size:23px;margin-bottom:14px}.top{margin-bottom:17px}.search-query-section,.search-ending-section,.search-run-section{padding:14px 16px}.search-intents button{min-height:58px}.search-intents button span{font-size:10px}.quick-ending-grid{gap:6px}.quick-ending-grid button{min-height:42px;padding:7px 10px;font-size:12px}.inline-ending-list{grid-template-columns:repeat(3,minmax(0,1fr))}.search-detail-row select{max-width:none}.field-heading .ending-shortcuts{gap:12px}}
+.progress:has(#progressText:empty){display:none}@media(min-width:760px){.search-workspace{display:grid;grid-template-columns:1fr 1fr}.search-intents,.search-run-section,.search-workspace.full-domain .search-query-section{grid-column:1/-1}.search-ending-section{border-top:0;border-left:1px solid var(--line)}.search-run-section{display:flex;align-items:center;gap:14px;flex-wrap:wrap}.search-preview{flex:1;margin:0}.run-actions{min-width:200px}.draft-notice{width:100%;margin:0}.inline-ending-list{grid-template-columns:repeat(3,minmax(0,1fr))}}
 </style>
 </head>
 <body>
 <main class="shell">
   <header class="top">
-    <div class="brand"><span class="logo" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="14" cy="14" r="10.5"/><path d="M3.5 14h21M14 3.5c-6 5.5-6 15.5 0 21M14 3.5c6 5.5 6 15.5 0 21"/></svg></span><div><strong>Domain Finder</strong><span class="version">v1.3.5</span></div></div>
+    <div class="brand"><span class="logo" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="14" cy="14" r="10.5"/><path d="M3.5 14h21M14 3.5c-6 5.5-6 15.5 0 21M14 3.5c6 5.5 6 15.5 0 21"/></svg></span><div><strong>Domain Finder</strong><span class="version">v1.4.0</span></div></div>
     <span id="connection" class="connection">Checking setup</span>
   </header>
-  <p class="eyebrow">Cloudflare Registrar</p>
-  <h1>Find your next domain.</h1>
-  <p class="lead">Search ideas. Check availability. See registration and renewal prices.</p>
+  <h1 class="page-title">Find a domain</h1>
   <nav class="tabs" role="tablist" aria-label="Domain tools"><button id="searchTab" role="tab" aria-selected="true" aria-controls="searchPane">Search</button><button id="catalogTab" role="tab" aria-selected="false" aria-controls="catalogPane">Catalog</button></nav>
   <section id="searchPane" role="tabpanel" aria-labelledby="searchTab">
-  <form id="searchForm" class="search-card" novalidate>
-    <label id="queryLabel" class="search-label" for="query">Name, phrase, or domain</label>
-    <div class="search-line">
-      <div class="input-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><input id="query" name="q" type="text" maxlength="2000" placeholder="Your idea or example.com" autocomplete="off" autocapitalize="none" spellcheck="false" enterkeyhint="search" aria-describedby="searchHint"></div>
-      <div class="search-actions"><button id="searchButton" class="primary" type="submit" disabled>Search</button><button id="refreshResults" class="secondary" type="button" hidden>Refresh results</button><button id="cancelButton" class="secondary" type="button" hidden>Stop</button></div>
+  <form id="searchForm" class="search-workspace" novalidate>
+    <div class="search-intents" role="group" aria-label="Search type">
+      <button id="ideasIntent" type="button" data-kind="ideas" aria-pressed="true"><strong>Ideas</strong><span>Find suggestions</span></button>
+      <button id="exactIntent" type="button" data-kind="exact" aria-pressed="false"><strong>Exact</strong><span>Check a name</span></button>
+      <button id="regexIntent" type="button" data-kind="regex" aria-pressed="false"><strong>Regex</strong><span>Match a pattern</span></button>
     </div>
-    <div class="search-options">
-      <div class="option-field"><label for="matchMode">Match</label><select id="matchMode"><option value="suggestions">All suggestions</option><option value="exact">Exact</option><option value="contains">Contains</option><option value="begins">Begins with</option><option value="ends">Ends with</option><option value="regex">Regex</option></select></div>
-      <div id="endingPicker" class="option-field ending-field">
-        <label id="endingsLabel">Endings</label>
-        <button id="endingToggle" class="ending-toggle" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="endingPanel" aria-labelledby="endingsLabel endingSummary"><span id="endingSummary">All endings</span><span aria-hidden="true">⌄</span></button>
+    <input id="matchMode" type="hidden" value="suggestions">
+    <div class="search-query-section">
+      <div class="field-heading"><label id="queryLabel" for="query">Name or idea</label><button id="queryExample" class="text-button" type="button">Try mango</button></div>
+      <input id="query" name="q" type="text" maxlength="2000" placeholder="e.g. mango" autocomplete="off" autocapitalize="none" spellcheck="false" enterkeyhint="search" aria-describedby="searchHint searchPreview">
+      <div id="ideaOptions" class="search-detail-row"><label for="ideaMatch">Suggestions</label><select id="ideaMatch"><option value="suggestions">Any match</option><option value="contains">Contains my text</option><option value="begins">Starts with my text</option><option value="ends">Ends with my text</option></select></div>
+      <div id="regexOptions" class="search-detail-row" hidden><label for="maxLength">Maximum name length</label><input id="maxLength" type="number" min="1" max="63" value="12" class="length-input"><details class="pattern-help"><summary>Pattern help</summary><p><code>[a-z]</code> letter · <code>[0-9]</code> digit · <code>{3}</code> repeat 3 times.<br>Example: <code>m[a-z]{2}</code> checks maa, mab, mac…<br>Patterns match the whole name. Supports groups, alternatives, and repetitions.</p></details></div>
+      <p id="searchHint" class="search-explanation"></p>
+    </div>
+    <section id="searchEndings" class="search-ending-section" aria-labelledby="endingsLabel">
+      <div class="field-heading"><span id="endingsLabel">Endings <span id="endingSummary"></span></span><div class="ending-shortcuts"><button id="usePinnedEndings" class="text-button" type="button">Select pinned</button><button id="useAllEndings" class="text-button" type="button">Clear</button></div></div>
+      <div id="endingChips" class="quick-ending-grid" role="group" aria-label="Quick endings"></div>
+      <button id="endingToggle" class="more-endings-button" type="button" aria-expanded="false" aria-controls="searchEndingPanel">More endings <span aria-hidden="true">⌄</span></button>
+      <div id="searchEndingPanel" class="inline-endings" hidden>
+        <div class="inline-ending-search"><label for="searchEndingQuery" class="sr-only">Find more endings</label><input id="searchEndingQuery" class="ending-search" type="search" placeholder="Find an ending, e.g. .dev" autocomplete="off"><button id="refreshSearchEndings" class="text-button" type="button">Refresh list</button></div>
+        <div id="searchEndingList" class="inline-ending-list" role="group" aria-label="More domain endings"></div><p id="searchEndingMessage" class="hint" role="status"></p>
       </div>
-    </div>
-    <div id="endingChips" class="ending-chips" aria-label="Saved endings" hidden></div>
-    <div id="regexOptions" class="search-options" hidden><div class="option-field"><label for="maxLength">Maximum name length</label><input id="maxLength" type="number" min="1" max="63" value="12" class="length-input"></div><p class="hint">Checks 200 candidates at a time. Stop and resume any time.</p></div>
-    <p id="searchHint" class="hint">Use a phrase for suggestions, or separate up to 20 full domains with commas.</p>
+    </section>
+    <div class="search-run-section"><p id="searchPreview" class="search-preview" aria-live="polite">Enter a name or idea to begin.</p><div class="run-actions"><button id="searchButton" class="primary" type="submit" disabled>Find ideas</button><button id="cancelButton" class="secondary" type="button" hidden>Stop</button></div><p id="draftNotice" class="draft-notice" hidden>Options changed. Run a new search to update the results.</p></div>
   </form>
   <noscript><div class="notice error">Enable JavaScript to search domains.</div></noscript>
   <p id="searchCacheStatus" class="hint" hidden></p>
@@ -63,12 +72,12 @@
   <div class="progress" role="status" aria-live="polite"><span id="spinner" class="spinner" hidden></span><span id="progressText"></span></div>
   <p id="filterSummary" class="filter-summary" hidden></p>
   <section id="results" class="results" aria-label="Domain results" hidden>
-    <div class="tools"><span id="resultCount" class="tools-title">Results</span><div class="filters"><label class="check-label"><input type="checkbox" id="availableOnly">Available only</label><label for="sort" class="sr-only">Sort results</label><select id="sort"><option value="relevance">Sort: relevance</option><option value="name">Sort: domain</option><option value="price">Sort: first-year price</option><option value="availability">Sort: availability</option></select></div></div>
+    <div class="result-heading"><h2 id="resultsTitle">Results</h2><button id="refreshResults" class="text-button" type="button" hidden>Refresh</button></div><div class="tools"><span id="resultCount" class="tools-title">Results</span><div class="filters"><label class="check-label"><input type="checkbox" id="availableOnly">Available only</label><label for="sort" class="sr-only">Sort results</label><select id="sort"><option value="relevance">Sort: relevance</option><option value="name">Sort: domain</option><option value="price">Sort: first-year price</option><option value="availability">Sort: availability</option></select></div></div>
     <div class="table-heading" aria-hidden="true"><span>Domain / status</span><span>First year</span><span>Renewal / yr</span><span>Verify</span></div>
     <div id="rows"></div><div id="emptyResults" class="empty" hidden></div>
     <div class="results-bottom"><span>Availability can change. Confirm again before buying.</span><button id="continueScan" class="secondary" type="button" hidden>Check next 200</button><button id="copyButton" class="copy" type="button">Copy shown domains</button></div>
   </section>
-  <p id="introNote" class="intro-note">Results come from Cloudflare Registrar. This page only searches and checks; it cannot buy or change domains.</p>
+  <p id="introNote" class="intro-note">Searches are saved for 24 hours. Use Catalog to browse saved three-character domains.</p>
   </section>
 <section id="catalogPane" role="tabpanel" aria-labelledby="catalogTab" hidden>
   <div class="search-card">
@@ -98,7 +107,7 @@
   <div id="endingList" class="ending-list" role="group" aria-label="Domain endings"></div>
   <div id="endingEmpty" class="ending-empty" hidden>No matching endings.</div>
   <div class="ending-footer">
-    <div class="ending-footer-top"><span id="endingSelectionSummary" role="status">All endings</span><button id="clearEndings" class="text-button" type="button">Clear all</button></div>
+    <div class="ending-footer-top"><span id="endingSelectionSummary" role="status">All endings</span></div>
     <div class="ending-footer-actions"><button id="reloadEndings" class="text-button" type="button">Refresh list</button><button id="doneEndings" class="primary" type="button">Done</button></div>
     <p id="endingMessage" class="ending-message" role="status" hidden></p>
   </div>
@@ -108,7 +117,7 @@
 'use strict';
 const $ = id => document.getElementById(id);
 let rows = [], lastQuery = '', active = null, generation = 0, ready = false;
-let searchInfo = null;
+let searchInfo = null, lastRun = null, validSearch = false;
 let endingCatalog = [], endingsComplete = false, endingsLoading = false, endingCursor = '', endingError = '';
 const endingCursors = new Set();
 const selectedEndings = new Set();
@@ -119,7 +128,7 @@ const POPULAR_ENDINGS = ['dev','info','biz','me','tv','us','uk','co.uk','ca','de
 const ENDING_CACHE_KEY = 'domain-finder.ending-list.v1';
 const RESULT_CACHE_KEY = 'domain-finder.results.v1';
 const DAY_MS = 86400000;
-let endingSavedAt = 0, pickerContext = 'search', endingView = 'quick', pickerOpener = null, forceSearch = false, cacheHits = 0;
+let endingSavedAt = 0, endingView = 'quick', pickerOpener = null, forceSearch = false, cacheHits = 0;
 let resultCache = {};
 try { resultCache = JSON.parse(localStorage.getItem(RESULT_CACHE_KEY) || '{}') || {}; } catch {}
 function cacheRead(key) {
@@ -186,7 +195,7 @@ function validEnding(value) {
   return typeof value === 'string' && value.length <= 253 && /[a-z]/.test(value) &&
     value.split('.').every(label => /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(label));
 }
-// Only display preferences are saved. Credentials never enter this page.
+// Preferences and result caches use separate keys. Credentials never enter this page.
 function saveOptions() {
   try { localStorage.setItem(PREFERENCE_KEY, JSON.stringify({ mode: $('matchMode').value, maxLength: $('maxLength').value, recentEndings: [...recentEndings].slice(-50), endings: [...selectedEndings] })); }
   catch { /* Search works when browser storage is disabled. */ }
@@ -209,39 +218,89 @@ function exactInput(query) {
   const parts = query.split(/[,;\n]+/).map(value => value.trim()).filter(Boolean);
   return parts.length > 1 || /^https?:\/\//i.test(query) || (query.includes('.') && !/\s/.test(query));
 }
+function searchDraft() { return {query:$('query').value.trim(),mode:$('matchMode').value,maxLength:Number($('maxLength').value),endings:[...selectedEndings]}; }
 function updateOptions() {
-  const mode = $('matchMode').value;
-  const fullDomain = mode !== 'regex' && exactInput($('query').value.trim());
-  $('matchMode').disabled = false;
-  $('endingToggle').disabled = fullDomain;
-  $('regexOptions').hidden = mode !== 'regex';
-  $('queryLabel').textContent = mode === 'regex' ? 'Regex pattern' : 'Name, phrase, or domain';
-  $('query').placeholder = mode === 'regex' ? '^mango[a-z0-9]{1,4}$' : 'Your idea or example.com';
-  const selected = [...selectedEndings].map(value => '.' + value);
-  $('endingSummary').textContent = selected.length ? selected.join(', ') : 'All endings';
-  $('endingToggle').title = $('endingSummary').textContent;
-  $('searchHint').textContent = fullDomain ? 'Full domains are checked exactly.'
-    : mode === 'regex' ? 'Generates matching names and checks availability. Choose endings. Matches the whole name, ignoring case; maximum length bounds * and +. Supports classes, groups, alternatives, and repetitions.'
-    : mode === 'exact' ? 'Check this exact name with each selected ending. Choose endings or enter a full domain.'
-    : 'Cloudflare suggestions; Contains, Begins with, and Ends with filter the returned names.';
+  const options=searchDraft(), mode=options.mode, query=options.query;
+  const kind=mode==='regex'?'regex':mode==='exact'?'exact':'ideas';
+  const fullDomain=kind!=='regex' && exactInput(query);
+  if(fullDomain && kind==='ideas'){$('matchMode').value='exact';saveOptions();return updateOptions();}
+  for(const button of document.querySelectorAll('.search-intents button')) button.setAttribute('aria-pressed',String(button.dataset.kind===kind));
+  $('queryLabel').textContent=kind==='regex'?'Pattern':kind==='exact'?'Name or full domain':'Name or idea';
+  $('query').placeholder=kind==='regex'?'e.g. m[a-z]{2}':kind==='exact'?'e.g. mango or mango.com':'e.g. mango';
+  $('queryExample').textContent=kind==='regex'?'Try m[a-z]{2}':kind==='exact'?'Try mango.com':'Try mango';
+  $('ideaOptions').hidden=kind!=='ideas'||fullDomain;
+  if(kind==='ideas') $('ideaMatch').value=mode;
+  $('regexOptions').hidden=kind!=='regex';
+  $('searchEndings').hidden=fullDomain;
+  $('searchForm').classList.toggle('full-domain',fullDomain);
+  $('endingSummary').textContent=selectedEndings.size?selectedEndings.size+' selected':kind==='ideas'?'All':'Choose at least one';
+  $('useAllEndings').disabled=!selectedEndings.size;
+  $('usePinnedEndings').disabled=PINNED_ENDINGS.every(name=>selectedEndings.has(name));
+  $('searchHint').textContent=fullDomain?'Full domains are checked directly, using the endings you entered.':kind==='ideas'?'Ideas come from up to 50 suggestions. The name match filters those suggestions.':kind==='exact'?'Check this name across your selected endings.':'';
+  let preview='',invalid=false;
+  if(!query) preview=kind==='regex'?'Enter a pattern, then choose endings.':kind==='exact'?'Enter a name or full domain.':'Enter a name or idea to begin.';
+  else try {
+    if(fullDomain){
+      const parts=query.split(/[,;\n]+/).map(value=>value.trim()).filter(Boolean);
+      if(parts.length>20)throw new Error('Check up to 20 full domains at a time.');
+      for(const part of parts){const host=new URL(/^https?:\/\//i.test(part)?part:'https://'+part).hostname.replace(/\.$/,'');if(!host.includes('.')||!host.split('.').every(label=>/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/i.test(label)))throw new Error('Enter valid full domains, such as mango.com.');}
+      preview='Check '+parts.length+' domain'+(parts.length===1?'':'s')+' for availability and prices.';
+    } else if(kind==='regex') {
+      const pattern=compileDomainPattern(query,options.maxLength);
+      if(!selectedEndings.size)throw new Error('Choose at least one ending for this pattern.');
+      const total=Math.min(Number.MAX_SAFE_INTEGER,pattern.total*selectedEndings.size);
+      preview='Up to '+total.toLocaleString()+' candidates · '+Math.min(200,total).toLocaleString()+' per scan. You choose when to continue.';
+    } else if(kind==='exact') {
+      const names=exactNames(query,options.endings);
+      preview=names.slice(0,3).join(' · ')+(names.length>3?' · +'+(names.length-3)+' more':'');
+    } else {if(query.length>100)throw new Error('Keep your idea to 100 characters or fewer.');preview='Find ideas for “'+query+'”'+(selectedEndings.size?' across '+selectedEndings.size+' selected ending'+(selectedEndings.size===1?'':'s'): ' across all endings')+'.';}
+  } catch(error){invalid=true;preview=error.message==='Invalid URL'?'Enter a valid full domain.':error.message;}
+  validSearch=!!query&&!invalid;
+  $('searchPreview').textContent=preview;$('searchPreview').className='search-preview'+(invalid?' invalid':'');
+  $('searchButton').textContent=fullDomain||kind==='exact'?'Check availability':kind==='regex'?'Check pattern':'Find ideas';
+  $('searchButton').disabled=!ready||!validSearch||!!active;
+  $('refreshResults').disabled=!!active;
+  $('draftNotice').hidden=!lastRun||JSON.stringify(options)===JSON.stringify(lastRun);
   renderEndingChips();
-  if (fullDomain && pickerContext==='search') closeEndings();
+  if(!$('searchEndingPanel').hidden) syncSearchEndings();
+}
+function toggleSearchEnding(name, checked) {
+  if(checked && !selectedEndings.has(name) && selectedEndings.size>=50){notice('Choose up to 50 endings.',true);syncSearchEndings();return;}
+  checked?selectedEndings.add(name):selectedEndings.delete(name);
+  updateOptions();saveOptions();
+}
+function syncSearchEndings() {
+  for(const input of $('searchEndingList').querySelectorAll('input'))input.checked=selectedEndings.has(input.value);
+  $('refreshSearchEndings').disabled=endingsLoading;
+  $('searchEndingMessage').textContent=endingError||(endingsLoading?'Updating list…':'');
+  $('searchEndingMessage').hidden=!$('searchEndingMessage').textContent;
+}
+function renderSearchEndings() {
+  const holder=$('searchEndingList');
+  if(!holder || $('searchEndingPanel').hidden)return;
+  const query=$('searchEndingQuery').value.trim().toLowerCase().replace(/^\./,'');
+  const scroll=holder.scrollTop, focused=holder.contains(document.activeElement)?document.activeElement.value:null;
+  const names=[...new Set([...POPULAR_ENDINGS,...recentEndings,...endingCatalog,...PINNED_ENDINGS])].filter(name=>query?name.includes(query):!PINNED_ENDINGS.includes(name));
+  const fragment=document.createDocumentFragment();
+  for(const name of names){const label=element('label','ending-choice'),input=element('input');input.type='checkbox';input.value=name;input.checked=selectedEndings.has(name);input.setAttribute('aria-label','.'+name);input.addEventListener('change',()=>toggleSearchEnding(name,input.checked));label.append(element('span','','.'+name),input);fragment.append(label);}
+  if(!names.length)fragment.append(element('p','hint','No matching endings.'));
+  holder.replaceChildren(fragment);holder.scrollTop=scroll;
+  if(focused){const input=[...holder.querySelectorAll('input')].find(input=>input.value===focused);input?.focus({preventScroll:true});}
+  syncSearchEndings();
 }
 function closeEndings(returnFocus = false) {
   const panel = $('endingPanel');
   if (panel.open) panel.close();
   panel.hidden = true;
   document.body.classList.remove('ending-modal-open');
-  $('endingToggle').setAttribute('aria-expanded','false');
   $('catalogEndingToggle').setAttribute('aria-expanded','false');
   if (returnFocus && pickerOpener && !pickerOpener.disabled) pickerOpener.focus();
 }
-function openEndingPicker(context) {
-  closeEndings(); pickerContext = context; endingView = 'quick';
-  pickerOpener = $(context==='catalog'?'catalogEndingToggle':'endingToggle');
-  $('endingTitle').textContent = context==='catalog'?'Catalog ending':'Choose endings';
-  $('endingDescription').textContent = context==='catalog'?'Choose an ending to view its catalog.':'Choose one or more endings for your search.';
-  $('clearEndings').hidden = context==='catalog';
+function openCatalogEndings() {
+  closeEndings(); endingView = 'quick';
+  pickerOpener = $('catalogEndingToggle');
+  $('endingTitle').textContent = 'Catalog ending';
+  $('endingDescription').textContent = 'Choose an ending to view its catalog.';
   $('endingSearch').value='';
   renderEndings(true);
   $('endingPanel').hidden=false; $('endingPanel').showModal();
@@ -251,36 +310,24 @@ function openEndingPicker(context) {
   // Keep the phone keyboard closed until the user chooses to search.
   if (matchMedia('(max-width:620px)').matches) $('endingTitle').focus(); else $('endingSearch').focus();
 }
-function endingChosen() { return pickerContext==='catalog'?new Set([catalogEnding]):selectedEndings; }
+function endingChosen() { return new Set([catalogEnding]); }
 function syncEndingSelection() {
+  syncSearchEndings();
   const chosen=endingChosen();
   for(const input of $('endingList').querySelectorAll('input')) input.checked=chosen.has(input.value);
-  const needsEnding=['exact','regex'].includes($('matchMode').value);
-  $('endingSelectionSummary').textContent=pickerContext==='catalog'?'.'+catalogEnding:chosen.size===0?(needsEnding?'Choose at least one ending':'All endings'):chosen.size+' ending'+(chosen.size===1?'':'s')+' selected';
+  $('endingSelectionSummary').textContent='.'+catalogEnding;
   $('endingSelectedView').textContent=chosen.size?'Selected ('+chosen.size+')':'Selected';
-  $('clearEndings').disabled=!chosen.size;
-  const pinnedButton=$('endingList').querySelector('.ending-select-group');
-  if(pinnedButton) pinnedButton.disabled=PINNED_ENDINGS.every(name=>chosen.has(name));
   $('endingMessage').textContent=endingError;
   $('endingMessage').hidden=!endingError;
   $('reloadEndings').disabled=endingsLoading;
   $('reloadEndings').textContent=endingsLoading?'Updating…':'Refresh list';
 }
-function chooseEnding(name, checked) {
-  if(pickerContext==='catalog') {
-    $('catalogEnding').value=name;
-    if(setCatalogEnding()){catalogStatus();refreshCatalog();closeEndings(true);}
-    return;
-  }
-  if(checked && !selectedEndings.has(name) && selectedEndings.size>=50){
-    syncEndingSelection();
-    $('endingMessage').textContent='Choose up to 50 endings.'; $('endingMessage').hidden=false;return;
-  }
-  checked?selectedEndings.add(name):selectedEndings.delete(name);
-  updateOptions(); saveOptions();
-  if(endingView==='selected') renderEndings(); else syncEndingSelection();
+function chooseEnding(name) {
+  $('catalogEnding').value=name;
+  if(setCatalogEnding()){catalogStatus();refreshCatalog();closeEndings(true);}
 }
 function renderEndings(resetScroll = false) {
+  renderSearchEndings();
   const list=$('endingList'), scroll=resetScroll?0:list.scrollTop;
   const focused=list.contains(document.activeElement)?document.activeElement.value:null;
   const query=$('endingSearch').value.trim().toLowerCase().replace(/^\./,'');
@@ -294,20 +341,12 @@ function renderEndings(resetScroll = false) {
     const visible=names.filter(name=>{if(used.has(name))return false;used.add(name);return name.includes(query)});
     if(!visible.length) continue;
     const header=element('div','ending-group',title);
-    if(title==='Pinned' && pickerContext==='search'){
-      const button=element('button','ending-select-group','Select pinned');button.type='button';
-      button.addEventListener('click',()=>{
-        for(const name of PINNED_ENDINGS) if(selectedEndings.size<50) selectedEndings.add(name);
-        updateOptions();saveOptions();syncEndingSelection();
-        if(PINNED_ENDINGS.some(name=>!selectedEndings.has(name))){$('endingMessage').textContent='Remove some selections to stay within the 50-ending limit.';$('endingMessage').hidden=false;}
-      });header.append(button);
-    }
     fragment.append(header);
     for(const name of visible){
       const label=element('label','ending-choice'),input=element('input');
-      input.type=pickerContext==='catalog'?'radio':'checkbox';input.name='ending-choice';input.value=name;input.checked=chosen.has(name);input.setAttribute('aria-label','.'+name);
+      input.type='radio';input.name='ending-choice';input.value=name;input.checked=chosen.has(name);input.setAttribute('aria-label','.'+name);
       input.addEventListener('change',()=>chooseEnding(name,input.checked));
-      if(pickerContext==='catalog') input.addEventListener('click',()=>{if(name===catalogEnding)closeEndings(true);});
+      input.addEventListener('click',()=>{if(name===catalogEnding)closeEndings(true);});
       label.append(element('span','','.'+name),input);fragment.append(label);
     }
   }
@@ -514,6 +553,7 @@ async function checkScan(id, controller) {
   progress(`${scan.checked.toLocaleString()} domains processed · ${scan.done ? 'Scan complete' : 'Up to ' + scan.total.toLocaleString() + ' candidates · More matches ready'}`);
 }
 function updateScanButton() {
+  updateOptions();
   $('continueScan').hidden = !domainScan || (domainScan.done && !domainScan.pending.length);
   $('continueScan').textContent = domainScan?.pending.length ? 'Resume checks' : 'Check next 200';
   $('continueScan').disabled = !!active;
@@ -557,6 +597,8 @@ function notice(message, error = false) {
   $('notice').hidden = !message;
 }
 function progress(message, busy = false) {
+  $('searchButton').disabled = busy || !ready || !validSearch;
+  $('refreshResults').disabled = busy;
   $('progressText').textContent = message;
   $('spinner').hidden = !busy;
   $('cancelButton').hidden = !busy;
@@ -620,7 +662,7 @@ async function checkSetup() {
     $('connection').textContent = 'Preview only';
     $('connection').className = 'connection error';
   } finally {
-    $('searchButton').disabled = !ready;
+    updateOptions();
     $('retrySetup').disabled = false;
   }
 }
@@ -705,11 +747,12 @@ function render() {
     fragment.append(article);
   }
   $('rows').append(fragment);
+  $('resultsTitle').textContent = searchInfo ? (searchInfo.mode==='regex'?'Pattern: ':searchInfo.mode==='exact'||searchInfo.exact?'Availability: ':'Ideas: ')+searchInfo.query : 'Results';
   $('resultCount').textContent = shown.length + (shown.length === 1 ? ' domain' : ' domains');
   $('emptyResults').hidden = shown.length > 0;
   $('emptyResults').textContent = rows.length
     ? 'No confirmed available domains in this view. Turn off “Available only” to see every result.'
-    : searchInfo?.total
+    : searchInfo?.mode==='regex' ? 'No valid names match this pattern within the maximum length.' : searchInfo?.total
       ? 'None of the returned suggestions match your filters. Broaden the match, pattern, or selected endings and search again.'
       : 'Cloudflare returned no suggestions for this keyword. Try another keyword.';
   showSearchSummary();
@@ -728,19 +771,20 @@ function completedText() {
   const available = rows.filter(row => row.checked && row.registrable === true).length;
   return `${verified} of ${rows.length} checked · ${available} available`;
 }
-async function search(event, refresh = false) {
+async function search(event, refresh = false, runOptions = null) {
   event.preventDefault();
   forceSearch = refresh; cacheHits = 0;
   $('searchCacheStatus').hidden = true;
-  const query = $('query').value.trim();
-  if (!ready) return;
+  const query = runOptions?.query ?? $('query').value.trim();
+  if (!ready || active) return;
   if (!query) { notice('Enter a name, phrase, or full domain.', true); $('query').focus(); return; }
   active?.abort();
   const id = ++generation;
   const controller = new AbortController();
   active = controller;
-  const exact = $('matchMode').value !== 'regex' && exactInput(query);
-  const options = { query, mode: $('matchMode').value, maxLength: Number($('maxLength').value), endings: [...selectedEndings] };
+  const options = runOptions || searchDraft();
+  const exact = options.mode !== 'regex' && exactInput(query);
+  lastRun = structuredClone(options);
   domainScan = null;
   $('continueScan').hidden = true;
   lastQuery = options.mode === 'regex' ? '' : query;
@@ -822,6 +866,23 @@ async function search(event, refresh = false) {
     }
   }
 }
+async function refreshCurrentBatch() {
+  if(active || !rows.length)return;
+  const id=++generation,controller=new AbortController(),names=rows.map(row=>row.name);
+  active=controller;notice('');
+  try {
+    for(let offset=0;offset<names.length;offset+=20){
+      progress('Refreshing '+(offset+1)+'–'+Math.min(offset+20,names.length)+' of '+names.length+' domains…',true);
+      const result=await request('/api/check',{domains:names.slice(offset,offset+20)},controller.signal,true);
+      if(id!==generation||controller.signal.aborted)return;
+      const replacements=new Map(resultRows(result).map(row=>[row.name,row]));
+      rows=rows.map(row=>replacements.get(row.name)||row);render();
+    }
+    progress(completedText());
+    $('searchCacheStatus').textContent='Results refreshed · '+new Date().toLocaleString()+' · Checks saved for 24 hours';
+  } catch(error){if(id===generation){progress(controller.signal.aborted?'Refresh stopped.':'Refresh incomplete.');if(!controller.signal.aborted)notice(error.message,true);}}
+  finally{if(id===generation){active=null;$('spinner').hidden=true;$('cancelButton').hidden=true;$('results').setAttribute('aria-busy','false');updateScanButton();document.querySelectorAll('.recheck').forEach(button=>button.disabled=false);}}
+}
 async function recheck(name) {
   if (active) return;
   const id = ++generation;
@@ -860,18 +921,27 @@ async function copyShown() {
     $('copyButton').textContent = 'Copied';
   } catch { notice('Clipboard access was blocked. Select and copy the domain names directly.'); }
 }
-$('matchMode').addEventListener('change', () => { updateOptions(); saveOptions(); });
+for(const button of document.querySelectorAll('.search-intents button'))button.addEventListener('click',()=>{
+  $('matchMode').value=button.dataset.kind==='ideas'?$('ideaMatch').value:button.dataset.kind;
+  notice('');updateOptions();saveOptions();
+});
+$('ideaMatch').addEventListener('change',()=>{$('matchMode').value=$('ideaMatch').value;updateOptions();saveOptions();});
+$('queryExample').addEventListener('click',()=>{$('query').value=$('matchMode').value==='regex'?'m[a-z]{2}':$('matchMode').value==='exact'?'mango.com':'mango';updateOptions();$('query').focus();});
+$('usePinnedEndings').addEventListener('click',()=>{for(const name of PINNED_ENDINGS)if(selectedEndings.size<50)selectedEndings.add(name);updateOptions();saveOptions();});
+$('useAllEndings').addEventListener('click',()=>{selectedEndings.clear();updateOptions();saveOptions();});
+$('searchEndingQuery').addEventListener('input',()=>{$('searchEndingList').scrollTop=0;renderSearchEndings();});
+$('searchEndingQuery').addEventListener('keydown',event=>{if(event.key==='Enter')event.preventDefault();});
+$('refreshSearchEndings').addEventListener('click',()=>loadEndings(true));
 $('query').addEventListener('input', updateOptions);
-$('maxLength').addEventListener('input', saveOptions);
+$('maxLength').addEventListener('input',()=>{updateOptions();saveOptions();});
 $('continueScan').addEventListener('click', continueScan);
-$('endingToggle').addEventListener('click',()=>{ if(!$('endingPanel').hidden && pickerContext==='search')closeEndings();else openEndingPicker('search'); });
-$('catalogEndingToggle').addEventListener('click',()=>{ if(!$('endingPanel').hidden && pickerContext==='catalog')closeEndings();else openEndingPicker('catalog'); });
+$('endingToggle').addEventListener('click',()=>{const open=$('searchEndingPanel').hidden;$('searchEndingPanel').hidden=!open;$('endingToggle').setAttribute('aria-expanded',String(open));if(open){renderSearchEndings();loadEndings();}});
+$('catalogEndingToggle').addEventListener('click',()=>{ if(!$('endingPanel').hidden)closeEndings();else openCatalogEndings(); });
 $('endingSearch').addEventListener('input',()=>renderEndings(true));
 $('endingSearch').addEventListener('keydown',event=>{if(event.key==='Enter')event.preventDefault();});
 for(const [id,view] of [['endingQuickView','quick'],['endingAllView','all'],['endingSelectedView','selected']]) $(id).addEventListener('click',()=>{endingView=view;$('endingSearch').value='';renderEndings(true);});
 $('doneEndings').addEventListener('click',()=>closeEndings(true));
 $('closeEndingPicker').addEventListener('click',()=>closeEndings(true));
-$('clearEndings').addEventListener('click',()=>{selectedEndings.clear();updateOptions();saveOptions();if(endingView==='selected')renderEndings();else syncEndingSelection();});
 $('reloadEndings').addEventListener('click',()=>loadEndings(true));
 $('endingPanel').addEventListener('cancel',event=>{event.preventDefault();closeEndings(true);});
 $('endingPanel').addEventListener('keydown',event=>{
@@ -888,7 +958,7 @@ $('endingPanel').addEventListener('click',event=>{
   if(event.clientX<box.left||event.clientX>box.right||event.clientY<box.top||event.clientY>box.bottom)closeEndings(true);
 });
 $('searchForm').addEventListener('submit', event=>search(event));
-$('refreshResults').addEventListener('click',event=>search(event,true));
+$('refreshResults').addEventListener('click',event=>{if(searchInfo?.mode==='regex' && rows.length)refreshCurrentBatch();else if(lastRun)search(event,true,structuredClone(lastRun));});
 $('cancelButton').addEventListener('click', () => active?.abort());
 $('retrySetup').addEventListener('click', checkSetup);
 $('availableOnly').addEventListener('change', render);
@@ -898,20 +968,14 @@ const recentEndings = new Set();
 function rememberEndings() { for (const ending of selectedEndings) recentEndings.add(ending); }
 function renderEndingChips() {
   rememberEndings();
-  const holder = $('endingChips'); holder.replaceChildren();
-  const names = [...selectedEndings];
-  for (const ending of names) {
-    const button = element('button', 'ending-chip' + (selectedEndings.has(ending) ? ' selected' : ''), '.' + ending + (selectedEndings.has(ending) ? ' ×' : ' +'));
-    button.type = 'button'; button.setAttribute('aria-pressed', String(selectedEndings.has(ending)));
-    button.setAttribute('aria-label', (selectedEndings.has(ending) ? 'Deselect ' : 'Select ') + '.' + ending);
-    button.addEventListener('click', () => {
-      if (selectedEndings.has(ending)) selectedEndings.delete(ending);
-      else if (selectedEndings.size < 50) selectedEndings.add(ending);
-      updateOptions(); renderEndings(); saveOptions();
-    });
-    holder.append(button);
+  const holder=$('endingChips'),names=[...new Set([...PINNED_ENDINGS,...selectedEndings])];
+  const existing=new Map([...holder.children].map(button=>[button.dataset.ending,button]));
+  for(const [name,button] of existing)if(!names.includes(name))button.remove();
+  for(const name of names){
+    let button=existing.get(name);
+    if(!button){button=element('button');button.type='button';button.dataset.ending=name;button.append(element('span','ending-mark',''),document.createTextNode('.'+name));button.addEventListener('click',()=>toggleSearchEnding(name,!selectedEndings.has(name)));holder.append(button);}
+    const checked=selectedEndings.has(name);button.setAttribute('aria-pressed',String(checked));button.setAttribute('aria-label',(checked?'Deselect ':'Select ')+'.'+name);button.querySelector('span').textContent=checked?'✓':'+';
   }
-  holder.hidden = !names.length;
 }
 let catalogVisible = false, catalogTimer = null, catalogBusy = false, catalogEpoch = 0;
 let catalogPacing = null, catalogOptionsBusy = false;
