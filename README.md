@@ -1,4 +1,4 @@
-# Domain Finder · v1.3.3
+# Domain Finder · v1.3.4
 
 Replace the same four files in your existing repository. Keep the same secrets. The updated wrangler.jsonc provisions Catalog storage and a background schedule automatically; upload all four files together.
 
@@ -99,7 +99,7 @@ The Worker uses one SQLite-backed Durable Object with a persistent cursor, saved
 
 The Catalog tab incrementally fetches saved rows and filters them locally using Exact/Contains/Begins with/Ends with/Regex, availability, and sort. Catalog regex is a filter against the complete saved list for that ending and accepts JavaScript regex syntax with a timeout. CSV exports the filtered cached list. Search regex remains a candidate generator.
 
-Selected and previously used endings appear as saved chips at the top of the search options. Selected chips are highlighted; click to deselect. Unselected saved chips can be selected again. Browser preferences are local; catalog data is stored on the server.
+Selected endings appear as removable chips above the search options. The shared Search/Catalog picker places the 13 requested endings first, followed by popular choices, saved choices, and the complete alphabetical list. Search supports multiple selections; Catalog selects one ending to view or scan. Previously used endings remain available in the picker. Browser preferences are local; catalog data is stored on the server.
 
 Deployment requires a Wrangler version supporting the current declarative Durable Object exports field. Existing deploy command npx wrangler deploy resolves the current release; no database IDs, manual binding setup, or new secrets are required.
 
@@ -110,3 +110,15 @@ Cloudflare limits: https://developers.cloudflare.com/fundamentals/api/reference/
 Letters a–z remain included. “Include numbers” adds digit-only and mixed letter/number names. “Include hyphens” adds a hyphen in the middle, the only valid position for a three-character name. With both enabled, the catalog covers all 47,952 valid ASCII three-character labels for each added ending. Endings may have registry-specific restrictions.
 
 The update adds columns to the existing jobs table without replacing its storage. Original letter ordinals, results, counters, and progress remain intact. Additional groups have separate saved cursors and disjoint domain IDs. Unchecking a box pauses only that group; cached results remain searchable. Rechecking resumes its cursor and does not repeat successful checks. Existing unknown-result retries remain supported. Options are saved per ending on the server.
+
+## Ending and search caches
+
+The complete paginated ending list is kept in browser storage for seven days. Opening the picker restores it immediately without fetching every page again. Stale lists stay visible while refreshed in the background. Refresh list bypasses both browser and server caches. Pinned and popular choices are available before the API list loads.
+
+Suggestions and successful domain checks, including unavailable results and prices, are cached for 24 hours. Search filters reuse the same suggestion page. Domain checks are cached individually, so overlapping searches and repeated Exact/Regex checks only request missing or expired domains. Browser storage survives reloads; its result cache is bounded to 2 MB, while catalog storage is separate and unchanged. The Worker also uses the Cloudflare Cache API for suggestions, ending pages, and individual checks, isolated by a digest of account/token. Edge cache entries may be evicted. Missing results, transport failures and API errors are never saved as successful availability checks. Original check timestamps are retained.
+
+Refresh results bypasses both cache layers for the current search. Recheck bypasses both layers for that domain. Successful fresh responses replace the cached record. Catalog results and all character-group cursors remain untouched. No new bindings, secrets or database migrations are required for these caches.
+
+Verified with local browser tests: pinned order, shared picker, mobile/desktop bounds, remembered selections, no ending-list downloads on reload, repeated and overlapping searches, negative results, explicit refresh, recheck, and expiry. Server cache tests verified 24-hour expiry, seven-day ending pages, unchanged timestamps, credential isolation, and no caching of failed or missing checks. Prior catalog migration, character generation, pause/resume and quota tests also passed.
+
+Cloudflare Cache API: https://developers.cloudflare.com/workers/runtime-apis/cache/

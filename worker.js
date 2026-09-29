@@ -1,9 +1,9 @@
 import { DurableObject } from 'cloudflare:workers';
 import page from './index.html';
 
-// Domain Finder 1.3.3. Only search, check, and extension-list Registrar operations are exposed.
+// Domain Finder 1.3.4. Only search, check, and extension-list Registrar operations are exposed.
 // Runtime secrets: CF_ACCOUNT_ID and CF_API_TOKEN. Never put values in this file.
-const VERSION = '1.3.3';
+const VERSION = '1.3.4';
 const LIMIT = 20; // Cloudflare domain-check request limit.
 const SEARCH_LIMIT = 50;
 const HEADERS = {
@@ -184,6 +184,9 @@ async function registrar(config, operation, data, observeRate) {
     options.headers['Content-Type'] = 'application/json';
     options.body = JSON.stringify({ domains: data.domains });
   }
+  const cacheKey = operation !== 'domain-check' ? await apiCacheKey(config, url.pathname + url.search) : null;
+  const saved = !config.refresh && cacheKey ? await apiCacheRead(cacheKey) : null;
+  if (saved) return saved;
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 15000);
   options.signal = controller.signal;
@@ -216,6 +219,8 @@ async function registrar(config, operation, data, observeRate) {
       }
       throw new AppError(`${message} (HTTP ${response.status})` + (detail ? ' ' + detail : ''), response.status === 429 ? 429 : 502);
     }
+    body.cachedAt = new Date().toISOString();
+    if (cacheKey) await apiCacheWrite(cacheKey, body, operation === 'extensions' ? 604800 : 86400);
     return body;
   } catch (error) {
     if (error instanceof AppError) {
@@ -228,13 +233,43 @@ async function registrar(config, operation, data, observeRate) {
   } finally { clearTimeout(timeout); }
 }
 
+async function apiCacheKey(config, resource) {
+  if (!config.cacheOrigin || typeof caches === 'undefined') return null;
+  const hash = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(config.account + ':' + config.token));
+  const namespace = [...new Uint8Array(hash)].map(byte => byte.toString(16).padStart(2, '0')).join('');
+  return new Request(config.cacheOrigin + '/_cache/registrar-v1/' + namespace + '/' + encodeURIComponent(resource));
+}
+async function apiCacheRead(key) {
+  try { const response = await caches.default.match(key); return response ? await response.json() : null; }
+  catch { return null; }
+}
+async function apiCacheWrite(key, data, ttl) {
+  try { await caches.default.put(key, new Response(JSON.stringify(data), { headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=' + ttl } })); }
+  catch { /* Cache failures never block a live check. */ }
+}
+
 async function check(config, domains, observeRate) {
   if (!Array.isArray(domains) || !domains.length || domains.length > LIMIT) {
     throw new AppError(`Check between 1 and ${LIMIT} domains at a time.`);
   }
   const names = [...new Set(domains.map(domainName))];
-  const rows = cleanRows((await registrar(config, 'domain-check', { domains: names }, observeRate)).result?.domains);
-  const byName = new Map(rows.map(row => [row.name, row]));
+  const byName = new Map(), keys = new Map();
+  for (const name of names) {
+    const key = await apiCacheKey(config, 'domain/' + name);
+    keys.set(name, key);
+    const saved = !config.refresh && key ? await apiCacheRead(key) : null;
+    if (saved?.name === name && saved.checked === true && typeof saved.registrable === 'boolean') byName.set(name, saved);
+  }
+  const missing = names.filter(name => !byName.has(name));
+  if (missing.length) {
+    const rows = cleanRows((await registrar(config, 'domain-check', { domains: missing }, observeRate)).result?.domains);
+    const checkedAt = new Date().toISOString();
+    for (const row of rows) {
+      const record = { ...row, checked: true, checkedAt };
+      byName.set(row.name, record);
+      if (keys.get(row.name)) await apiCacheWrite(keys.get(row.name), record, 86400);
+    }
+  }
   // Missing records are unknown, never "available" or "taken".
   return names.map(name => byName.has(name)
     ? { ...byName.get(name), checked: true }
@@ -287,10 +322,13 @@ export default {
     try {
       const config = settings(env);
       if (config.problems.length) throw new AppError('Setup needed: ' + config.problems.join(' '), 503);
+      config.cacheOrigin = url.origin;
+      config.refresh = request.headers.get('X-Refresh-Results') === '1';
       if (isExtensions) {
         const cursor = url.searchParams.get('cursor') || '';
         if (cursor.length > 256 || /[\u0000-\u001f\u007f]/.test(cursor)) throw new AppError('Invalid ending-list cursor.');
-        return json(extensionPage(await registrar(config, 'extensions', { cursor })));
+        const result = await registrar(config, 'extensions', { cursor });
+        return json({ ...extensionPage(result), cachedAt: result.cachedAt });
       }
       const body = await readBody(request);
       if (url.pathname === '/api/check') {
@@ -306,8 +344,9 @@ export default {
       }
       if (q.length > 100) throw new AppError('Keep a keyword or phrase search to 100 characters or fewer.');
       selectedExtensions(body.extensions);
-      const rows = cleanRows((await registrar(config, 'domain-search', { q })).result?.domains);
-      return json({ mode: 'suggestions', domains: rows.slice(0, SEARCH_LIMIT).map(row => ({ ...row, checked: false })) });
+      const result = await registrar(config, 'domain-search', { q });
+      const rows = cleanRows(result.result?.domains);
+      return json({ mode: 'suggestions', cachedAt: result.cachedAt, domains: rows.slice(0, SEARCH_LIMIT).map(row => ({ ...row, checked: false })) });
     } catch (error) {
       return json({ error: error instanceof AppError ? error.message : 'An unexpected error occurred. Please retry.' }, error instanceof AppError ? error.status : 500);
     }
