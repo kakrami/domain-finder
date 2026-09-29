@@ -16,24 +16,43 @@
 .progress{min-height:40px;display:flex;align-items:center;gap:9px;color:var(--muted);font-size:12px;line-height:1.5;padding:8px 2px}.spinner{width:13px;height:13px;border:2px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;flex:none}@keyframes spin{to{transform:rotate(360deg)}}
 .results{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}.tools{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 17px;border-bottom:1px solid var(--line);flex-wrap:wrap}.tools-title{font-size:13px;font-weight:700}.filters{display:flex;align-items:center;gap:13px;flex-wrap:wrap}.check-label{font-size:12px;display:flex;align-items:center;gap:6px;min-height:32px}.check-label input{width:16px;height:16px;margin:0;accent-color:var(--accent)}select{min-height:35px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--muted);font-size:12px;padding:5px 26px 5px 9px}.table-heading,.domain-row{display:grid;grid-template-columns:minmax(0,1fr) 100px 100px 86px;gap:14px;align-items:center;padding:13px 17px}.table-heading{background:#fafbfc;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.7px}.table-heading span:not(:first-child){text-align:right}.domain-row+.domain-row{border-top:1px solid var(--line)}.name{font-weight:680;font-size:16px;overflow-wrap:anywhere;letter-spacing:-.25px;margin:0 0 6px}.domain-detail{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 7px;border-radius:5px;background:#f0f2f5;color:#596371;font-size:10px;font-weight:700;line-height:1.4;letter-spacing:.1px}.badge.available{color:var(--green);background:var(--green-bg)}.badge.likely,.badge.unknown{color:var(--amber);background:var(--amber-bg)}.source{font-size:10px;color:var(--muted)}.cost{text-align:right;font-size:14px;font-variant-numeric:tabular-nums;white-space:nowrap}.cost small{font-size:10px;color:var(--muted);display:block;margin-top:4px}.price-label{display:none}.row-actions{display:flex;justify-content:flex-end}.recheck{background:#fff;border:1px solid var(--line);border-radius:8px;font-size:12px;padding:8px 11px;min-height:36px;color:var(--ink)}.recheck:hover:not(:disabled){background:var(--bg)}mark{background:#fff0db;color:inherit;border-radius:2px}.empty{padding:34px 20px;text-align:center;color:var(--muted);font-size:13px;line-height:1.7}.results-bottom{border-top:1px solid var(--line);padding:11px 17px;display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;font-size:11px;color:var(--muted)}.copy{border:0;background:none;color:var(--accent);padding:7px 0;font-size:12px;font-weight:650;min-height:32px}footer{margin-top:17px;color:var(--muted);font-size:11px;line-height:1.75;display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}footer a{white-space:nowrap}.intro-note{padding:18px 2px 5px;color:var(--muted);font-size:12px;line-height:1.7}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 @media(max-width:620px){.shell{padding:18px 15px 25px}.top{margin-bottom:27px}.brand strong{font-size:16px}.version{font-size:10px}.logo{width:34px;height:34px;border-radius:10px}.connection{font-size:10px}.search-card{padding:15px}.search-line{flex-wrap:wrap}.input-wrap{flex-basis:100%}.search-actions{width:100%}.primary{flex:1;min-height:44px}.lead{font-size:14px;margin-bottom:17px}.tools{padding:10px 13px;gap:6px}.filters{gap:10px}.table-heading{display:none}.domain-row{grid-template-columns:1fr 1fr 84px;gap:12px 10px;padding:15px}.domain-info{grid-column:1/-1}.name{font-size:17px}.cost{text-align:left;font-size:14px}.price-label{display:block;color:var(--muted);font-size:10px;margin-bottom:4px}.cost small{display:inline;font-size:9px;margin:0 0 0 3px}.row-actions{align-self:end}.results-bottom{padding:8px 13px}.source{font-size:10px}footer{gap:6px}}
+
+.search-options{display:flex;align-items:end;gap:10px;margin-top:13px}.option-field{display:flex;flex-direction:column;gap:5px;min-width:0}.option-field>label{font-size:11px;font-weight:650}.option-field select{height:40px;font-size:13px;color:var(--ink);min-width:145px}.ending-field{position:relative;flex:1;max-width:300px}.ending-toggle{height:40px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 11px;font-size:13px;min-width:0}.ending-toggle span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ending-panel{position:absolute;top:calc(100% + 7px);left:0;width:340px;max-width:calc(100vw - 60px);z-index:5;background:var(--paper);border:1px solid #d4dbe3;border-radius:12px;padding:13px;box-shadow:0 12px 35px #172a3a24}.ending-top{display:flex;gap:9px;justify-content:space-between;align-items:center;margin-bottom:9px}.ending-top strong{font-size:13px}.text-button{background:none;border:0;color:var(--accent);font-size:12px;padding:5px 0;min-height:32px}.ending-search,.pattern-input{border:1px solid #cbd2db;border-radius:8px;background:var(--paper);color:var(--ink);font-size:16px;padding:9px 10px;width:100%;min-width:0;min-height:40px}.ending-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px 6px;max-height:220px;overflow-y:auto;overscroll-behavior:contain;margin-top:8px}.ending-choice{display:flex;align-items:center;gap:6px;font-size:12px;min-height:36px;overflow:hidden;cursor:pointer}.ending-choice span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ending-choice input{width:16px;height:16px;margin:0;accent-color:var(--accent);flex:none}.ending-message{font-size:11px;color:var(--muted);line-height:1.5;margin:9px 0 0;overflow-wrap:anywhere}.ending-bottom{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:7px;border-top:1px solid var(--line);padding-top:7px}.ending-bottom .secondary{min-height:34px;font-size:12px;padding:0 12px}.pattern-field{margin-top:12px}.pattern-field label{font-size:11px;font-weight:650;display:block;margin-bottom:6px}.pattern-input{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.filter-summary{font-size:11px;color:var(--muted);margin:0 0 12px;line-height:1.6;overflow-wrap:anywhere}
+@media(max-width:620px){.search-options{gap:8px}.option-field select{min-width:130px;width:100%}.ending-field{max-width:none}.ending-panel{left:auto;right:0;max-width:calc(100vw - 62px)}.filter-summary{margin-bottom:10px}}
 @media(prefers-reduced-motion:reduce){.spinner{animation:none}}
 </style>
 </head>
 <body>
 <main class="shell">
   <header class="top">
-    <div class="brand"><span class="logo" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="14" cy="14" r="10.5"/><path d="M3.5 14h21M14 3.5c-6 5.5-6 15.5 0 21M14 3.5c6 5.5 6 15.5 0 21"/></svg></span><div><strong>Domain Finder</strong><span class="version">v1.0.1</span></div></div>
+    <div class="brand"><span class="logo" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="14" cy="14" r="10.5"/><path d="M3.5 14h21M14 3.5c-6 5.5-6 15.5 0 21M14 3.5c6 5.5 6 15.5 0 21"/></svg></span><div><strong>Domain Finder</strong><span class="version">v1.1.0</span></div></div>
     <span id="connection" class="connection">Checking setup</span>
   </header>
   <p class="eyebrow">Cloudflare Registrar</p>
   <h1>Find your next domain.</h1>
   <p class="lead">Search ideas. Check availability. See registration and renewal prices.</p>
   <form id="searchForm" class="search-card" novalidate>
-    <label class="search-label" for="query">Name, phrase, or domain</label>
+    <label id="queryLabel" class="search-label" for="query">Name, phrase, or domain</label>
     <div class="search-line">
       <div class="input-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg><input id="query" name="q" type="text" maxlength="2000" placeholder="Your idea or example.com" autocomplete="off" autocapitalize="none" spellcheck="false" enterkeyhint="search" aria-describedby="searchHint"></div>
       <div class="search-actions"><button id="searchButton" class="primary" type="submit" disabled>Search</button><button id="cancelButton" class="secondary" type="button" hidden>Stop</button></div>
     </div>
+    <div class="search-options">
+      <div class="option-field"><label for="matchMode">Match</label><select id="matchMode"><option value="suggestions">All suggestions</option><option value="contains">Contains</option><option value="begins">Begins with</option><option value="ends">Ends with</option><option value="regex">Regex</option></select></div>
+      <div id="endingPicker" class="option-field ending-field">
+        <label id="endingsLabel">Endings</label>
+        <button id="endingToggle" class="ending-toggle" type="button" aria-expanded="false" aria-controls="endingPanel" aria-labelledby="endingsLabel endingSummary"><span id="endingSummary">All endings</span><span aria-hidden="true">⌄</span></button>
+        <div id="endingPanel" class="ending-panel" aria-label="Choose domain endings" hidden>
+          <div class="ending-top"><strong>Choose endings</strong><button id="clearEndings" class="text-button" type="button">Use all</button></div>
+          <label for="endingSearch" class="sr-only">Find an ending</label><input id="endingSearch" class="ending-search" type="search" placeholder="Find .com, .io, .co.uk…" autocomplete="off" autocapitalize="none" spellcheck="false">
+          <div id="endingList" class="ending-list"></div>
+          <p id="endingMessage" class="ending-message" role="status"></p>
+          <p class="ending-message">No selection means all endings. Some may only be available in Cloudflare’s dashboard.</p>
+          <div class="ending-bottom"><button id="reloadEndings" class="text-button" type="button">Refresh list</button><button id="doneEndings" class="secondary" type="button">Done</button></div>
+        </div>
+      </div>
+    </div>
+    <div id="patternField" class="pattern-field" hidden><label for="pattern">Regex pattern</label><input id="pattern" class="pattern-input" type="text" maxlength="256" placeholder="^mango[a-z]{3,8}$" autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="searchHint"></div>
     <p id="searchHint" class="hint">Use a phrase for suggestions, or separate up to 20 full domains with commas.</p>
   </form>
   <noscript><div class="notice error">Enable JavaScript to search domains.</div></noscript>
@@ -45,6 +64,7 @@
     <div class="setup-links"><button id="retrySetup" type="button" class="secondary">Check again</button><a href="https://developers.cloudflare.com/registrar/registrar-api/" target="_blank" rel="noopener noreferrer">Cloudflare API setup ↗</a></div>
   </section>
   <div class="progress" role="status" aria-live="polite"><span id="spinner" class="spinner" hidden></span><span id="progressText"></span></div>
+  <p id="filterSummary" class="filter-summary" hidden></p>
   <section id="results" class="results" aria-label="Domain results" hidden>
     <div class="tools"><span id="resultCount" class="tools-title">Results</span><div class="filters"><label class="check-label"><input type="checkbox" id="availableOnly">Available only</label><label for="sort" class="sr-only">Sort results</label><select id="sort"><option value="relevance">Sort: relevance</option><option value="name">Sort: domain</option><option value="price">Sort: first-year price</option><option value="availability">Sort: availability</option></select></div></div>
     <div class="table-heading" aria-hidden="true"><span>Domain / status</span><span>First year</span><span>Renewal / yr</span><span>Verify</span></div>
@@ -58,6 +78,204 @@
 'use strict';
 const $ = id => document.getElementById(id);
 let rows = [], lastQuery = '', active = null, generation = 0, ready = false;
+let searchInfo = null;
+let endingCatalog = [], endingsComplete = false, endingsLoading = false, endingCursor = '', endingError = '';
+const endingCursors = new Set();
+const selectedEndings = new Set();
+const MATCH_MODES = ['suggestions', 'contains', 'begins', 'ends', 'regex'];
+const PREFERENCE_KEY = 'domain-finder.search-options';
+
+
+function validEnding(value) {
+  return typeof value === 'string' && value.length <= 253 && /[a-z]/.test(value) &&
+    value.split('.').every(label => /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(label));
+}
+// Only display preferences are saved. Credentials never enter this page.
+function saveOptions() {
+  try { localStorage.setItem(PREFERENCE_KEY, JSON.stringify({ mode: $('matchMode').value, pattern: $('pattern').value, endings: [...selectedEndings] })); }
+  catch { /* Search works when browser storage is disabled. */ }
+}
+function restoreOptions() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(PREFERENCE_KEY) || 'null');
+    if (!saved || typeof saved !== 'object') return;
+    if (MATCH_MODES.includes(saved.mode)) $('matchMode').value = saved.mode;
+    if (typeof saved.pattern === 'string') $('pattern').value = saved.pattern.slice(0, 256);
+    if (Array.isArray(saved.endings)) {
+      for (const value of saved.endings.slice(0, 50)) {
+        if (validEnding(value)) selectedEndings.add(value);
+      }
+    }
+  } catch { /* Ignore malformed or inaccessible saved preferences. */ }
+}
+function exactInput(query) {
+  const parts = query.split(/[,;\n]+/).map(value => value.trim()).filter(Boolean);
+  return parts.length > 1 || /^https?:\/\//i.test(query) || (query.includes('.') && !/\s/.test(query));
+}
+function updateOptions() {
+  const exact = exactInput($('query').value.trim());
+  const mode = $('matchMode').value;
+  $('matchMode').disabled = exact;
+  $('endingToggle').disabled = exact;
+  $('patternField').hidden = exact || mode !== 'regex';
+  $('pattern').disabled = exact || mode !== 'regex';
+  $('queryLabel').textContent = !exact && mode === 'regex' ? 'Keyword for Cloudflare suggestions' : 'Name, phrase, or domain';
+  const selected = [...selectedEndings].map(value => '.' + value);
+  $('endingSummary').textContent = selected.length ? selected.join(', ') : 'All endings';
+  $('endingToggle').title = $('endingSummary').textContent;
+  $('searchHint').textContent = exact
+    ? 'Full domains are checked exactly. Match and ending filters do not apply.'
+    : mode === 'regex'
+      ? 'Enter a keyword above. Regex filters returned names without their ending; case-insensitive, no /slashes/.'
+      : mode === 'suggestions'
+        ? 'Use a phrase for suggestions, or separate up to 20 full domains with commas.'
+        : 'Matches your text against the name before its ending. Spaces are ignored. Filters apply when you search.';
+  if (exact) closeEndings();
+}
+function closeEndings(returnFocus = false) {
+  $('endingPanel').hidden = true;
+  $('endingToggle').setAttribute('aria-expanded', 'false');
+  if (returnFocus) $('endingToggle').focus();
+}
+function renderEndings() {
+  const query = $('endingSearch').value.trim().toLowerCase().replace(/^\./, '');
+  const priority = ['com', 'net', 'org', 'io', 'ai', 'app', 'dev', 'co'];
+  const names = [...new Set([...selectedEndings, ...endingCatalog])].sort((a, b) => {
+    const ai = priority.indexOf(a), bi = priority.indexOf(b);
+    return (ai < 0 ? 100 : ai) - (bi < 0 ? 100 : bi) || a.localeCompare(b);
+  }).filter(name => name.includes(query));
+  const fragment = document.createDocumentFragment();
+  for (const name of names) {
+    const label = element('label', 'ending-choice');
+    const input = element('input');
+    input.type = 'checkbox';
+    input.value = name;
+    input.checked = selectedEndings.has(name);
+    input.addEventListener('change', () => {
+      if (input.checked && selectedEndings.size >= 50) {
+        input.checked = false;
+        $('endingMessage').textContent = 'Choose up to 50 endings, or use all.';
+        return;
+      }
+      input.checked ? selectedEndings.add(name) : selectedEndings.delete(name);
+      updateOptions();
+      saveOptions();
+    });
+    label.title = '.' + name;
+    label.append(input, element('span', '', '.' + name));
+    fragment.append(label);
+  }
+  $('endingList').replaceChildren(fragment);
+  $('endingMessage').textContent = endingError || (endingsLoading
+    ? `Loading Cloudflare endings… ${endingCatalog.length} loaded.`
+    : !names.length
+      ? query ? 'No matching endings in the loaded list.' : 'No endings loaded. Select Refresh list to retry.'
+      : endingsComplete ? 'Endings loaded from Cloudflare.' : 'Loaded choices are usable. Refresh to load the full list.');
+}
+async function loadEndings(refresh = false) {
+  if (endingsLoading || (!refresh && endingsComplete)) return;
+  if (!ready) { $('endingMessage').textContent = 'Connect the Cloudflare Worker to load endings.'; return; }
+  if (refresh) { endingCursor = ''; endingCursors.clear(); endingsComplete = false; endingCatalog = []; }
+  endingsLoading = true;
+  endingError = '';
+  $('reloadEndings').disabled = true;
+  $('endingMessage').textContent = 'Loading Cloudflare endings…';
+  try {
+    do {
+      const result = await request('/api/extensions' + (endingCursor ? '?cursor=' + encodeURIComponent(endingCursor) : ''));
+      if (!Array.isArray(result.extensions) || result.extensions.some(name => !validEnding(name)) || typeof result.cursor !== 'string') {
+        throw new Error('The Worker returned an invalid ending list. Upload both updated app files together.');
+      }
+      endingCatalog = [...new Set([...endingCatalog, ...result.extensions])];
+      renderEndings();
+      if (result.cursor && (endingCursors.has(result.cursor) || endingCursors.size >= 50)) {
+        throw new Error('Cloudflare did not finish the ending list. The loaded choices remain usable.');
+      }
+      endingCursor = result.cursor;
+      if (endingCursor) endingCursors.add(endingCursor);
+      $('endingMessage').textContent = endingCursor ? `Loading Cloudflare endings… ${endingCatalog.length} loaded.` : 'Endings loaded from Cloudflare.';
+    } while (endingCursor);
+    endingsComplete = true;
+  } catch (error) {
+    endingError = 'Could not finish loading endings. ' + error.message;
+  } finally {
+    endingsLoading = false;
+    $('reloadEndings').disabled = false;
+    renderEndings();
+  }
+}
+// Run user regexes off the page's main thread and terminate expensive patterns.
+// The worker source is fixed; the user pattern is passed only as message data.
+function regexJob(pattern, labels, signal) {
+  if (!pattern || pattern.length > 256) return Promise.reject(new Error('Enter a regex pattern of 1–256 characters.'));
+  if (pattern.startsWith('/')) return Promise.reject(new Error('Enter the regex pattern without surrounding /slashes/ or flags. Matching is case-insensitive.'));
+  return new Promise((resolve, reject) => {
+    if (signal?.aborted) { reject(new DOMException('Stopped', 'AbortError')); return; }
+    let worker, objectURL, timer;
+    let settled = false;
+    const finish = (error, result) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      signal?.removeEventListener('abort', stop);
+      worker?.terminate();
+      if (objectURL) URL.revokeObjectURL(objectURL);
+      error ? reject(error) : resolve(result);
+    };
+    const stop = () => finish(new DOMException('Stopped', 'AbortError'));
+    const task = function () {
+      self.onmessage = ({ data }) => {
+        try {
+          const regex = new RegExp(data.pattern, 'i');
+          self.postMessage({ matches: data.labels.map(label => regex.test(label)) });
+        } catch (error) { self.postMessage({ error: 'Invalid regex: ' + error.message }); }
+      };
+    };
+    try {
+      objectURL = URL.createObjectURL(new Blob(['(' + task.toString() + ')()'], { type: 'text/javascript' }));
+      worker = new Worker(objectURL);
+      worker.onmessage = ({ data }) => {
+        if (data.error) finish(new Error(data.error));
+        else if (!Array.isArray(data.matches) || data.matches.length !== labels.length) finish(new Error('Regex filtering returned an invalid result.'));
+        else finish(null, data.matches);
+      };
+      worker.onerror = event => {
+        event.preventDefault();
+        finish(new Error('Regex filtering could not start. Refresh after deploying both updated app files.'));
+      };
+      signal?.addEventListener('abort', stop, { once: true });
+      timer = setTimeout(() => finish(new Error('Regex took too long and was stopped. Simplify the pattern and search again.')), 1000);
+      worker.postMessage({ pattern, labels });
+    } catch { finish(new Error('This browser could not start safe regex filtering. Use Contains, Begins with, or Ends with instead.')); }
+  });
+}
+async function filterCandidates(candidates, options, signal) {
+  // API names are registrable domains: the portion after the first dot is the
+  // complete ending, including multi-label endings such as co.uk.
+  const endings = new Set(options.endings);
+  const scoped = candidates.filter(row => !endings.size || endings.has(row.name.slice(row.name.indexOf('.') + 1)));
+  const labels = scoped.map(row => row.name.split('.')[0]);
+  if (options.mode === 'regex') {
+    const matches = await regexJob(options.pattern, labels, signal);
+    return scoped.filter((row, i) => matches[i]);
+  }
+  const text = options.query.toLowerCase().replace(/\s+/g, '');
+  return scoped.filter((row, i) => {
+    if (options.mode === 'contains') return labels[i].includes(text);
+    if (options.mode === 'begins') return labels[i].startsWith(text);
+    if (options.mode === 'ends') return labels[i].endsWith(text);
+    return true;
+  });
+}
+function showSearchSummary() {
+  $('filterSummary').hidden = !searchInfo || searchInfo.exact;
+  if (!searchInfo || searchInfo.exact) return;
+  const mode = { suggestions: 'All suggestions', contains: 'Contains', begins: 'Begins with', ends: 'Ends with', regex: 'Regex' }[searchInfo.mode];
+  const endings = searchInfo.endings.length ? searchInfo.endings.map(name => '.' + name).join(', ') : 'all endings';
+  const filtered = searchInfo.mode !== 'suggestions' || searchInfo.endings.length;
+  $('filterSummary').textContent = `${rows.length} of ${searchInfo.total} suggestions match · ${mode} · ${endings}. ` +
+    (filtered ? 'Filters cover these returned suggestions, not every possible domain.' : 'Up to 50 suggestions per search; not an exhaustive domain search.');
+}
 
 function notice(message, error = false) {
   $('notice').textContent = message;
@@ -120,6 +338,7 @@ async function checkSetup() {
     $('connection').textContent = ready ? 'Secrets configured' : 'Setup needed';
     $('connection').className = 'connection ' + (ready ? 'ready' : 'error');
     if (ready) notice('');
+    updateOptions();
   } catch (error) {
     $('setup').hidden = false;
     $('secretHelp').hidden = true;
@@ -214,7 +433,12 @@ function render() {
   $('rows').append(fragment);
   $('resultCount').textContent = shown.length + (shown.length === 1 ? ' domain' : ' domains');
   $('emptyResults').hidden = shown.length > 0;
-  $('emptyResults').textContent = rows.length ? 'No confirmed available domains in this view. Turn off “Available only” to see every result.' : 'Cloudflare returned no suggestions. Try another phrase or check a full domain name.';
+  $('emptyResults').textContent = rows.length
+    ? 'No confirmed available domains in this view. Turn off “Available only” to see every result.'
+    : searchInfo?.total
+      ? 'None of the returned suggestions match your filters. Broaden the match, pattern, or selected endings and search again.'
+      : 'Cloudflare returned no suggestions for this keyword and these endings. Try another keyword or select more endings.';
+  showSearchSummary();
   $('copyButton').disabled = !shown.length;
   $('copyButton').textContent = 'Copy shown domains';
   $('results').hidden = false;
@@ -238,25 +462,48 @@ async function search(event) {
   const id = ++generation;
   const controller = new AbortController();
   active = controller;
+  const exact = exactInput(query);
+  const options = { query, mode: $('matchMode').value, pattern: $('pattern').value.trim(), endings: [...selectedEndings] };
   lastQuery = query;
   rows = [];
+  searchInfo = null;
   $('results').hidden = true;
+  $('filterSummary').hidden = true;
   $('introNote').hidden = true;
+  closeEndings();
+  saveOptions();
   notice('');
   progress('Searching Cloudflare…', true);
   try {
-    const result = await request('/api/search', { q: query }, controller.signal);
-    if (id !== generation) return;
-    rows = resultRows(result);
+    // Validate regex before making a Cloudflare request, without blocking the UI.
+    if (!exact && options.mode === 'regex') await regexJob(options.pattern, [], controller.signal);
+    if (id !== generation || controller.signal.aborted) return;
+    const result = await request('/api/search', { q: query, ...(exact ? {} : { extensions: options.endings }) }, controller.signal);
+    if (id !== generation || controller.signal.aborted) return;
+    const candidates = resultRows(result);
+    searchInfo = { ...options, total: candidates.length, exact: result.mode === 'check' };
+    const matched = result.mode === 'check' ? candidates : await filterCandidates(candidates, options, controller.signal);
+    if (id !== generation || controller.signal.aborted) return;
+    rows = matched;
     render();
     if (result.mode === 'suggestions' && rows.length) {
-      progress(`Checking ${rows.length} domains with the registry…`, true);
+      // Search supports 50 suggestions, but domain-check accepts only 20 at once.
+      // Check only matching rows, sequentially, and retain completed earlier batches.
+      const names = rows.map(row => row.name);
       try {
-        const checked = await request('/api/check', { domains: rows.map(row => row.name) }, controller.signal);
-        if (id !== generation) return;
-        const verified = new Map(resultRows(checked).map(row => [row.name, row]));
-        rows = rows.map(row => verified.get(row.name) || { name: row.name, registrable: null, checked: false, reason: 'not_returned' });
-        render();
+        for (let offset = 0; offset < names.length; offset += 20) {
+          if (id !== generation || controller.signal.aborted) throw new DOMException('Stopped', 'AbortError');
+          const batch = names.slice(offset, offset + 20);
+          progress(`Checking ${offset + 1}–${offset + batch.length} of ${names.length} matching domains…`, true);
+          const checked = await request('/api/check', { domains: batch }, controller.signal);
+          if (id !== generation || controller.signal.aborted) throw new DOMException('Stopped', 'AbortError');
+          const verified = new Map(resultRows(checked).map(row => [row.name, row]));
+          const batchNames = new Set(batch);
+          rows = rows.map(row => batchNames.has(row.name)
+            ? verified.get(row.name) || { name: row.name, registrable: null, checked: false, reason: 'not_returned' }
+            : row);
+          render();
+        }
       } catch (error) {
         if (id !== generation || controller.signal.aborted) throw error;
         notice('Live verification did not complete. Unverified results are suggestions, not confirmed availability. ' + error.message);
@@ -316,12 +563,32 @@ async function copyShown() {
     $('copyButton').textContent = 'Copied';
   } catch { notice('Clipboard access was blocked. Select and copy the domain names directly.'); }
 }
+$('matchMode').addEventListener('change', () => { updateOptions(); saveOptions(); });
+$('query').addEventListener('input', updateOptions);
+$('pattern').addEventListener('input', saveOptions);
+$('endingToggle').addEventListener('click', () => {
+  const open = $('endingPanel').hidden;
+  $('endingPanel').hidden = !open;
+  $('endingToggle').setAttribute('aria-expanded', String(open));
+  if (open) { renderEndings(); loadEndings(); $('endingSearch').focus(); }
+});
+$('endingSearch').addEventListener('input', renderEndings);
+$('endingSearch').addEventListener('keydown', event => { if (event.key === 'Enter') event.preventDefault(); });
+$('doneEndings').addEventListener('click', () => closeEndings(true));
+$('clearEndings').addEventListener('click', () => { selectedEndings.clear(); renderEndings(); updateOptions(); saveOptions(); });
+$('reloadEndings').addEventListener('click', () => loadEndings(true));
+document.addEventListener('click', event => { if (!$('endingPicker').contains(event.target)) closeEndings(); });
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && !$('endingPanel').hidden) { event.preventDefault(); closeEndings(true); }
+});
 $('searchForm').addEventListener('submit', search);
 $('cancelButton').addEventListener('click', () => active?.abort());
 $('retrySetup').addEventListener('click', checkSetup);
 $('availableOnly').addEventListener('change', render);
 $('sort').addEventListener('change', render);
 $('copyButton').addEventListener('click', copyShown);
+restoreOptions();
+updateOptions();
 checkSetup();
 </script>
 </body>

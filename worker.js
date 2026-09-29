@@ -1,9 +1,10 @@
 import page from './index.html';
 
-// Domain Finder 1.0.1. Only these two read-only Registrar operations are exposed.
+// Domain Finder 1.1.0. Only search, check, and extension-list Registrar operations are exposed.
 // Runtime secrets: CF_ACCOUNT_ID and CF_API_TOKEN. Never put values in this file.
-const VERSION = '1.0.1';
-const LIMIT = 20;
+const VERSION = '1.1.0';
+const LIMIT = 20; // Cloudflare domain-check request limit.
+const SEARCH_LIMIT = 50;
 const HEADERS = {
   'Cache-Control': 'no-store',
   'X-Content-Type-Options': 'nosniff',
@@ -54,6 +55,36 @@ function domainName(input) {
     throw new AppError('Enter a valid full domain, such as example.com.');
   }
   return name;
+}
+
+function extensionName(value) {
+  if (typeof value !== 'string') throw new AppError('Each ending must be text.');
+  const name = value.trim().toLowerCase().replace(/^\./, '');
+  if (!name || name.length > 253 || !/[a-z]/.test(name) ||
+      name.split('.').some(label => !/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(label))) {
+    throw new AppError('Use endings such as .com, .app, or .co.uk.');
+  }
+  return name;
+}
+
+function selectedExtensions(value) {
+  if (value === undefined) return [];
+  if (!Array.isArray(value) || value.length > 50) throw new AppError('Choose up to 50 endings.');
+  return [...new Set(value.map(extensionName))];
+}
+
+function extensionPage(body) {
+  if (!Array.isArray(body.result) || body.result.length > 50) {
+    throw new AppError('Cloudflare returned an unexpected ending list.', 502);
+  }
+  let extensions;
+  try { extensions = [...new Set(body.result.map(item => extensionName(item?.metadata?.name)))]; }
+  catch { throw new AppError('Cloudflare returned an invalid ending list.', 502); }
+  const cursor = body.result_info?.cursor ?? '';
+  if (typeof cursor !== 'string' || cursor.length > 256 || /[\u0000-\u001f\u007f]/.test(cursor)) {
+    throw new AppError('Cloudflare returned an invalid ending-list cursor.', 502);
+  }
+  return { extensions, cursor };
 }
 
 async function readBody(request) {
@@ -125,14 +156,19 @@ function safeDetail(value, config) {
 async function registrar(config, operation, data) {
   const url = new URL(`https://api.cloudflare.com/client/v4/accounts/${config.account}/registrar/${operation}`);
   const options = {
-    method: operation === 'domain-search' ? 'GET' : 'POST',
+    method: operation === 'domain-check' ? 'POST' : 'GET',
     headers: { Authorization: 'Bearer ' + config.token, Accept: 'application/json' },
     // Workers supports manual redirect handling. Never forward the API token.
     redirect: 'manual',
   };
   if (operation === 'domain-search') {
     url.searchParams.set('q', data.q);
-    url.searchParams.set('limit', String(LIMIT));
+    url.searchParams.set('limit', String(SEARCH_LIMIT));
+    // Repeated keys match Cloudflare's official SDK query serialization.
+    for (const extension of data.extensions || []) url.searchParams.append('extensions', extension);
+  } else if (operation === 'extensions') {
+    url.searchParams.set('per_page', '50');
+    if (data.cursor) url.searchParams.set('cursor', data.cursor);
   } else {
     options.headers['Content-Type'] = 'application/json';
     options.body = JSON.stringify({ domains: data.domains });
@@ -166,7 +202,7 @@ async function registrar(config, operation, data) {
       }
       throw new AppError(`${message} (HTTP ${response.status})` + (detail ? ' ' + detail : ''), response.status === 429 ? 429 : 502);
     }
-    return cleanRows(body.result?.domains);
+    return body;
   } catch (error) {
     if (error instanceof AppError) throw error;
     if (controller.signal.aborted) throw new AppError('Cloudflare took too long to respond. Please retry the search.', 504);
@@ -180,7 +216,7 @@ async function check(config, domains) {
     throw new AppError(`Check between 1 and ${LIMIT} domains at a time.`);
   }
   const names = [...new Set(domains.map(domainName))];
-  const rows = await registrar(config, 'domain-check', { domains: names });
+  const rows = cleanRows((await registrar(config, 'domain-check', { domains: names })).result?.domains);
   const byName = new Map(rows.map(row => [row.name, row]));
   // Missing records are unknown, never "available" or "taken".
   return names.map(name => byName.has(name)
@@ -197,7 +233,7 @@ export default {
         headers: {
           ...HEADERS,
           'Content-Type': 'text/html; charset=utf-8',
-          'Content-Security-Policy': `default-src 'none'; script-src 'nonce-${nonce}'; style-src 'nonce-${nonce}'; connect-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'self'; frame-ancestors 'none'`,
+          'Content-Security-Policy': `default-src 'none'; script-src 'nonce-${nonce}'; style-src 'nonce-${nonce}'; connect-src 'self'; worker-src blob:; img-src 'self' data:; base-uri 'none'; form-action 'self'; frame-ancestors 'none'`,
           'X-Frame-Options': 'DENY',
         },
       });
@@ -208,9 +244,12 @@ export default {
       const config = settings(env);
       return json({ version: VERSION, configured: config.problems.length === 0, problems: config.problems });
     }
-    if (!['/api/search', '/api/check'].includes(url.pathname)) return json({ error: 'Not found.' }, 404);
-    if (request.method !== 'POST') return json({ error: 'Use POST for searches.' }, 405);
-    // No cross-origin credentialed proxy. Only fixed search/check routes exist.
+    const isExtensions = url.pathname === '/api/extensions';
+    if (!['/api/search', '/api/check', '/api/extensions'].includes(url.pathname)) return json({ error: 'Not found.' }, 404);
+    if (request.method !== (isExtensions ? 'GET' : 'POST')) {
+      return json({ error: isExtensions ? 'Use GET for endings.' : 'Use POST for searches.' }, 405);
+    }
+    // No cross-origin credentialed proxy. Only fixed read-only routes exist.
     const origin = request.headers.get('origin');
     if ((origin && origin !== url.origin) || request.headers.get('sec-fetch-site') === 'cross-site') {
       return json({ error: 'Search from this website, not another origin.' }, 403);
@@ -218,6 +257,11 @@ export default {
     try {
       const config = settings(env);
       if (config.problems.length) throw new AppError('Setup needed: ' + config.problems.join(' '), 503);
+      if (isExtensions) {
+        const cursor = url.searchParams.get('cursor') || '';
+        if (cursor.length > 256 || /[\u0000-\u001f\u007f]/.test(cursor)) throw new AppError('Invalid ending-list cursor.');
+        return json(extensionPage(await registrar(config, 'extensions', { cursor })));
+      }
       const body = await readBody(request);
       if (url.pathname === '/api/check') {
         return json({ mode: 'check', domains: await check(config, body.domains), checkedAt: new Date().toISOString() });
@@ -231,8 +275,9 @@ export default {
         return json({ mode: 'check', domains: await check(config, parts), checkedAt: new Date().toISOString() });
       }
       if (q.length > 100) throw new AppError('Keep a keyword or phrase search to 100 characters or fewer.');
-      const rows = await registrar(config, 'domain-search', { q });
-      return json({ mode: 'suggestions', domains: rows.slice(0, LIMIT).map(row => ({ ...row, checked: false })) });
+      const extensions = selectedExtensions(body.extensions);
+      const rows = cleanRows((await registrar(config, 'domain-search', { q, extensions })).result?.domains);
+      return json({ mode: 'suggestions', domains: rows.slice(0, SEARCH_LIMIT).map(row => ({ ...row, checked: false })) });
     } catch (error) {
       return json({ error: error instanceof AppError ? error.message : 'An unexpected error occurred. Please retry.' }, error instanceof AppError ? error.status : 500);
     }
