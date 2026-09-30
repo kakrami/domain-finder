@@ -1,9 +1,9 @@
 import { DurableObject } from 'cloudflare:workers';
 import page from './index.html';
 
-// Domain Finder 1.4.5. Only search, check, and extension-list Registrar operations are exposed.
-// Runtime secrets: CF_ACCOUNT_ID and CF_API_TOKEN. Never put values in this file.
-const VERSION = '1.4.5';
+// Domain Finder 1.4.6. Only search, check, and extension-list Registrar operations are exposed.
+// Runtime secrets: CF_ACCOUNT_ID, CF_API_TOKEN, and ADMIN_KEY. Never put values in this file.
+const VERSION = '1.4.6';
 const LIMIT = 20; // Cloudflare domain-check request limit.
 const SEARCH_LIMIT = 50;
 const HEADERS = {
@@ -12,6 +12,94 @@ const HEADERS = {
   'Referrer-Policy': 'no-referrer',
   'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
 };
+
+
+const AUTH_COOKIE = 'domain_finder_admin';
+const AUTH_MAX_AGE = 60 * 60 * 24 * 30;
+
+function bytesToBase64Url(bytes) {
+  let binary = '';
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  return btoa(binary)
+    .replaceAll('+', '-')
+    .replaceAll('/', '_')
+    .replaceAll('=', '');
+}
+
+async function authToken(key) {
+  const bytes = new TextEncoder().encode('domain-finder-admin-v1:' + key);
+  const digest = await crypto.subtle.digest('SHA-256', bytes);
+  return bytesToBase64Url(new Uint8Array(digest));
+}
+
+function cookieValue(request, name) {
+  const cookie = request.headers.get('Cookie') || '';
+  for (const part of cookie.split(';')) {
+    const [key, ...rest] = part.trim().split('=');
+    if (key === name) return rest.join('=');
+  }
+  return '';
+}
+
+function sameString(a, b) {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+
+async function authorized(request, env) {
+  const key = String(env.ADMIN_KEY || '').trim();
+  if (!key) return false;
+  const actual = cookieValue(request, AUTH_COOKIE);
+  if (!actual) return false;
+  const expected = await authToken(key);
+  return sameString(actual, expected);
+}
+
+function loginPage(message = '', status = 401) {
+  const safe = String(message || '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;');
+
+  const html = `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Domain Finder</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0b1220;color:#e5e7eb;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:20px}.card{width:min(100%,380px);background:#111827;border:1px solid #263244;border-radius:16px;padding:22px;box-shadow:0 20px 50px rgba(0,0,0,.35)}h1{font-size:20px;margin:0 0 6px}.sub{font-size:13px;color:#94a3b8;margin:0 0 18px}.msg{font-size:13px;color:#fca5a5;margin:0 0 12px}label{display:block;font-size:12px;color:#cbd5e1;margin-bottom:6px}input{width:100%;font-size:16px;padding:12px 13px;border-radius:10px;border:1px solid #334155;background:#0f172a;color:#fff;outline:none}input:focus{border-color:#64748b}button{width:100%;margin-top:12px;padding:12px;border:0;border-radius:10px;background:#e5e7eb;color:#111827;font-weight:700;font-size:15px}button:active{transform:translateY(1px)}
+</style>
+</head>
+<body>
+<form class="card" method="post" action="/login" autocomplete="off">
+<h1>Domain Finder</h1>
+<p class="sub">Enter the admin key to continue.</p>
+${safe ? `<p class="msg">${safe}</p>` : ''}
+<label for="key">Admin key</label>
+<input id="key" name="key" type="password" required autofocus autocomplete="current-password">
+<button type="submit">Enter</button>
+</form>
+</body>
+</html>`;
+
+  return new Response(html, {
+    status,
+    headers: {
+      ...HEADERS,
+      'Content-Type': 'text/html; charset=utf-8',
+      'Content-Security-Policy': "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
+      'X-Frame-Options': 'DENY',
+    },
+  });
+}
+
+function clearAuthCookie(headers) {
+  headers.set('Set-Cookie', `${AUTH_COOKIE}=; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0`);
+}
 
 class AppError extends Error {
   constructor(message, status = 400) { super(message); this.status = status; }
@@ -328,6 +416,45 @@ export default {
 
   async fetch(request, env) {
     const url = new URL(request.url);
+    const adminKey = String(env.ADMIN_KEY || '').trim();
+
+    if (!adminKey) {
+      return loginPage('ADMIN_KEY is not configured in Cloudflare yet.', 503);
+    }
+
+    if (url.pathname === '/login') {
+      if (request.method === 'GET') return loginPage('', 200);
+      if (request.method !== 'POST') return new Response(null, { status: 405, headers: HEADERS });
+
+      let form;
+      try { form = await request.formData(); }
+      catch { return loginPage('Enter the admin key.', 400); }
+
+      const provided = String(form.get('key') || '');
+      const actual = await authToken(provided);
+      const expected = await authToken(adminKey);
+
+      if (!sameString(actual, expected)) {
+        return loginPage('Incorrect admin key.', 401);
+      }
+
+      const headers = new Headers({
+        ...HEADERS,
+        Location: '/',
+      });
+      headers.set('Set-Cookie', `${AUTH_COOKIE}=${expected}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${AUTH_MAX_AGE}`);
+      return new Response(null, { status: 303, headers });
+    }
+
+    if (url.pathname === '/logout') {
+      const headers = new Headers({ ...HEADERS, Location: '/login' });
+      clearAuthCookie(headers);
+      return new Response(null, { status: 303, headers });
+    }
+
+    if (!(await authorized(request, env))) {
+      return loginPage('', 401);
+    }
 
     if ((url.pathname === '/' || url.pathname === '/index.html') && ['GET', 'HEAD'].includes(request.method)) {
       const nonce = crypto.randomUUID().replaceAll('-', '');
