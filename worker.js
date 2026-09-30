@@ -1,9 +1,9 @@
 import { DurableObject } from 'cloudflare:workers';
 import page from './index.html';
 
-// Domain Finder 1.4.4. Only search, check, and extension-list Registrar operations are exposed.
+// Domain Finder 1.4.5. Only search, check, and extension-list Registrar operations are exposed.
 // Runtime secrets: CF_ACCOUNT_ID and CF_API_TOKEN. Never put values in this file.
-const VERSION = '1.4.4';
+const VERSION = '1.4.5';
 const LIMIT = 20; // Cloudflare domain-check request limit.
 const SEARCH_LIMIT = 50;
 const HEADERS = {
@@ -154,12 +154,29 @@ function safeDetail(value, config) {
 }
 
 function rateInfo(headers) {
-  const reset = [...(headers.get('Ratelimit') || '').matchAll(/r=(\d+)\s*;\s*t=(\d+)/gi)];
-  const close = reset.filter(match => Number(match[1]) < 150);
-  const lowDelayMs = close.length ? Math.min(600000, Math.max(...close.map(match => Number(match[2]) * 1000 + 1000))) : 0;
+  const windows = [...(headers.get('Ratelimit') || '').matchAll(/r=(\d+)\s*;\s*t=(\d+)/gi)]
+    .map(match => ({ remaining: Number(match[1]), resetSeconds: Number(match[2]) }))
+    .filter(item => Number.isFinite(item.remaining) && Number.isFinite(item.resetSeconds));
+
+  const close = windows.filter(item => item.remaining < 150);
+  const lowDelayMs = close.length
+    ? Math.min(600000, Math.max(...close.map(item => item.resetSeconds * 1000 + 1000)))
+    : 0;
+
+  const perRequestDelayMs = windows.length
+    ? Math.min(60000, Math.max(...windows.map(item =>
+        item.remaining > 0
+          ? Math.ceil((item.resetSeconds * 1000) / (item.remaining * CATALOG_RATE_HEADROOM))
+          : item.resetSeconds * 1000 + 1000
+      )))
+    : CATALOG_FALLBACK_WAVE_MS / CATALOG_CONCURRENCY;
+
   const retry = Number(headers.get('Retry-After'));
-  const retryAfterMs = Number.isFinite(retry) && retry >= 0 ? Math.min(900000, retry * 1000 + 1000) : 300000;
-  return { lowDelayMs, retryAfterMs };
+  const retryAfterMs = Number.isFinite(retry) && retry >= 0
+    ? Math.min(900000, retry * 1000 + 1000)
+    : 300000;
+
+  return { lowDelayMs, retryAfterMs, perRequestDelayMs };
 }
 
 async function registrar(config, operation, data, observeRate) {
@@ -474,7 +491,10 @@ export default {
 };
 
 const CATALOG_TOTAL = 26 ** 3;
-const CATALOG_INTERVAL_MS = 1000;
+const CATALOG_MIN_INTERVAL_MS = 250;
+const CATALOG_CONCURRENCY = 4;
+const CATALOG_RATE_HEADROOM = 0.8;
+const CATALOG_FALLBACK_WAVE_MS = 1250;
 
 const utcDay = () =>
   new Date(Date.now()).toISOString().slice(0, 10);
@@ -591,6 +611,20 @@ function catalogBatch(job) {
   }
 
   return null;
+}
+
+function catalogBatches(job, count = CATALOG_CONCURRENCY) {
+  const shadow = { ...job };
+  const batches = [];
+
+  while (batches.length < count) {
+    const batch = catalogBatch(shadow);
+    if (!batch) break;
+    batches.push(batch);
+    shadow[batch.field] = batch.cursor;
+  }
+
+  return batches;
 }
 
 function catalogStub(env) {
@@ -794,7 +828,7 @@ export class DomainCatalog extends DurableObject {
         next = Math.min(
           next,
           Math.max(
-            Date.now() + CATALOG_INTERVAL_MS,
+            Date.now() + CATALOG_MIN_INTERVAL_MS,
             job.retry_at,
             allowedAt
           )
@@ -806,7 +840,7 @@ export class DomainCatalog extends DurableObject {
           next = Math.min(
             next,
             Math.max(
-              Date.now() + CATALOG_INTERVAL_MS,
+              Date.now() + CATALOG_MIN_INTERVAL_MS,
               job.retry_at,
               allowedAt,
               due
@@ -1096,37 +1130,35 @@ export class DomainCatalog extends DurableObject {
       `, now).toArray();
 
       let job;
-      let indices;
-      let isRetry;
-      let segment;
+      let work = [];
+      let isRetry = false;
 
       for (const candidate of jobs) {
-        const batch = catalogBatch(candidate);
+        const batches = catalogBatches(candidate);
 
-        if (batch) {
+        if (batches.length) {
           job = candidate;
-          segment = batch;
-          indices = batch.indices;
-          isRetry = false;
+          work = batches.map(batch => ({
+            batch,
+            indices: batch.indices,
+          }));
           break;
         }
 
-        const pending = this.retryRows(
-          candidate,
-          now
-        );
+        const pending = this.retryRows(candidate, now);
 
         if (pending.length) {
           job = candidate;
-          indices = pending.map(
-            row => row.ordinal
-          );
           isRetry = true;
+          work = [{
+            batch: null,
+            indices: pending.map(row => row.ordinal),
+          }];
           break;
         }
       }
 
-      if (!job) {
+      if (!job || !work.length) {
         await this.wake();
         return;
       }
@@ -1135,26 +1167,112 @@ export class DomainCatalog extends DurableObject {
         const config = settings(this.env);
 
         if (config.problems.length) {
-          throw new AppError(
-            config.problems.join(' '),
-            503
-          );
+          throw new AppError(config.problems.join(' '), 503);
         }
 
-        let observedRate;
+        const observedRates = [];
 
-        const results = await check(
-          config,
-          indices.map(
-            i => shortName(i) + '.' + job.ending
-          ),
-          info => {
-            observedRate = info;
-          }
+        const settled = await Promise.allSettled(
+          work.map(async item => {
+            let observedRate;
+
+            const results = await check(
+              config,
+              item.indices.map(
+                i => shortName(i) + '.' + job.ending
+              ),
+              info => {
+                observedRate = info;
+                observedRates.push(info);
+              }
+            );
+
+            return {
+              ...item,
+              results,
+              observedRate,
+            };
+          })
         );
 
-        const checkedAt =
-          new Date().toISOString();
+        const failures = settled.filter(
+          result => result.status === 'rejected'
+        );
+
+        const rateDelayMs = observedRates.length
+          ? Math.max(
+              ...observedRates.map(
+                info => info.perRequestDelayMs || 0
+              )
+            ) * observedRates.length
+          : CATALOG_MIN_INTERVAL_MS;
+
+        const lowDelayMs = observedRates.length
+          ? Math.max(
+              ...observedRates.map(
+                info => info.lowDelayMs || 0
+              )
+            )
+          : 0;
+
+        const retryAfterMs = failures.reduce(
+          (max, result) => {
+            const error = result.reason;
+            return Math.max(
+              max,
+              error instanceof AppError &&
+              error.status === 429
+                ? error.retryAfterMs || 300000
+                : 0
+            );
+          },
+          0
+        );
+
+        const nextDelayMs = Math.max(
+          CATALOG_MIN_INTERVAL_MS,
+          rateDelayMs,
+          lowDelayMs,
+          retryAfterMs
+        );
+
+        const nextAllowedAt = now + nextDelayMs;
+
+        if (failures.length) {
+          const attempts = job.attempts + 1;
+          const firstError = failures[0].reason;
+
+          const message = firstError instanceof AppError
+            ? firstError.message
+            : 'Catalog check failed. It will retry automatically.';
+
+          const retryAt = now + Math.max(
+            nextDelayMs,
+            Math.min(
+              900000,
+              10000 * 2 ** Math.min(attempts, 7)
+            )
+          );
+
+          this.sql.exec(
+            "UPDATE jobs SET state='retrying',attempts=?,retry_at=?,error=?,updated=? WHERE ending=?",
+            attempts,
+            retryAt,
+            message,
+            now,
+            job.ending
+          );
+
+          this.sql.exec(
+            'UPDATE scan_budget SET cooldown_until=MAX(cooldown_until, ?) WHERE id=1',
+            retryAt
+          );
+
+          await this.wake();
+          return;
+        }
+
+        const checkedAt = new Date().toISOString();
 
         this.ctx.storage.transactionSync(() => {
           let sequence = job.sequence;
@@ -1163,242 +1281,165 @@ export class DomainCatalog extends DurableObject {
           let available = job.available;
           let unknown = job.unknown;
 
-          results.forEach((row, i) => {
-            const ordinal = indices[i];
+          settled.forEach((result, workIndex) => {
+            const item = work[workIndex];
+            const rows = result.value.results;
 
-            const data = {
-              ...row,
-              checkedAt,
-            };
+            rows.forEach((row, i) => {
+              const ordinal = item.indices[i];
+              const data = { ...row, checkedAt };
 
-            const previousRow = this.sql.exec(`
-              SELECT checked, available
-              FROM domains
-              WHERE ending=?
-                AND ordinal=?
-            `,
-            job.ending,
-            ordinal
-            ).toArray()[0];
-
-            if (!previousRow) {
-              cached++;
-            }
-
-            checkedCount +=
-              (row.checked ? 1 : 0) -
-              (previousRow?.checked || 0);
-
-            available +=
-              (
-                row.checked &&
-                row.registrable === true
-                  ? 1
-                  : 0
-              ) -
-              (
-                previousRow?.checked &&
-                previousRow.available === 1
-                  ? 1
-                  : 0
-              );
-
-            unknown =
-              cached - checkedCount;
-
-            this.sql.exec(`
-              INSERT INTO domains(
-                ending,
-                ordinal,
-                checked,
-                available,
-                data,
-                sequence
-              )
-              VALUES(?,?,?,?,?,?)
-              ON CONFLICT(ending,ordinal)
-              DO UPDATE SET
-                checked=excluded.checked,
-                available=excluded.available,
-                data=excluded.data,
-                sequence=excluded.sequence
-            `,
-            job.ending,
-            ordinal,
-            row.checked ? 1 : 0,
-            row.registrable === true
-              ? 1
-              : row.registrable === false
-                ? 0
-                : null,
-            JSON.stringify(data),
-            ++sequence
-            );
-
-            if (row.checked) {
-              this.sql.exec(
-                'DELETE FROM retries WHERE ending=? AND ordinal=?',
+              const previousRow = this.sql.exec(
+                'SELECT checked, available FROM domains WHERE ending=? AND ordinal=?',
                 job.ending,
                 ordinal
-              );
-            } else {
-              const previous = this.sql.exec(`
-                SELECT attempts
-                FROM retries
-                WHERE ending=?
-                  AND ordinal=?
-              `,
-              job.ending,
-              ordinal
-              ).toArray()[0]?.attempts || 0;
+              ).toArray()[0];
 
-              if (previous >= 6) {
+              if (!previousRow) cached++;
+
+              checkedCount +=
+                (row.checked ? 1 : 0) -
+                (previousRow?.checked || 0);
+
+              available +=
+                (row.checked && row.registrable === true ? 1 : 0) -
+                (previousRow?.checked && previousRow.available === 1 ? 1 : 0);
+
+              unknown = cached - checkedCount;
+
+              this.sql.exec(
+                'INSERT INTO domains(ending,ordinal,checked,available,data,sequence) VALUES(?,?,?,?,?,?) ON CONFLICT(ending,ordinal) DO UPDATE SET checked=excluded.checked, available=excluded.available, data=excluded.data, sequence=excluded.sequence',
+                job.ending,
+                ordinal,
+                row.checked ? 1 : 0,
+                row.registrable === true
+                  ? 1
+                  : row.registrable === false
+                    ? 0
+                    : null,
+                JSON.stringify(data),
+                ++sequence
+              );
+
+              if (row.checked) {
                 this.sql.exec(
                   'DELETE FROM retries WHERE ending=? AND ordinal=?',
                   job.ending,
                   ordinal
                 );
               } else {
-                this.sql.exec(`
-                  INSERT INTO retries(
-                    ending,
+                const previous = this.sql.exec(
+                  'SELECT attempts FROM retries WHERE ending=? AND ordinal=?',
+                  job.ending,
+                  ordinal
+                ).toArray()[0]?.attempts || 0;
+
+                if (previous >= 6) {
+                  this.sql.exec(
+                    'DELETE FROM retries WHERE ending=? AND ordinal=?',
+                    job.ending,
+                    ordinal
+                  );
+                } else {
+                  this.sql.exec(
+                    'INSERT INTO retries(ending,ordinal,attempts,due) VALUES(?,?,?,?) ON CONFLICT(ending,ordinal) DO UPDATE SET attempts=excluded.attempts,due=excluded.due',
+                    job.ending,
                     ordinal,
-                    attempts,
-                    due
-                  )
-                  VALUES(?,?,?,?)
-                  ON CONFLICT(ending,ordinal)
-                  DO UPDATE SET
-                    attempts=excluded.attempts,
-                    due=excluded.due
-                `,
-                job.ending,
-                ordinal,
-                previous + 1,
-                now +
-                  Math.min(
-                    900000,
-                    60000 * 2 ** previous
-                  )
-                );
+                    previous + 1,
+                    now + Math.min(
+                      900000,
+                      60000 * 2 ** previous
+                    )
+                  );
+                }
               }
+            });
+
+            if (!isRetry) {
+              this.sql.exec(
+                `UPDATE jobs SET ${item.batch.field}=? WHERE ending=?`,
+                item.batch.cursor,
+                job.ending
+              );
             }
           });
 
+          const updatedJob = { ...job };
+
           if (!isRetry) {
-            this.sql.exec(
-              `UPDATE jobs SET ${segment.field}=? WHERE ending=?`,
-              segment.cursor,
-              job.ending
-            );
+            for (const item of work) {
+              updatedJob[item.batch.field] =
+                item.batch.cursor;
+            }
           }
 
-          const updatedJob = {
-            ...job,
-            ...(!isRetry
-              ? {
-                  [segment.field]:
-                    segment.cursor,
-                }
-              : {}),
-          };
+          const state = catalogPending(updatedJob)
+            ? 'running'
+            : this.retryRows(updatedJob).length
+              ? 'retrying'
+              : unknown
+                ? 'complete_with_unknown'
+                : 'complete';
 
-          const state =
-            catalogPending(updatedJob)
-              ? 'running'
-              : this.retryRows(updatedJob).length
-                ? 'retrying'
-                : unknown
-                  ? 'complete_with_unknown'
-                  : 'complete';
-
-          this.sql.exec(`
-            UPDATE jobs
-            SET sequence=?,
-                state=?,
-                attempts=0,
-                retry_at=?,
-                error='',
-                updated=?,
-                cached=?,
-                checked=?,
-                available=?,
-                unknown=?
-            WHERE ending=?
-          `,
-          sequence,
-          state,
-          now + CATALOG_INTERVAL_MS,
-          now,
-          cached,
-          checkedCount,
-          available,
-          unknown,
-          job.ending
+          this.sql.exec(
+            "UPDATE jobs SET sequence=?,state=?,attempts=0,retry_at=?,error='',updated=?,cached=?,checked=?,available=?,unknown=? WHERE ending=?",
+            sequence,
+            state,
+            nextAllowedAt,
+            now,
+            cached,
+            checkedCount,
+            available,
+            unknown,
+            job.ending
           );
 
-          this.sql.exec(`
-            UPDATE scan_budget
-            SET used=used+?,
-                cooldown_until=
-                  MAX(cooldown_until, ?)
-            WHERE id=1
-          `,
-          indices.length * 2 + 6,
-          now +
-            (observedRate?.lowDelayMs || 0)
+          const totalIndices = work.reduce(
+            (sum, item) => sum + item.indices.length,
+            0
+          );
+
+          this.sql.exec(
+            'UPDATE scan_budget SET used=used+?, cooldown_until=MAX(cooldown_until, ?) WHERE id=1',
+            totalIndices * 2 + 6,
+            nextAllowedAt
           );
         });
       } catch (error) {
-        const attempts =
-          job.attempts + 1;
+        const attempts = job.attempts + 1;
 
-        const message =
-          error instanceof AppError
-            ? error.message
-            : 'Catalog check failed. It will retry automatically.';
+        const message = error instanceof AppError
+          ? error.message
+          : 'Catalog check failed. It will retry automatically.';
 
-        const retryAt =
-          now +
-          Math.max(
-            Math.min(
-              900000,
-              10000 *
-                2 ** Math.min(attempts, 7)
-            ),
-            error instanceof AppError &&
-            error.status === 429
-              ? error.retryAfterMs ||
-                300000
-              : 0
-          );
+        const retryAt = now + Math.max(
+          Math.min(
+            900000,
+            10000 * 2 ** Math.min(attempts, 7)
+          ),
+          error instanceof AppError &&
+          error.status === 429
+            ? error.retryAfterMs || 300000
+            : 0
+        );
 
-        this.sql.exec(`
-          UPDATE jobs
-          SET state='retrying',
-              attempts=?,
-              retry_at=?,
-              error=?,
-              updated=?
-          WHERE ending=?
-        `,
-        attempts,
-        retryAt,
-        message,
-        now,
-        job.ending
+        this.sql.exec(
+          "UPDATE jobs SET state='retrying',attempts=?,retry_at=?,error=?,updated=? WHERE ending=?",
+          attempts,
+          retryAt,
+          message,
+          now,
+          job.ending
         );
 
         if (
           error instanceof AppError &&
           error.status === 429
         ) {
-          this.sql.exec(`
-            UPDATE scan_budget
-            SET cooldown_until=
-              MAX(cooldown_until, ?)
-            WHERE id=1
-          `, retryAt);
+          this.sql.exec(
+            'UPDATE scan_budget SET cooldown_until=MAX(cooldown_until, ?) WHERE id=1',
+            retryAt
+          );
         }
       }
 
